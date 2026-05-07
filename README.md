@@ -1,8 +1,10 @@
 <div align="center">
-<sub><i>Strong gravitational lensi<img width="1702" height="986" alt="hubble-lrg3757-potw1151a-med" src="https://github.com/user-attachments/assets/414f26fd-02a6-475e-a05e-1d331d9bfdde" />
-ng observed by the Hubble Space Telescope. Credit: NASA/ESA</i></sub>
+  <img src="https://github.com/user-attachments/assets/414f26fd-02a6-475e-a05e-1d331d9bfdde" alt="hubble-lrg3757-potw1151a-med" width="80%" />
+  <br />
+  <sub><i>Strong gravitational lensing observed by the Hubble Space Telescope. Credit: NASA/ESA</i></sub>
+</div>
 
-<br/><br/>
+<br />
 
 # Gravitational Lens Detection on ESA Euclid Q1 Data
 
