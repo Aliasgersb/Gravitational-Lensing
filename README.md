@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Gravitational_lens-full.jpg/1200px-Gravitational_lens-full.jpg" alt="Hubble Space Telescope — Gravitational Lensing" width="100%" style="border-radius:8px;"/>
+<img src="https://upload.wikimedia.org/wikipedia/commons/3/3f/Gravitational_lens-full.jpg" alt="Hubble Space Telescope - Gravitational Lensing" width="100%" />
 
 <sub><i>Strong gravitational lensing observed by the Hubble Space Telescope. Credit: NASA/ESA</i></sub>
 
