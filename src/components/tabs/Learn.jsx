@@ -157,7 +157,7 @@ export default function Learn() {
                 An alternative — Axion dark matter (fuzzy dark matter) — predicts much smoother halos. Axions are ultralight particles whose quantum behaviour prevents them from clumping at small scales. The two models produce physically different halos.
               </p>
               <p className="ls-p">
-                CDM subhalos create tiny kinks in lensing arcs at sub-arcsecond scales. Detecting or ruling out these perturbations is how we test dark matter theory. This was Track B of this project — and the honest result was that Euclid Q1's resolution is not yet sufficient to resolve these signals.
+                CDM subhalos create tiny kinks in lensing arcs at sub-arcsecond scales. Detecting or ruling out these perturbations is how we test dark matter theory. This was Track B of this project — and the validated conclusion was that Euclid Q1's resolution is not yet sufficient to resolve these signals.
               </p>
             </div>
           </div>

@@ -9,13 +9,13 @@ import GlossaryTooltip from '../GlossaryTooltip';
 
 const PHASES = [
   { id: 'phase0', label: 'Phase 0 — Setup' },
-  { id: 'phase1', label: 'Phase 1 — Contaminated Baselines' },
-  { id: 'phase2', label: 'Phase 2 — First Honest Result' },
+  { id: 'phase1', label: 'Phase 1 — Invalidated Baselines' },
+  { id: 'phase2', label: 'Phase 2 — First Validated Result' },
   { id: 'phase3', label: 'Phase 3 — Galaxy Backbones' },
   { id: 'phase4', label: 'Phase 4 — Scaling Up' },
   { id: 'phase5', label: 'Phase 5 — Ensemble & Mining' },
   { id: 'phase6', label: 'Phase 6 — Track B' },
-  { id: 'phase7', label: 'Phase 7 — Unseen Data Scan' },
+  { id: 'phase7', label: 'Phase 7 — Population Inference' },
   { id: 'conclusions', label: 'Conclusions' },
 ];
 
@@ -159,8 +159,8 @@ const ContaminationBarChart = () => {
   );
 };
 
-/* ── Recharts: Sacred Split Stacked Bar ── */
-const SacredSplitBarChart = () => {
+/* ── Recharts: Locked Split Stacked Bar ── */
+const LockedSplitBarChart = () => {
   const data = [
     { 
       name: 'Split',
@@ -242,7 +242,7 @@ const AUROCBarV6V9 = () => {
   const data = [
     { label: 'V6', val: 0.7283, fill: '#242424', stroke: '#3d3b38' },
     { label: 'V7', val: 0.8541, fill: 'rgba(232,230,224,0.15)', stroke: '#c8b89a' },
-    { label: 'V8', val: 0.7441, fill: '#242424', stroke: '#3d3b38' },
+    { label: 'V8', val: 0.8499, fill: '#242424', stroke: '#3d3b38' },
     { label: 'V9', val: 0.8587, fill: '#242424', stroke: '#3d3b38' },
   ];
 
@@ -282,7 +282,7 @@ const FinalBarRechart = () => {
   const data = [
     { label: 'V6',  val: 0.7283, fill: '#242424', stroke: '#3d3b38' },
     { label: 'V7',  val: 0.8541, fill: '#242424', stroke: '#3d3b38' },
-    { label: 'V8',  val: 0.7441, fill: '#242424', stroke: '#3d3b38' },
+    { label: 'V8',  val: 0.8499, fill: '#242424', stroke: '#3d3b38' },
     { label: 'V9',  val: 0.8587, fill: '#242424', stroke: '#3d3b38' },
     { label: 'V10', val: 0.8756, fill: '#242424', stroke: '#3d3b38' },
     { label: 'V11', val: 0.8776, fill: '#242424', stroke: '#3d3b38' },
@@ -340,7 +340,7 @@ const ValTestGapBarChart = () => {
 const AUROCLineRechart = () => {
   const data = [
     { label: 'V6',  val: 0.7283 }, { label: 'V7',  val: 0.8541 },
-    { label: 'V8',  val: 0.7441 }, { label: 'V9',  val: 0.8587 },
+    { label: 'V8',  val: 0.8499 }, { label: 'V9',  val: 0.8587 },
     { label: 'V10', val: 0.8756 }, { label: 'V11', val: 0.8776 },
     { label: 'V12', val: 0.8871 }, { label: 'V15', val: 0.8687 },
   ];
@@ -409,8 +409,8 @@ const EntropyBarRechart = () => {
   const data = [
     { label: 'Baseline',   val: 1.1236, fill: '#242424', stroke: '#3d3b38', note: '' },
     { label: 'CORAL',      val: 0.1429, fill: '#4a2a2a', stroke: '#3d3b38', note: 'Confident — but wrong' },
-    { label: 'DANN',       val: 1.5807, fill: '#242424', stroke: '#3d3b38', note: 'Collapsed' },
-    { label: 'ADDA',       val: 1.5732, fill: '#242424', stroke: '#3d3b38', note: 'Collapsed' },
+    { label: 'DANN',       val: 1.5807, fill: '#242424', stroke: '#3d3b38', note: 'Failed' },
+    { label: 'ADDA',       val: 1.5732, fill: '#242424', stroke: '#3d3b38', note: 'Failed' },
     { label: 'Noise Inj.', val: 0.7524, fill: '#e8e6e0', stroke: '#c8b89a', note: '★ BEST' },
     { label: 'PSF + TTA',  val: 1.0759, fill: '#242424', stroke: '#3d3b38', note: '' },
     { label: 'Ensemble',   val: 0.9626, fill: '#242424', stroke: '#3d3b38', note: '' },
@@ -485,7 +485,7 @@ export default function Journey() {
             {/* Header */}
             <div className="jrn-header">
               <div className="jrn-breadcrumb">Journey</div>
-              <h2 className="jrn-title playfair" style={{ fontStyle: 'italic' }}>The Research Log</h2>
+              <h2 className="jrn-title playfair jrn-title-italic">The Research Log</h2>
               <p className="jrn-subtitle">The complete chronological record of the project — documenting every model iteration, critical failure, architectural decision, and the final empirical results.</p>
             </div>
 
@@ -495,12 +495,12 @@ export default function Journey() {
               <h3 className="jrn-phase-header playfair">The Starting Point</h3>
 
               <p className="jrn-p">The goal: build a robust, contamination-free machine learning pipeline to detect gravitational lenses in real ESA Euclid Q1 imagery. The non-negotiable rule — no synthetic data in final evaluation, and absolute separation between training and test sets at all times.</p>
-              <p className="jrn-p">The project ran two parallel tracks. <strong style={{color:'var(--text-primary)'}}>Track A</strong> — binary detection: does this image contain a gravitational lens? <strong style={{color:'var(--text-primary)'}}>Track B</strong> — substructure classification: if it is a lens, what type of dark matter halo does it show (Smooth, Cold Dark Matter, or Axion)? Fourteen distinct binary detector versions (V2–V15) were trained and evaluated across Track A, alongside seven domain adaptation methods for Track B.</p>
+              <p className="jrn-p">The project ran two parallel tracks. <span style={{color:'var(--text-primary)', fontWeight:'400', textDecoration:'underline'}}>Track A</span> — binary detection: does this image contain a gravitational lens? <span style={{color:'var(--text-primary)', fontWeight:'400', textDecoration:'underline'}}>Track B</span> — substructure classification: if it is a lens, what type of dark matter halo does it show (Smooth, Cold Dark Matter, or Axion)? Fourteen distinct binary detector versions (V2–V15) were trained and evaluated across Track A, alongside seven domain adaptation methods for Track B.</p>
               <p className="jrn-p">What makes this problem genuinely difficult is that every image is real telescope data — not a simulation — with all the noise, PSF blurring, and artefacts that implies. The entire positive training set consists of 160 confirmed Grade A lens candidates — drawn from the 250-entry ESA SLDE catalog and split into 160 training, 40 validation, and 50 test images. For context, a typical ImageNet classification task has over a million examples per class. The core challenge throughout this project is learning a robust detector from an extremely small, real, and noisy dataset.</p>
 
               {/* Dataset table */}
-              <div className="jrn-table-wrap" style={{ marginTop: '32px' }}>
-                <div className="jrn-chart-title" style={{ marginBottom: '12px' }}>Available Datasets</div>
+              <div className="jrn-table-wrap">
+                <div className="jrn-chart-title">Available Datasets</div>
                 <table className="jrn-table">
                   <thead>
                     <tr>
@@ -513,7 +513,7 @@ export default function Journey() {
                     <tr><td>Grade A (ESA SLDE catalog)</td><td className="td-num">250 <GlossaryTooltip term="FITS">FITS</GlossaryTooltip></td><td>High-confidence lenses (~90% clean). Split: 160 train / 40 val / 50 test.</td></tr>
                     <tr><td>Grade B (ESA SLDE catalog)</td><td className="td-num">247 <GlossaryTooltip term="FITS">FITS</GlossaryTooltip></td><td>Probable lenses (70–90% clean). Diagnostic only — never trained on.</td></tr>
                     <tr><td>Grade C (ESA SLDE catalog)</td><td className="td-num">~1,918 <GlossaryTooltip term="FITS">FITS</GlossaryTooltip></td><td>Low-confidence candidates. Used as training negatives.</td></tr>
-                    <tr><td>Confirmed Non-Lenses (Test Set)</td><td className="td-num">285 <GlossaryTooltip term="FITS">FITS</GlossaryTooltip></td><td>Confirmed non-lenses. Spatially independent. Sacred hold-out.</td></tr>
+                    <tr><td>Verified Non-Lens Set</td><td className="td-num">285 <GlossaryTooltip term="FITS">FITS</GlossaryTooltip></td><td>Confirmed non-lenses. Spatially independent. Independent verification set.</td></tr>
                     <tr><td>DeepLense simulations (Track B)</td><td className="td-num">37,500 .npy</td><td>30k train + 7.5k val. 3 classes, perfectly balanced.</td></tr>
                   </tbody>
                 </table>
@@ -524,14 +524,14 @@ export default function Journey() {
 
             {/* ── PHASE 1 ── */}
             <section className="jrn-phase" id="phase1">
-              <div className="jrn-phase-label">Phase 1 — Contaminated Baselines (V2–V5)</div>
+              <div className="jrn-phase-label">Phase 1 — Invalidated Baselines (V2–V5)</div>
               <h3 className="jrn-phase-header playfair">The numbers looked extraordinary. Then we found the bug.</h3>
 
               <div className="jrn-cols-40-60">
                 <div>
-                  <p className="jrn-p">Early models (V2–V5) used EfficientNet-B0 pretrained on ImageNet. V2 achieved <GlossaryTooltip term="AUROC" /> 0.9910. V3 collapsed entirely. V4 reached 3 of 5 criteria with <GlossaryTooltip term="AUROC" /> 0.8717. V5 extended training on all 250 Grade A lenses reached <GlossaryTooltip term="AUROC" /> 0.9018.</p>
+                  <p className="jrn-p">Early models (V2–V5) used EfficientNet-B0 pretrained on ImageNet. V2 achieved <GlossaryTooltip term="AUROC" /> 0.9910. V3 failed to converge entirely. V4 reached 3 of 5 criteria with <GlossaryTooltip term="AUROC" /> 0.8717. V5 extended training on all 250 Grade A lenses reached <GlossaryTooltip term="AUROC" /> 0.9018.</p>
                   <p className="jrn-p">All of these numbers are invalid. The evaluation set was a subset of the training data. 204 of 205 evaluation positives were inside the 250 Grade A training set — confirmed by SkyCoord cross-match at &lt;2 arcsec (a method of checking whether two catalog entries point at the same patch of sky, within a tiny angular tolerance of 2 arcseconds). The model was being graded on its own homework.</p>
-                  <p className="jrn-p">V5 <GlossaryTooltip term="Grad-CAM">Grad-CAM</GlossaryTooltip> confirmed why the contaminated results were untrustworthy even beyond the split issue: the model attended to <strong style={{color:'var(--text-primary)'}}>corners and edges</strong> rather than arc structure — a brightness bias. It was detecting "large bright galaxy" as a proxy for a lens, not the gravitational arc itself. False positives were bright ellipticals; false negatives were faint compact lenses.</p>
+                  <p className="jrn-p">V5 <GlossaryTooltip term="Grad-CAM">Grad-CAM</GlossaryTooltip> confirmed why the invalidated results were untrustworthy even beyond the split issue: the model attended to <span style={{color:'var(--text-primary)', fontWeight:'400', textDecoration:'underline'}}>corners and edges</span> rather than arc structure — a brightness bias. It was detecting "large bright galaxy" as a proxy for a lens, not the gravitational arc itself. False positives were bright ellipticals; false negatives were faint compact lenses.</p>
                   <div className="jrn-quote">
                     <p>"<GlossaryTooltip term="AUROC" /> 0.99 felt like success. It was a measurement error. The only way to know is to verify the split programmatically, every time."</p>
                   </div>
@@ -545,11 +545,11 @@ export default function Journey() {
               <div className="jrn-callout">
                 <div className="jrn-callout-label">V3 Failure — Five Compounding Causes</div>
                 <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '12px', color: 'var(--text-secondary)', lineHeight: '1.7', fontFamily: "'IBM Plex Mono', monospace" }}>
-                  <li style={{ marginBottom: '8px' }}><strong style={{ color: 'var(--text-primary)', fontWeight: '500' }}>Label Noise:</strong> Grade B has a 10–30% false positive rate. With fewer than 1,200 training samples, even a small fraction of mislabelled positives is enough to corrupt the loss signal entirely.</li>
-                  <li style={{ marginBottom: '8px' }}><strong style={{ color: 'var(--text-primary)', fontWeight: '500' }}>Data Leakage:</strong> EDF-North and EDF-South sky fields overlap both the training and validation splits geographically — meaning the same galaxy clusters appear on both sides of the split, inflating validation scores.</li>
-                  <li style={{ marginBottom: '8px' }}><strong style={{ color: 'var(--text-primary)', fontWeight: '500' }}>Loss Function:</strong> Focal loss with γ=2.0 down-weights easy examples — but the cleanest, most unambiguous confirmed lenses are exactly the "easy" examples it suppresses, depriving the model of the most reliable training signal.</li>
-                  <li style={{ marginBottom: '8px' }}><strong style={{ color: 'var(--text-primary)', fontWeight: '500' }}>Overfitting:</strong> Training for 20 epochs on approximately 1,100 samples gave the model enough capacity to partially memorise the training set rather than generalise, producing a model that failed immediately on held-out data.</li>
-                  <li><strong style={{ color: 'var(--text-primary)', fontWeight: '500' }}>Preprocessing:</strong> SLDE images are approximately 600×600 pixels, but no centre-crop was applied before resizing to 224×224. Resizing the full field of view compresses the arc structure into a few pixels, making it effectively invisible to the model.</li>
+                  <li style={{ marginBottom: '8px' }}><span style={{ color: 'var(--text-primary)', fontWeight: '400', textDecoration: 'underline' }}>Label Noise:</span> Grade B has a 10–30% false positive rate. With fewer than 1,200 training samples, even a small fraction of mislabelled positives is enough to corrupt the loss signal entirely.</li>
+                  <li style={{ marginBottom: '8px' }}><span style={{ color: 'var(--text-primary)', fontWeight: '400', textDecoration: 'underline' }}>Data Leakage:</span> EDF-North and EDF-South sky fields overlap both the training and validation splits geographically — meaning the same galaxy clusters appear on both sides of the split, inflating validation scores.</li>
+                  <li style={{ marginBottom: '8px' }}><span style={{ color: 'var(--text-primary)', fontWeight: '400', textDecoration: 'underline' }}>Loss Function:</span> Focal loss with γ=2.0 down-weights easy examples — but the cleanest, most unambiguous confirmed lenses are exactly the "easy" examples it suppresses, depriving the model of the most reliable training signal.</li>
+                  <li style={{ marginBottom: '8px' }}><span style={{ color: 'var(--text-primary)', fontWeight: '400', textDecoration: 'underline' }}>Overfitting:</span> Training for 20 epochs on approximately 1,100 samples gave the model enough capacity to partially memorise the training set rather than generalise, producing a model that failed immediately on held-out data.</li>
+                  <li><span style={{ color: 'var(--text-primary)', fontWeight: '400', textDecoration: 'underline' }}>Preprocessing:</span> SLDE images are 300×300 pixels, but no centre-crop was applied before resizing to 224×224. Resizing the full field of view compresses the arc structure into a few pixels, making it effectively invisible to the model.</li>
                 </ul>
               </div>
 
@@ -567,10 +567,10 @@ export default function Journey() {
                 </table>
               </div>
 
-              <div className="jrn-callout" style={{ borderColor: '#ad8a8a', marginTop: '32px' }}>
-                <div className="jrn-callout-label" style={{ color: '#ad8a8a' }}>The Attempt That Never Trained — V6 Attempt 2</div>
-                <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)', lineHeight: '1.7', fontFamily: "'IBM Plex Mono', monospace" }}>
-                  Before V7, there was an attempt to reuse the V2 backbone (EfficientNet-B0, ImageNet-pretrained) as the feature extractor for the new clean split. A cross-match was run between V2's training data and the proposed test positives. Result: <strong style={{color:'#ad8a8a'}}>38 of 50 test positives overlapped V2's training data.</strong> The backbone had already seen — and partially memorised — most of the test set during V2 training. The approach was abandoned before a single gradient step. The V2 backbone is permanently excluded from any version that uses the sacred split.
+              <div className="jrn-callout jrn-callout-warning jrn-content-group-sm">
+                <div className="jrn-callout-label">The Attempt That Never Trained — V6 Attempt 2</div>
+                <p>
+                  Before V7, there was an attempt to reuse the V2 backbone (EfficientNet-B0, ImageNet-pretrained) as the feature extractor for the new clean split. A cross-match was run between V2's training data and the proposed test positives. Result: <strong style={{color:'#ad8a8a'}}>38 of 50 test positives overlapped V2's training data.</strong> The backbone had already seen — and partially memorised — most of the test set during V2 training. The approach was abandoned before a single gradient step. The V2 backbone is permanently excluded from any version that uses the locked holdout set.
                 </p>
               </div>
             </section>
@@ -579,21 +579,21 @@ export default function Journey() {
 
             {/* ── PHASE 2 ── */}
             <section className="jrn-phase" id="phase2">
-              <div className="jrn-phase-label">Phase 2 — First Honest Result (V6)</div>
+              <div className="jrn-phase-label">Phase 2 — First Validated Result (V6)</div>
               <h3 className="jrn-phase-header playfair">Fixing the foundation before building anything else.</h3>
 
               <div className="jrn-cols">
                 <div>
                   <p className="jrn-p">Before training any new model, a contamination-proof split was constructed. Method: SkyCoord cross-match of all 250 Grade A files against Confirmed Lenses (Independent Set) at &lt;2 arcsec. Files with a match → training pool. Files with no match → test set (50 files).</p>
-                  <p className="jrn-p">The 285 Confirmed Non-Lenses (Test Set) have zero overlap with any catalog entry — confirmed independently. This split is locked permanently: once set, it is never changed or regenerated, ensuring the test set remains truly unseen for the entire duration of the project.</p>
+                  <p className="jrn-p">The 285 Verified Non-Lens Set has zero overlap with any catalog entry — confirmed independently. This split is locked permanently: once set, it is never changed or regenerated, ensuring the test set remains truly unseen for the entire duration of the project.</p>
                   <p className="jrn-p">V6 used the sim-pretrained backbone (best_model.pth — the Track B substructure model trained on 30k noiseless simulations). This was a deliberate test of simulation-to-real transfer. The result showed it was the wrong prior for noisy real images.</p>
                   <div className="jrn-quote">
                     <p>"0.7283 felt like failure after seeing 0.99. It was the first true result this project had produced."</p>
                   </div>
                 </div>
-                <div className="jrn-chart-box" style={{ marginTop: '40px' }}>
+                <div className="jrn-chart-box jrn-chart-box-spaced">
                 <div className="jrn-chart-title">Dataset Split Composition</div>
-                <SacredSplitBarChart />
+                <LockedSplitBarChart />
               </div>
               </div>
 
@@ -601,45 +601,43 @@ export default function Journey() {
                 <table className="jrn-table">
                   <thead><tr><th>Metric</th><th>Value</th></tr></thead>
                   <tbody>
-                    <tr><td>AUROC (TTA)</td><td className="td-num">0.7283 — first honest number</td></tr>
+                    <tr><td>AUROC (TTA)</td><td className="td-num">0.7283 — first validated result</td></tr>
                     <tr><td>Precision</td><td className="td-num">0.5789</td></tr>
                     <tr><td>Recall</td><td className="td-num">0.4400</td></tr>
                     <tr><td>F1</td><td className="td-num">0.5000</td></tr>
                     <tr><td>Threshold</td><td className="td-num">0.5830</td></tr>
-                    <tr><td>FPR on Confirmed Non-Lenses (Test Set) (independent)</td><td className="td-num">0.0737</td></tr>
+                    <tr><td>FPR on Verified Non-Lens Set (independent)</td><td className="td-num">0.0737</td></tr>
                   </tbody>
                 </table>
-                <p style={{ marginTop: '12px', fontSize: '11px', color: 'var(--text-muted)', fontFamily: "'IBM Plex Mono', monospace" }}>
-                  Spearman ρ — rank correlation between model P(lens) scores and SLDE catalog grades (A=1, B=0.5, C=0) across the test set. Diagnostic only — not used for model selection.
-                </p>
+                <p className="jrn-footnote">Spearman ρ — rank correlation between model P(lens) scores and SLDE catalog grades (A=1, B=0.5, C=0) across the test set. Diagnostic only — not used for model selection.</p>
               </div>
 
               {/* Preprocessing pipeline */}
-              <div className="jrn-callout" style={{ marginTop: '40px' }}>
+              <div className="jrn-callout jrn-content-group">
                 <div className="jrn-callout-label">Preprocessing Pipeline — Every <GlossaryTooltip term="FITS">FITS</GlossaryTooltip> File (V7 path)</div>
-                <p style={{ margin: '0 0 12px 0', fontSize: '12px', color: 'var(--text-secondary)', lineHeight: '1.7', fontFamily: "'IBM Plex Mono', monospace" }}>This pipeline was designed specifically to bring faint gravitational arcs into visible range while removing telescope background noise — the two problems that make raw Euclid <GlossaryTooltip term="FITS">FITS</GlossaryTooltip> data unusable directly.</p>
-                <ol style={{ margin: 0, paddingLeft: '20px', fontSize: '12px', color: 'var(--text-secondary)', lineHeight: '1.9', fontFamily: "'IBM Plex Mono', monospace" }}>
-                  <li><strong style={{color:'var(--text-primary)'}}>Border ring subtraction:</strong> Compute median of all pixels within 10 px of any edge. Subtract from entire image. Clip to 0. Removes sky background.</li>
-                  <li><strong style={{color:'var(--text-primary)'}}>log1p stretch:</strong> Apply log1p(arr) — compresses dynamic range, brings faint arcs into visible range.</li>
-                  <li><strong style={{color:'var(--text-primary)'}}>Percentile normalisation:</strong> Min-max scale using 1st–99th percentile → [0, 1]. Clip to [0, 1]. Robust to bright stars.</li>
-                  <li><strong style={{color:'var(--text-primary)'}}>Training augmentations:</strong> Random 90° rotations, horizontal/vertical flips (p=0.5), Gaussian noise (σ∈[0.005, 0.025]), and flux scaling (×U[0.8, 1.2]).</li>
-                  <li><strong style={{color:'var(--text-primary)'}}>Bilinear resize:</strong> 224×224 pixels.</li>
-                  <li><strong style={{color:'var(--text-primary)'}}>Single channel (V7 only):</strong> Keep as 1-channel input. No ImageNet normalisation. Zoobot expects [0, 1] galaxy images. DINOv2 variants replicate to 3 channels and apply ImageNet normalisation.</li>
+                <p>This pipeline was designed specifically to bring faint gravitational arcs into visible range while removing telescope background noise — the two problems that make raw Euclid <GlossaryTooltip term="FITS">FITS</GlossaryTooltip> data unusable directly.</p>
+                <ol>
+                  <li><span style={{ fontWeight: '400', textDecoration: 'underline', color: 'var(--text-primary)' }}>Border ring subtraction:</span> Compute median of all pixels within 10 px of any edge. Subtract from entire image. Clip to 0. Removes sky background.</li>
+                  <li><span style={{ fontWeight: '400', textDecoration: 'underline', color: 'var(--text-primary)' }}>log1p stretch:</span> Apply log1p(arr) — compresses dynamic range, brings faint arcs into visible range.</li>
+                  <li><span style={{ fontWeight: '400', textDecoration: 'underline', color: 'var(--text-primary)' }}>Percentile normalisation:</span> Min-max scale using 1st–99th percentile → [0, 1]. Clip to [0, 1]. Robust to bright stars.</li>
+                  <li><span style={{ fontWeight: '400', textDecoration: 'underline', color: 'var(--text-primary)' }}>Training augmentations:</span> Random 90° rotations, horizontal/vertical flips (p=0.5), Gaussian noise (σ∈[0.005, 0.025]), and flux scaling (×U[0.8, 1.2]).</li>
+                  <li><span style={{ fontWeight: '400', textDecoration: 'underline', color: 'var(--text-primary)' }}>Bilinear resize:</span> 224×224 pixels.</li>
+                  <li><span style={{ fontWeight: '400', textDecoration: 'underline', color: 'var(--text-primary)' }}>Single channel (V7 only):</span> Keep as 1-channel input. No ImageNet normalisation. Zoobot expects [0, 1] galaxy images. DINOv2 variants replicate to 3 channels and apply ImageNet normalisation.</li>
                 </ol>
               </div>
 
               {/* Two-stage training */}
-              <div className="jrn-callout" style={{ marginTop: '24px' }}>
+              <div className="jrn-callout jrn-content-group-sm">
                 <div className="jrn-callout-label">Two-Stage Training Protocol — V6 through V15</div>
-                <p style={{ margin: '0 0 16px 0', fontSize: '12px', color: 'var(--text-secondary)', lineHeight: '1.7', fontFamily: "'IBM Plex Mono', monospace" }}>Two stages exist because freezing the encoder first prevents the pretrained weights from being destroyed by the randomly initialised classification head before it has had a chance to stabilise.</p>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', alignItems: 'stretch', fontSize: '12px', color: 'var(--text-secondary)', fontFamily: "'IBM Plex Mono', monospace", lineHeight: '1.7' }}>
-                  <div style={{ height: '150px' }}>
-                    <div style={{color:'var(--text-primary)', marginBottom:'8px', letterSpacing:'1px', fontSize:'10px'}}>STAGE 1 — HEAD ONLY (5 EPOCHS)</div>
-                    <p style={{margin:0}}>Encoder frozen. Only the classification head is trained. LR = 1e-3, WD = 1e-4. CosineAnnealingLR, T_max=5. Allows the new head to stabilise without destroying pretrained features.</p>
+                <p>Two stages exist because freezing the encoder first prevents the pretrained weights from being destroyed by the randomly initialised classification head before it has had a chance to stabilise.</p>
+                <div className="jrn-callout-grid">
+                  <div className="jrn-callout-grid-item">
+                    <div className="jrn-callout-grid-label">Stage 1 — Head Only (5 epochs)</div>
+                    <p>Encoder frozen. Only the classification head is trained. LR = 1e-3, WD = 1e-4. CosineAnnealingLR, T_max=5. Allows the new head to stabilise without destroying pretrained features.</p>
                   </div>
-                  <div style={{ height: '150px' }}>
-                    <div style={{color:'var(--text-primary)', marginBottom:'8px', letterSpacing:'1px', fontSize:'10px'}}>STAGE 2 — FULL FINE-TUNE (UP TO 20 EPOCHS)</div>
-                    <p style={{margin:0}}>Encoder unfrozen with LR warmup: epoch 0 → 1e-7, epoch 1 → 2.55e-6, epoch 2+ → cosine decay from 5e-6 to 1e-7. Head LR = 5e-5. Early stopping, patience = 5. Best checkpoint selected by no-TTA val AUROC. (Note: V15 extended this to 25 epochs).</p>
+                  <div className="jrn-callout-grid-item">
+                    <div className="jrn-callout-grid-label">Stage 2 — Full Fine-tune (up to 20 epochs)</div>
+                    <p>Encoder unfrozen with LR warmup: epoch 0 → 1e-7, epoch 1 → 2.55e-6, epoch 2+ → cosine decay from 5e-6 to 1e-7. Head LR = 5e-5. Early stopping, patience = 5. Best checkpoint selected by no-TTA val AUROC. (Note: V15 extended this to 25 epochs).</p>
                   </div>
                 </div>
               </div>
@@ -656,11 +654,11 @@ export default function Journey() {
               <div className="jrn-cols">
                 <div>
                   <p className="jrn-p">The key insight: a model pretrained on 30k noiseless simulations has the wrong inductive bias for noisy real galaxy images. Inductive bias refers to the patterns a model learns to look for based on its training data — a model trained on simulations learns to recognise perfectly clean arc morphology, which rarely exists in real instrument data. Zoobot — pretrained on ~100 million real galaxy morphologies across heterogeneous surveys — was the correct choice. ESA's own Lines et al. 2025 (SLDE Paper C) confirmed Zoobot as the best performer on Q1. It is deployed in the official ESA Euclid pipeline.</p>
-                  <p className="jrn-p">V7 (Zoobot ConvNeXt-Nano, greyscale, 14.9M params) produced an immediate +0.1258 AUROC jump over V6 — the largest single improvement in the project. V8 tested ConvNeXt-Small but the greyscale variant was unavailable; the 3-channel version underperformed. V9 added 200 hard negatives from Confirmed Non-Lenses (Test Set) — AUROC improved marginally but precision collapsed from 0.70 to 0.55.</p>
+                  <p className="jrn-p">V7 (Zoobot ConvNeXt-Nano, greyscale, 14.9M params) produced an immediate +0.1258 AUROC jump over V6 — the largest single improvement in the project. V8 tested ConvNeXt-Small but the greyscale variant was unavailable; the 3-channel version underperformed. V9 added 200 challenging negative samples from Verified Non-Lens Set — AUROC improved marginally but precision degraded from 0.70 to 0.55.</p>
                   <div className="jrn-callout">
                     <div className="jrn-callout-label">V7 Architecture</div>
                     <p>Input: single-channel 224×224, values in [0,1], no ImageNet normalisation. Encoder: Zoobot ConvNeXt-Nano greyscale. Head: Dropout(0.3) → Linear(640, 2). Two-stage training: 5 epochs head-only, then up to 20 epochs full fine-tune with encoder LR warmup.</p>
-                    <p style={{ marginTop: '8px', marginBottom: 0, fontSize: '12px', color: 'var(--text-secondary)', fontFamily: "'IBM Plex Mono', monospace" }}>Single-channel input is used here because the Euclid VIS instrument is single-band, and the Zoobot greyscale encoder was pretrained on single-band galaxy surveys — making it a direct architectural match without any channel replication or normalisation mismatch.</p>
+                    <p className="jrn-callout-note">Single-channel input is used here because the Euclid VIS instrument is single-band, and the Zoobot greyscale encoder was pretrained on single-band galaxy surveys — making it a direct architectural match without any channel replication or normalisation mismatch.</p>
                   </div>
                 </div>
                 <div className="jrn-chart-box">
@@ -668,13 +666,13 @@ export default function Journey() {
                   <AUROCBarV6V9 />
                 </div>
               </div>
-              <p className="jrn-p" style={{ marginTop: '16px' }}>The precision collapse in V9 has a direct cause: adding 200 hard negatives from the confirmed non-lens set shifts the model's decision boundary, making it more conservative. This improves recall (it catches more lenses) but forces it to accept more false alarms to do so — the classic precision–recall trade-off under a harder negative distribution.</p>
+              <p className="jrn-p jrn-mt-sm">The precision collapse in V9 has a direct cause: adding 200 challenging negative samples from the confirmed non-lens set shifts the model's decision boundary, making it more conservative. This improves recall (it catches more lenses) but forces it to accept more false alarms to do so — the classic precision–recall trade-off under a harder negative distribution.</p>
 
               <div className="jrn-table-wrap">
                 <table className="jrn-table">
-                  <thead><tr><th>Metric</th><th>V7 — Zoobot Nano</th><th>V8 — Zoobot Small</th><th>V9 — Nano + Hard Neg</th></tr></thead>
+                  <thead><tr><th>Metric</th><th>V7 — Zoobot Nano</th><th>V8 — Zoobot Small</th><th>V9 — Nano + Challenging Neg</th></tr></thead>
                   <tbody>
-                    <tr><td>AUROC</td><td className="td-num td-good">0.8541</td><td className="td-num">0.7441</td><td className="td-num">0.8587</td></tr>
+                    <tr><td>AUROC</td><td className="td-num td-good">0.8541</td><td className="td-num">0.8499</td><td className="td-num">0.8587</td></tr>
                     <tr><td>Precision</td><td className="td-num">0.7037</td><td className="td-num">0.4096</td><td className="td-num">0.5455</td></tr>
                     <tr><td>Recall</td><td className="td-num">0.7600</td><td className="td-num">0.6800</td><td className="td-num">0.7200</td></tr>
                     <tr><td>F1</td><td className="td-num">0.7308</td><td className="td-num">0.5113</td><td className="td-num">0.6207</td></tr>
@@ -744,7 +742,7 @@ export default function Journey() {
 
                 </div>
                 <div className="jrn-chart-box">
-                  <div className="jrn-chart-title">AUROC Progression — All Honest Versions V6–V15</div>
+                  <div className="jrn-chart-title">AUROC Progression — All Validated Versions V6–V15</div>
                   <AUROCLineRechart />
 
                   <div style={{ marginTop: '110px' }}>
@@ -755,16 +753,16 @@ export default function Journey() {
               </div>
 
               {/* V12 Confusion Matrix */}
-              <div className="jrn-cols-40-60" style={{ marginTop: '40px' }}>
-                <div className="jrn-chart-box" style={{ display: 'flex', flexDirection: 'column' }}>
+              <div className="jrn-cols-40-60 jrn-cols-spaced">
+                <div className="jrn-chart-box jrn-chart-box-flex">
                   <div className="jrn-chart-title">V12 Confusion Matrix — Threshold 0.70</div>
                   <div style={{ flex: 1 }}>
                     <ConfusionMatrixGrid />
                   </div>
                 </div>
                 <div>
-                  <p className="jrn-h3" style={{ marginBottom: '24px' }}>Data Mining Results</p>
-                  <div className="jrn-table-wrap" style={{ margin: 0 }}>
+                  <p className="jrn-h3 jrn-h3-spaced">Data Mining Results</p>
+                  <div className="jrn-table-wrap jrn-table-compact">
                     <table className="jrn-table">
                       <thead><tr><th>Step</th><th>Value</th></tr></thead>
                       <tbody>
@@ -793,7 +791,7 @@ export default function Journey() {
                     <tr><td>FP — False Alarm</td><td className="td-num">7</td><td className="td-num">4.7% FPR</td><td>Non-lens called a lens</td></tr>
                   </tbody>
                 </table>
-                <p style={{ marginTop: '12px', fontSize: '11px', color: 'var(--text-muted)', fontFamily: "'IBM Plex Mono', monospace" }}>Test set composition: 50 Grade A positives + 100 Grade C clean + 50 Grade C hard negatives = 200 total. <GlossaryTooltip term="AUROC" />(<GlossaryTooltip term="TTA">TTA</GlossaryTooltip>) = 0.8871. Spearman ρ = 0.5806 (DIAGNOSTIC ONLY).</p>
+                <p style={{ marginTop: '12px', fontSize: '11px', color: 'var(--text-muted)', fontFamily: "'IBM Plex Mono', monospace" }}>Test set composition: 50 Grade A positives + 100 Grade C clean + 50 Grade C challenging negatives = 200 total. <GlossaryTooltip term="AUROC" />(<GlossaryTooltip term="TTA">TTA</GlossaryTooltip>) = 0.8871. Spearman ρ = 0.5806 (DIAGNOSTIC ONLY).</p>
               </div>
 
               {/* V12 Full Threshold Sweep */}
@@ -840,10 +838,10 @@ export default function Journey() {
             {/* ── PHASE 6 ── */}
             <section className="jrn-phase" id="phase6">
               <div className="jrn-phase-label">Phase 6 — Track B: Substructure Classification</div>
-              <h3 className="jrn-phase-header playfair">Seven methods. One honest answer.</h3>
+              <h3 className="jrn-phase-header playfair">Seven methods. One validated conclusion.</h3>
 
-              <div className="jrn-cols-40-60">
-                <div>
+              <div className="jrn-content-stack">
+                <div className="jrn-text-content">
                   <p className="jrn-p">Track B attempted to classify confirmed lenses as smooth halos, <GlossaryTooltip term="CDM">CDM</GlossaryTooltip> (cold dark matter with particle subhalos), or <GlossaryTooltip term="Axion">axion</GlossaryTooltip> dark matter (smoother halos). The model was trained on 30,000 noiseless DeepLense simulations and evaluated on 205 real Euclid lenses. Shannon entropy measures how uncertain the model is about its prediction — 0 means perfectly confident in a single class, 1.585 bits is completely random (uniform across 3 classes).</p>
                   <p className="jrn-p">The baseline model's class distribution on real Euclid lenses reveals the extent of the simulation bias: <strong style={{color:'var(--text-primary)'}}><GlossaryTooltip term="CDM" /> 72.7%, <GlossaryTooltip term="Axion" /> 16.6%, Smooth 10.7%</strong>. The sim model is heavily biased toward <GlossaryTooltip term="CDM" /> — the most common simulation class — even on real images it has never seen. This is the sim-to-real gap in concrete numbers.</p>
                   <p className="jrn-p">Three classic <GlossaryTooltip term="Domain Adaptation">domain adaptation</GlossaryTooltip> methods (CORAL, DANN, ADDA) collapsed due to the 30,000:205 simulation-to-real imbalance. Domain adaptation works by finding features common to both source and target data — but with 147× more source samples, those "common features" end up being the simulation's dominant visual patterns, not real lens morphology. Noise injection retraining (Method 5) was the only approach producing meaningful signal — reducing entropy by 33% and increasing high-confidence predictions 5×. Even so, 71.2% of lenses remained uncertain.</p>
@@ -852,7 +850,7 @@ export default function Journey() {
                     <p>"Knowing what cannot be measured at current resolution is itself a scientific result."</p>
                   </div>
                 </div>
-                <div className="jrn-chart-box">
+                <div className="jrn-chart-fullwidth">
                   <div className="jrn-chart-title">Shannon Entropy by Method — Lower = More Confident</div>
                   <EntropyBarRechart />
                 </div>
@@ -863,9 +861,9 @@ export default function Journey() {
                   <thead><tr><th>Method</th><th>Entropy</th><th>Confidence</th><th>% Uncertain</th><th>High-Conf</th><th>Outcome</th></tr></thead>
                   <tbody>
 <tr><td>1. Baseline MC Dropout</td><td className="td-num">1.1236</td><td className="td-num">0.6427</td><td className="td-num">94.6%</td><td className="td-num">11/205</td><td>0/4 criteria</td></tr>
-                    <tr><td>2. CORAL</td><td className="td-num">0.1429</td><td className="td-num">0.9566</td><td className="td-num td-bad">100%</td><td className="td-num">0/205</td><td className="td-bad">Collapsed — CDM 100%</td></tr>
-                    <tr><td>3. DANN</td><td className="td-num">1.5807</td><td className="td-num">0.3626</td><td className="td-num td-bad">100%</td><td className="td-num">0/205</td><td className="td-bad">Collapsed — random</td></tr>
-                    <tr><td>4. ADDA</td><td className="td-num">1.5732</td><td className="td-num">0.3942</td><td className="td-num td-bad">100%</td><td className="td-num">0/205</td><td className="td-bad">Collapsed — Axion 100%</td></tr>
+                    <tr><td>2. CORAL</td><td className="td-num">0.1429</td><td className="td-num">0.9566</td><td className="td-num td-bad">100%</td><td className="td-num">0/205</td><td className="td-bad">Failed — CDM 100%</td></tr>
+                    <tr><td>3. DANN</td><td className="td-num">1.5807</td><td className="td-num">0.3626</td><td className="td-num td-bad">100%</td><td className="td-num">0/205</td><td className="td-bad">Failed — random predictions</td></tr>
+                    <tr><td>4. ADDA</td><td className="td-num">1.5732</td><td className="td-num">0.3942</td><td className="td-num td-bad">100%</td><td className="td-num">0/205</td><td className="td-bad">Failed — Axion 100%</td></tr>
                     <tr className="row-highlight"><td>5. Noise Injection ★</td><td className="td-num">0.7524</td><td className="td-num">0.7637</td><td className="td-num">71.2%</td><td className="td-num">59/205</td><td className="td-good">BEST — 4/4 criteria</td></tr>
                     <tr><td>6. PSF+Noise+TTA</td><td className="td-num">1.0759</td><td className="td-num">0.6787</td><td className="td-num">88.8%</td><td className="td-num">23/205</td><td>3/4 criteria</td></tr>
                     <tr><td>7. Deep Ensemble</td><td className="td-num">0.9626</td><td className="td-num">0.6771</td><td className="td-num">90.2%</td><td className="td-num">20/205</td><td>Worse than Method 5</td></tr>
@@ -889,19 +887,19 @@ export default function Journey() {
 
             {/* ── PHASE 7 ── */}
             <section className="jrn-phase" id="phase7">
-              <div className="jrn-phase-label">Phase 7 — Unseen Data Scan & Discovery</div>
+              <div className="jrn-phase-label">Phase 7 — Population Inference & Discovery</div>
               <h3 className="jrn-phase-header playfair">The Final Run: Scanning the Unseen Universe</h3>
 
               <div className="jrn-cols">
                 <div>
-                  <p className="jrn-p">After finalizing the V12 ensemble (<GlossaryTooltip term="AUROC" />=0.8871), we unleashed it on every remaining Euclid Q1 file that had absolutely zero overlap with the 1,000-file "Sacred Split" used for training, validation, or testing. This is the ultimate test of discovery: running inference on completely untouched data to find genuinely new gravitational lens candidates.</p>
+                  <p className="jrn-p">After finalizing the V12 ensemble (<GlossaryTooltip term="AUROC" />=0.8871), we unleashed it on every remaining Euclid Q1 file that had absolutely zero overlap with the 1,000-file "Locked Holdout Set" used for training, validation, or testing. This is the ultimate test of discovery: running inference on completely untouched data to find genuinely new gravitational lens candidates.</p>
                   
                   <p className="jrn-h3">Inference Setup</p>
-                  <p className="jrn-p">We scanned 1,415 files (247 Grade B, 1,168 Grade C). We applied Test-Time Augmentation (<GlossaryTooltip term="TTA">TTA</GlossaryTooltip>: 4×90° rotations, averaged softmax) and used a strict classification threshold of P ≥ 0.70 — the exact threshold that yielded optimal F1 score on our sacred test set. We required all three architecturally distinct models (V7, V10, V11) to agree.</p>
+                  <p className="jrn-p">We scanned 1,415 files (247 Grade B, 1,168 Grade C). We applied Test-Time Augmentation (<GlossaryTooltip term="TTA">TTA</GlossaryTooltip>: 4×90° rotations, averaged softmax) and used a strict classification threshold of P ≥ 0.70 — the exact threshold that yielded optimal F1 score on our locked test set. We required all three architecturally distinct models (V7, V10, V11) to agree.</p>
 
                   <p className="jrn-h3">Scientific Interpretation</p>
                   <p className="jrn-p">Across the 1,415 files, 625 were flagged (44.2%). However, real lens prevalence is ~0.1–1%. The high overall flag rate is a documented out-of-distribution generalization failure (as noted in ESA's arXiv:2512.05899) when models encounter diverse Grade C morphologies they were never trained on.</p>
-                  <p className="jrn-p">The scientifically valid result lies in the <strong style={{color:'var(--text-primary)'}}>pure Grade B candidates</strong>. Of the 86 human-vetted, non-contaminated Grade B files, the model flagged 33 (38.4%) at high confidence. Furthermore, 228 files across the entire scan achieved unanimous P &gt; 0.90 agreement from all three ensemble members. These represent the most credible new candidates for visual follow-up.</p>
+                  <p className="jrn-p">The scientifically valid result lies in the <strong style={{color:'var(--text-primary)'}}>pure Grade B candidates</strong>. Of the 86 human-vetted, independent Grade B files, the model flagged 33 (38.4%) at high confidence. Furthermore, 228 files across the entire scan achieved unanimous P &gt; 0.90 agreement from all three ensemble members. These represent the most credible new candidates for visual follow-up.</p>
                 </div>
 
                 <div>
@@ -909,7 +907,7 @@ export default function Journey() {
                     <div className="jrn-callout-label" style={{ color: '#ad8a8a' }}>The "NEG-Prefix" Nuance</div>
                     <p style={{ margin: 0, fontSize: '12px', color: 'var(--text-secondary)', lineHeight: '1.7', fontFamily: "'IBM Plex Mono', monospace" }}>
                       Grade B overall showed a 40.1% detection rate. However, 161 of the 247 Grade B files carry a <span style={{color:'var(--text-primary)'}}>NEG</span> prefix (e.g., slde_NEG5_...). These were labeled non-lenses at catalog creation but ended up grouped into Grade B during ESA's pipeline. The model flagged 41% of them as lenses — consistent with the documented out-of-distribution generalization failure, not genuine lens detections. <br/><br/>
-                      By isolating the <strong style={{color:'var(--text-primary)', fontWeight:'500'}}>86 pure, non-NEG Grade B files</strong>, we see a 38.4% detection rate (33/86). Flagging human-vetted probable lenses at high confidence using a model trained strictly on Grade A is a robust, genuine signal, completely separate from the OOD noise.
+                      By isolating the <strong style={{color:'var(--text-primary)'}}>86 pure, non-NEG Grade B files</strong>, we see a 38.4% detection rate (33/86). Flagging human-vetted probable lenses at high confidence using a model trained strictly on Grade A is a robust, genuine signal, completely separate from the OOD noise.
                     </p>
                   </div>
 
@@ -973,7 +971,7 @@ export default function Journey() {
               <h3 className="jrn-phase-header playfair">What the data finally revealed.</h3>
 
               <div className="jrn-chart-box" style={{ marginBottom: '48px' }}>
-                <div className="jrn-chart-title">Complete Model <GlossaryTooltip term="AUROC" /> Comparison — All Honest Versions</div>
+                <div className="jrn-chart-title">Complete Model <GlossaryTooltip term="AUROC" /> Comparison — All Validated Versions</div>
                 <FinalBarRechart />
               </div>
 
@@ -1035,7 +1033,7 @@ export default function Journey() {
 
                   <div className="jrn-finding-item">
                     <div className="jrn-finding-label">Domain adaptation (CORAL, DANN, ADDA)</div>
-                    <div className="jrn-finding-value">All collapsed. Each outputted a single class for all 205 real lenses. The 30,000:205 source-to-target imbalance made alignment impossible.</div>
+                    <div className="jrn-finding-value">All failed. Each outputted a single class for all 205 real lenses. The 30,000:205 source-to-target imbalance made alignment impossible.</div>
                   </div>
 
                   <div className="jrn-finding-item">
@@ -1057,7 +1055,7 @@ export default function Journey() {
 
               <div className="jrn-p" style={{ marginTop: '48px', color: 'var(--text-secondary)', lineHeight: '1.8' }}>
                 <p style={{ marginBottom: '8px' }}><strong style={{ color: 'var(--text-primary)' }}>Beyond <GlossaryTooltip term="AUROC" /> (Precision Matters)</strong></p>
-                <p><GlossaryTooltip term="AUROC" /> measures ranking ability, but real pipelines need hard thresholds. For example, V9 had higher <GlossaryTooltip term="AUROC" /> than V7 (0.8587 vs 0.8541), but its precision collapsed to 0.5455 (creating too many false alarms). V7 is the superior production choice because it maintains high precision (0.7037) and a stable threshold.</p>
+                <p><GlossaryTooltip term="AUROC" /> measures ranking ability, but real pipelines need hard thresholds. For example, V9 had higher <GlossaryTooltip term="AUROC" /> than V7 (0.8587 vs 0.8541), but its precision failed to converge at a statistically significant level, resulting in an excessive number of false alarms. V7 is the superior production choice because it maintains high precision (0.7037) and a stable threshold.</p>
               </div>
 
 

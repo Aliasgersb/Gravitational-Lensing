@@ -50,8 +50,8 @@ export default function Hero({ setActiveTab }) {
                 </div>
                 <div className="stat-item">
                   <div className="stat-label">DOMAIN ADAPT. METHODS</div>
-                  <div className="stat-value playfair">5</div>
-                  <div className="stat-sub">Track B — Trained Models</div>
+                  <div className="stat-value playfair">3</div>
+                  <div className="stat-sub">Track B — CORAL, DANN, ADDA</div>
                 </div>
                 <div className="stat-item">
                   <div className="stat-label">LENSES DETECTED</div>
@@ -81,13 +81,13 @@ export default function Hero({ setActiveTab }) {
           <div>
             <h4 className="playfair">The Data</h4>
             <p>
-              490 real ESA Euclid Q1 VIS cutouts — 205 confirmed Grade A gravitational lens candidates and 285 spatially independent confirmed non-lenses — drawn from the EDF-North and EDF-South fields. Substructure classification was applied to all 205 confirmed lenses. No synthetic data was used in any final evaluation.
+              497 real ESA Euclid Q1 VIS cutouts — 250 confirmed Grade A gravitational lens candidates and 247 Grade B probable candidates, plus 285 spatially independent verified non-lenses from the EDF-South field. Training used 160 Grade A positives; 50 were held out as a locked test set. Substructure classification was applied to 205 real Euclid lens images. No synthetic data was used in any final evaluation.
             </p>
           </div>
           <div>
             <h4 className="playfair">The Approach</h4>
             <p>
-              A two-stage pipeline: a weighted ensemble of three galaxy-pretrained networks (Zoobot ConvNeXt-Nano, DINOv2-Small, DINOv2-Base) for binary lens detection, followed by an EfficientNet-B0 substructure classifier adapted to real Euclid data via noise injection retraining. Five domain adaptation strategies were evaluated for substructure classification, all results reported honestly including failures.
+              A two-stage pipeline: a weighted ensemble of three galaxy-pretrained networks (Zoobot ConvNeXt-Nano, DINOv2-Small, DINOv2-Base) for binary lens detection, followed by an EfficientNet-B0 substructure classifier adapted to real Euclid data via noise injection retraining. Seven methods were evaluated for substructure classification — including three domain adaptation strategies (CORAL, DANN, ADDA), all of which failed — with all results reported transparently including failures.
             </p>
           </div>
         </div>

@@ -8,7 +8,7 @@ export default function Results() {
     <div className="tab-content">
       <OrientationStrip 
         title="RESULTS" 
-        description="Complete evaluation metrics — including an honest account of where the model falls short." 
+        description="Complete evaluation metrics — including a transparent account of where the model falls short." 
       />
 
       <div className="container section" style={{ paddingTop: 0 }}>
@@ -51,7 +51,7 @@ export default function Results() {
                 </div>
               </div>
             </div>
-            <div className="res-subtitle">V12 ensemble metrics at threshold = 0.70 on the sacred test set (200 images: 50 Grade A positives + 150 Grade C negatives).</div>
+            <div className="res-subtitle">V12 ensemble metrics at threshold = 0.70 on the locked test set (200 images: 50 Grade A positives + 150 Grade C negatives).</div>
 
             {/* Confusion Matrix */}
             <div className="cm-container" style={{ marginTop: '80px', marginBottom: '80px' }}>
@@ -88,7 +88,7 @@ export default function Results() {
                 <div className="res-kv-row"><div className="res-kv-key">Negative source:</div><div className="res-kv-val">Grade C — low-confidence candidates treated as non-lenses</div></div>
                 <div className="res-kv-row"><div className="res-kv-key">Split:</div><div className="res-kv-val">Locked before any training. Never modified. Seed = 42.</div></div>
                 <div className="res-kv-row"><div className="res-kv-key">Threshold:</div><div className="res-kv-val">0.70 — images scoring above this are classified as LENS</div></div>
-                <div className="res-kv-row"><div className="res-kv-key">Contamination note:</div><div className="res-kv-val">Models V2–V5 were trained on data that overlapped the test set. Their results are invalid and shown in the table marked as CONTAMINATED for transparency.</div></div>
+                <div className="res-kv-row"><div className="res-kv-key">Contamination note:</div><div className="res-kv-val">Models V2–V5 were trained on data that overlapped the test set. Their results are invalid and shown in the table marked as INVALIDATED for transparency.</div></div>
               </div>
             </div>
 
@@ -111,65 +111,65 @@ export default function Results() {
                   </thead>
                   <tbody>
                     <tr className="muted">
-                      <td>V2</td><td>EfficientNet-B0 (ImageNet)</td><td>0.9910</td><td>0.892</td><td>0.976</td><td>0.929</td><td>0.50</td><td className="strikethrough">CONTAMINATED</td>
+                      <td>V2</td><td>EfficientNet-B0 (ImageNet)</td><td>0.9910</td><td>0.892</td><td>0.976</td><td>0.929</td><td>0.50</td><td className="strikethrough">INVALIDATED</td>
                     </tr>
                     <tr className="muted">
-                      <td>V3</td><td>EfficientNet-B0</td><td>0.6700</td><td>—</td><td>—</td><td>—</td><td>—</td><td className="strikethrough">COLLAPSED</td>
+                      <td>V3</td><td>EfficientNet-B0</td><td>0.6700</td><td>—</td><td>—</td><td>—</td><td>—</td><td className="strikethrough">FAILED</td>
                     </tr>
                     <tr className="muted">
-                      <td>V4</td><td>EfficientNet-B0 (ImageNet)</td><td>0.8717</td><td>—</td><td>—</td><td>—</td><td>—</td><td className="strikethrough">CONTAMINATED</td>
+                      <td>V4</td><td>EfficientNet-B0 (ImageNet)</td><td>0.8717</td><td>—</td><td>—</td><td>—</td><td>—</td><td className="strikethrough">INVALIDATED</td>
                     </tr>
                     <tr className="muted">
-                      <td>V5</td><td>EfficientNet-B0 (ImageNet)</td><td>0.9018</td><td>0.877</td><td>0.624</td><td>0.729</td><td>0.50</td><td className="strikethrough">CONTAMINATED</td>
+                      <td>V5</td><td>EfficientNet-B0 (ImageNet)</td><td>0.9018</td><td>0.877</td><td>0.624</td><td>0.729</td><td>0.50</td><td className="strikethrough">INVALIDATED</td>
                     </tr>
                     <tr>
-                      <td>V6</td><td>EfficientNet-B0 (sim backbone)</td><td>0.7283</td><td>0.579</td><td>0.440</td><td>0.500</td><td>0.583</td><td>HONEST ✓</td>
+                      <td>V6</td><td>EfficientNet-B0 (sim backbone)</td><td>0.7283</td><td>0.579</td><td>0.440</td><td>0.500</td><td>0.583</td><td>VALIDATED ✓</td>
                     </tr>
                     <tr>
-                      <td>V7</td><td>Zoobot ConvNeXt-Nano</td><td>0.8541</td><td>0.704</td><td>0.760</td><td>0.731</td><td>0.623</td><td>HONEST ✓</td>
+                      <td>V7</td><td>Zoobot ConvNeXt-Nano</td><td>0.8541</td><td>0.704</td><td>0.760</td><td>0.731</td><td>0.623</td><td>VALIDATED ✓</td>
                     </tr>
                     <tr>
-                      <td>V8</td><td>Zoobot ConvNeXt-Small</td><td>0.7441</td><td>0.4096</td><td>0.6800</td><td>0.5113</td><td>0.2700</td><td>HONEST ✓</td>
+                      <td>V8</td><td>Zoobot ConvNeXt-Small</td><td>0.8499</td><td>0.4096</td><td>0.6800</td><td>0.5113</td><td>0.2700</td><td>VALIDATED ✓</td>
                     </tr>
                     <tr>
-                      <td>V9</td><td>Zoobot ConvNeXt-Nano + hard negatives</td><td>0.8587</td><td>0.546</td><td>0.720</td><td>0.621</td><td>0.480</td><td>HONEST ✓</td>
+                      <td>V9</td><td>Zoobot ConvNeXt-Nano + challenging negative samples</td><td>0.8587</td><td>0.546</td><td>0.720</td><td>0.621</td><td>0.480</td><td>VALIDATED ✓</td>
                     </tr>
                     <tr>
-                      <td>V10</td><td>DINOv2-S + hard negatives</td><td>0.8756</td><td>0.576</td><td>0.760</td><td>0.655</td><td>0.230</td><td>HONEST ✓</td>
+                      <td>V10</td><td>DINOv2-S + challenging negative samples</td><td>0.8756</td><td>0.576</td><td>0.760</td><td>0.655</td><td>0.230</td><td>VALIDATED ✓</td>
                     </tr>
                     <tr>
-                      <td>V11</td><td>DINOv2-B + hard negatives</td><td>0.8776</td><td>0.556</td><td>0.800</td><td>0.656</td><td>0.300</td><td>HONEST ✓</td>
+                      <td>V11</td><td>DINOv2-B + challenging negative samples</td><td>0.8776</td><td>0.556</td><td>0.800</td><td>0.656</td><td>0.300</td><td>VALIDATED ✓</td>
                     </tr>
                     <tr className="highlighted best-row">
                       <td>V12</td><td>Ensemble V7+V10+V11 (0.3/0.2/0.5)</td><td><strong>0.8871</strong></td><td><strong>0.833</strong></td><td><strong>0.700</strong></td><td><strong>0.761</strong></td><td>0.700</td><td><strong>BEST ✓</strong></td>
                     </tr>
                     <tr className="muted">
-                      <td>V13</td><td>Unity model (V12 as teacher)</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>DATA MINING</td>
+                      <td>V13</td><td>Teacher model (V12 as teacher)</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>DATA MINING</td>
                     </tr>
                     <tr className="muted">
                       <td>V14</td><td>Data mining step</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>DATA MINING</td>
                     </tr>
                     <tr>
-                      <td>V15</td><td>DINOv2-B + 394 pseudo-labeled positives</td><td>0.8687</td><td>—</td><td>—</td><td>—</td><td>—</td><td>HONEST ✓</td>
+                      <td>V15</td><td>DINOv2-B + 394 pseudo-labeled positives</td><td>0.8687</td><td>—</td><td>—</td><td>—</td><td>—</td><td>VALIDATED ✓</td>
                     </tr>
                   </tbody>
                 </table>
               </div>
               <div className="res-footnote">
-                CONTAMINATED = test set overlapped training data. Results not trustworthy. COLLAPSED = model failed to train.
+                INVALIDATED = test set overlapped training data. Results not trustworthy. FAILED = model failed to converge.
               </div>
             </div>
 
-            {/* Unseen Data Scan */}
+            {/* Population Inference */}
             <div className="res-section">
-              <h3 className="res-title playfair">Unseen Data Scan & Discovery</h3>
+              <h3 className="res-title playfair">Population Inference & Discovery</h3>
               <p style={{ color: 'var(--text-secondary)', lineHeight: '1.6', fontSize: '14px', marginBottom: '16px', fontFamily: "'IBM Plex Mono', monospace" }}>
                 Following the finalization of the V12 ensemble, the model was run on 1,415 untouched Euclid Q1 files (247 Grade B, 1,168 Grade C) that had zero overlap with the training, validation, or test sets. This served as the ultimate test of out-of-distribution discovery.
               </p>
               <div className="res-list">
                 <div className="res-list-item">
                   <div className="res-list-label">PURE GRADE B CANDIDATES</div>
-                  <div className="res-list-text">Of the 86 human-vetted, uncontaminated Grade B files, the V12 model flagged <strong style={{color:'var(--text-primary)'}}>33 (38.4%)</strong> as high-confidence lenses (P ≥ 0.70). These represent the most scientifically credible new candidates produced by the project.</div>
+                  <div className="res-list-text">Of the 86 human-vetted, independent Grade B files, the V12 model flagged <strong style={{color:'var(--text-primary)'}}>33 (38.4%)</strong> as high-confidence lenses (P ≥ 0.70). These represent the most scientifically credible new candidates produced by the project.</div>
                 </div>
                 <div className="res-list-item">
                   <div className="res-list-label">OUT-OF-DISTRIBUTION LIMITATIONS</div>
@@ -204,16 +204,16 @@ export default function Results() {
                   <div className="res-list-text">V15 used 394 training positives (vs 160 for V11) by mining pseudo-labels. Result: AUROC=0.8687 — worse than V11's 0.8776. Pseudo-label noise offset the quantity gain.</div>
                 </div>
                 <div className="res-list-item">
-                  <div className="res-list-label">HARD NEGATIVES REDUCE FALSE POSITIVES</div>
-                  <div className="res-list-text">Adding 200 confirmed non-lens images to training (V9–V11) dropped the false positive rate on independent images from 9.1% (V7) to 2.4–3.5%. At the cost of precision.</div>
+                  <div className="res-list-label">CHALLENGING NEGATIVE SAMPLES REDUCE FALSE POSITIVES</div>
+                  <div className="res-list-text">Adding 200 challenging negative samples to training (V9–V11) dropped the false positive rate on independent images from 9.1% (V7) to 2.4–3.5%. At the cost of precision.</div>
                 </div>
                 <div className="res-list-item">
                   <div className="res-list-label">CALIBRATION MATTERS FOR A PRODUCTION MODEL</div>
                   <div className="res-list-text">V10 and V11 have AUROC above V7 but their optimal thresholds are 0.23 and 0.30 — indicating miscalibrated probabilities. V7's threshold of 0.623 is meaningful. This is why V7 is used in the Analyse tab.</div>
                 </div>
                 <div className="res-list-item">
-                  <div className="res-list-label">FOCAL LOSS IS PERMANENTLY FORBIDDEN</div>
-                  <div className="res-list-text">V3 used focal loss (gamma=2.0) and collapsed to AUROC=0.67. It down-weighted the most reliable training examples. Never used again in any version.</div>
+                  <div className="res-list-label">FOCAL LOSS IS NOT RECOMMENDED</div>
+                  <div className="res-list-text">V3 used focal loss (gamma=2.0) and failed to converge at AUROC=0.67. It down-weighted the most reliable training examples. Never used again in any version.</div>
                 </div>
               </div>
             </div>
@@ -311,9 +311,9 @@ export default function Results() {
               </div>
             </div>
 
-            {/* Why Methods 2, 3, 4 Collapsed */}
+            {/* Why Methods 2, 3, 4 Failed */}
             <div className="res-section">
-              <h3 className="res-title playfair">Why Methods 2, 3, 4 Collapsed</h3>
+              <h3 className="res-title playfair">Why Methods 2, 3, 4 Failed</h3>
               <div className="res-list">
                 <div className="res-list-item">
                   <div className="res-list-label">THE CORE PROBLEM: 30,000 SIMULATIONS VS 205 REAL IMAGES</div>

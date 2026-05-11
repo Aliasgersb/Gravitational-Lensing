@@ -31,9 +31,9 @@ export default function App() {
             <p>A two-stage deep learning pipeline trained on real ESA Euclid Q1 cutouts.</p>
           </div>
           <div className="footer-right">
-            <a href="#">ESA Euclid Archive</a>
-            <a href="#">Kaggle Dataset</a>
-            <a href="#">GitHub</a>
+            <span className="footer-link-disabled" data-coming-soon>ESA Euclid Archive</span>
+            <span className="footer-link-disabled" data-coming-soon>Kaggle Dataset</span>
+            <span className="footer-link-disabled" data-coming-soon>GitHub</span>
           </div>
         </div>
       </footer>

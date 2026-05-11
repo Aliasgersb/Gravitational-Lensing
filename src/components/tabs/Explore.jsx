@@ -57,7 +57,7 @@ function AboutBanner({ meta }) {
           <div className="exp-about-grid">
             <div className="exp-about-item">
               <div className="exp-about-label">What you're looking at</div>
-              <div className="exp-about-text">{meta.total_images} real images from the sacred test split of the ESA Euclid telescope, each processed by our V12 ensemble model. The model assigns a probability that each image contains a gravitational lens — a massive galaxy bending light from something behind it.</div>
+              <div className="exp-about-text">{meta.total_images} real images from the locked test split of the ESA Euclid telescope, each processed by our V12 ensemble model. The model assigns a probability that each image contains a gravitational lens — a massive galaxy bending light from something behind it.</div>
             </div>
             <div className="exp-about-item">
               <div className="exp-about-label">Threshold</div>

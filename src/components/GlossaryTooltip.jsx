@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 const GLOSSARY = {
   'AUROC': 'Area Under the Receiver Operating Characteristic curve; a performance metric where 1.0 is perfect and 0.5 is random guessing.',
@@ -21,16 +21,69 @@ const GLOSSARY = {
 
 export default function GlossaryTooltip({ term, children }) {
   const definition = GLOSSARY[term];
-  
+  const [isVisible, setIsVisible] = useState(false);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const wrapperRef = useRef(null);
+
+  useEffect(() => {
+    if (!isVisible || !wrapperRef.current) return;
+
+    const rect = wrapperRef.current.getBoundingClientRect();
+    const tooltipWidth = 280;
+    const tooltipHeight = 100;
+    const margin = 12;
+
+    // Calculate centered position above the trigger
+    let x = rect.left + rect.width / 2;
+    let y = rect.top - margin;
+
+    // Boundary checks
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+
+    // Adjust if tooltip would go off-screen horizontally
+    if (x - tooltipWidth / 2 < 10) {
+      x = tooltipWidth / 2 + 10;
+    } else if (x + tooltipWidth / 2 > viewportWidth - 10) {
+      x = viewportWidth - tooltipWidth / 2 - 10;
+    }
+
+    // If not enough space above, show below
+    if (y < tooltipHeight + margin) {
+      y = rect.bottom + margin + tooltipHeight;
+    }
+
+    setPosition({ x, y });
+  }, [isVisible]);
+
+  if (!definition) {
+    return <span>{children || term}</span>;
+  }
+
   return (
-    <span className="ls-tooltip-wrapper">
-      {children || term}
-      {definition && (
-        <span className="ls-tooltip">
+    <>
+      <span
+        ref={wrapperRef}
+        className="ls-tooltip-wrapper"
+        onMouseEnter={() => setIsVisible(true)}
+        onMouseLeave={() => setIsVisible(false)}
+        onFocus={() => setIsVisible(true)}
+        onBlur={() => setIsVisible(false)}
+      >
+        <span style={{ fontWeight: 400 }}>{children || term}</span>
+      </span>
+      {isVisible && (
+        <div
+          className="ls-tooltip-fixed"
+          style={{
+            left: position.x,
+            top: position.y,
+          }}
+        >
           <span className="ls-tt-term">{term}</span>
           {definition}
-        </span>
+        </div>
       )}
-    </span>
+    </>
   );
 }

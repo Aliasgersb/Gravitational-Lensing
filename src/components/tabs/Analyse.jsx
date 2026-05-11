@@ -427,7 +427,7 @@ export default function Analyse() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '32px' }}>
             {[
                { label: 'File Compatibility', value: '.fits, .fit, .fts', desc: 'Ensure your file contains standard 2D image HDUs.' },
-               { label: 'Recommended Area', value: '300 × 300 Pixels', desc: 'Pipeline crops to the central 30 px region for analysis.' },
+               { label: 'Recommended Area', value: '300 × 300 Pixels', desc: 'Pipeline crops to the central 300 × 300 px region for analysis.' },
                { label: 'Spatial Resolution', value: '0.1 Arcsec/Pixel', desc: 'Optimized for high-resolution VIS-band imaging.' },
                { label: 'Data Treatment', value: 'Linear Raw Counts', desc: 'Pipeline handles background and log-scaling automatically.' },
             ].map(item => (
