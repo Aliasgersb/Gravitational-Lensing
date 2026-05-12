@@ -57,6 +57,16 @@ body {
   animation: fadeIn 0.3s ease-out forwards;
 }
 
+::selection {
+  background-color: var(--accent-dim);
+  color: var(--text-primary);
+}
+
+::-moz-selection {
+  background-color: var(--accent-dim);
+  color: var(--text-primary);
+}
+
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
