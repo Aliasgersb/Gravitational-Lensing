@@ -271,7 +271,36 @@ export default function Results() {
                 </div>
               </div>
             </div>
-            <div className="res-subtitle">Evaluated on 205 real Euclid lens images from the ESA SLDE catalog. Task: classify each lens as smooth dark matter halo, CDM subhalo, or axion-like dark matter.</div>
+
+            <div className="res-subtitle" style={{ marginBottom: '32px' }}>
+              Evaluated on 205 real Euclid lens images from the ESA SLDE catalog. Task: classify each lens as smooth dark matter halo, CDM subhalo, or axion-like dark matter.
+            </div>
+
+            {/* Simple, integrated breakdown */}
+            <div className="res-section" style={{ marginBottom: '60px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '40px', marginBottom: '16px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  <span style={{ fontSize: '10px', color: 'var(--text-tertiary)', letterSpacing: '0.1em', marginBottom: '4px' }}>REAL DATA PREDICTIONS (N=42)</span>
+                  <div style={{ display: 'flex', gap: '24px', alignItems: 'baseline' }}>
+                    <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
+                      <span style={{ fontSize: '24px', fontWeight: 600, color: 'var(--accent)', fontFamily: "'Playfair Display', serif" }}>31</span>
+                      <span style={{ fontSize: '11px', color: 'var(--text-secondary)', fontWeight: 600 }}>AXION</span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
+                      <span style={{ fontSize: '24px', fontWeight: 600, color: '#c8b89a', fontFamily: "'Playfair Display', serif" }}>11</span>
+                      <span style={{ fontSize: '11px', color: 'var(--text-secondary)', fontWeight: 600 }}>CDM</span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
+                      <span style={{ fontSize: '24px', fontWeight: 600, color: 'var(--text-tertiary)', fontFamily: "'Playfair Display', serif" }}>0</span>
+                      <span style={{ fontSize: '11px', color: 'var(--text-tertiary)', fontWeight: 600 }}>SMOOTH</span>
+                    </div>
+                  </div>
+                </div>
+                <div style={{ flex: 1, borderLeft: '1px solid var(--border)', paddingLeft: '24px', fontSize: '13px', color: 'var(--text-secondary)', lineHeight: '1.6' }}>
+                  <strong>Note:</strong> Zero smooth predictions are expected as catalogued lenses show visible arc distortion. These results are <em>indicative hypotheses only</em> and do not constitute ground-truth detections.
+                </div>
+              </div>
+            </div>
 
             {/* What Is This Task? */}
             <div className="res-section" style={{ marginTop: '80px' }}>
@@ -375,6 +404,7 @@ export default function Results() {
                 <li><strong>Future data.</strong> Euclid DR2 and later releases will have better PSF characterisation and more images. The substructure classification task may become tractable with future data, better simulations, or foundation models pretrained on astronomical surveys.</li>
               </ul>
             </div>
+
 
             {/* Scientific Conclusion */}
             <div className="res-conclusion-box">
