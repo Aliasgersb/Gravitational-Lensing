@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Nav from './components/Nav';
 import Hero from './components/tabs/Hero';
 import Learn from './components/tabs/Learn';
@@ -6,10 +6,21 @@ import Journey from './components/tabs/Journey';
 import Explore from './components/tabs/Explore';
 import Analyse from './components/tabs/Analyse';
 import Results from './components/tabs/Results';
+import MobileBlock from './components/MobileBlock';
+import { isMobileDevice } from './utils/mobileDetection';
 import './App.css';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('OVERVIEW');
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(isMobileDevice());
+  }, []);
+
+  if (isMobile) {
+    return <MobileBlock />;
+  }
 
   return (
     <div>
