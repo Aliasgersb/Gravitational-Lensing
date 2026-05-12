@@ -43,26 +43,26 @@ const pipelineNodeTypes = {
     <div style={{ width: 220, padding: '16px', borderRadius: '2px', backgroundColor: data.bg, border: `1.5px solid ${data.borderColor}`, textAlign: 'center', fontFamily: "'IBM Plex Mono', monospace" }}>
       <Handle type="target" position={Position.Left} id="in" style={{ background: data.borderColor, border: 'none' }} />
       {data.title === 'TRACK B' && <Handle type="target" position={Position.Top} id="in-top" style={{ background: data.borderColor, border: 'none' }} />}
-      <div style={{ fontSize: '10px', color: data.borderColor, letterSpacing: '2px', marginBottom: '8px' }}>{data.title}</div>
-      <div style={{ fontSize: '15px', color: '#e8e6e0', fontWeight: '500', marginBottom: '8px' }}>{data.name}</div>
-      <div style={{ fontSize: '12px', color: '#7a7870', marginBottom: '4px' }}>{data.desc1}</div>
-      <div style={{ fontSize: '11px', color: '#3d3b38' }}>{data.desc2}</div>
+      <div style={{ fontSize: '12px', color: data.borderColor, letterSpacing: '2px', marginBottom: '8px' }}>{data.title}</div>
+      <div style={{ fontSize: '17px', color: '#e8e6e0', fontWeight: '500', marginBottom: '8px' }}>{data.name}</div>
+      <div style={{ fontSize: '14px', color: '#7a7870', marginBottom: '4px' }}>{data.desc1}</div>
+      <div style={{ fontSize: '13px', color: '#3d3b38' }}>{data.desc2}</div>
       <Handle type="source" position={Position.Right} id="out" style={{ background: data.borderColor, border: 'none' }} />
     </div>
   ),
   customInput: ({ data }) => (
     <div style={{ width: 120, padding: '12px', borderRadius: '2px', backgroundColor: 'transparent', border: '1px solid #3d3b38', textAlign: 'center', fontFamily: "'IBM Plex Mono', monospace" }}>
-      <div style={{ fontSize: '10px', color: '#3d3b38', letterSpacing: '1px', marginBottom: '8px' }}>INPUT</div>
-      <div style={{ fontSize: '13px', color: '#7a7870', marginBottom: '4px' }}>{data.name}</div>
-      <div style={{ fontSize: '11px', color: '#3d3b38' }}>{data.desc}</div>
+      <div style={{ fontSize: '12px', color: '#3d3b38', letterSpacing: '1px', marginBottom: '8px' }}>INPUT</div>
+      <div style={{ fontSize: '15px', color: '#7a7870', marginBottom: '4px' }}>{data.name}</div>
+      <div style={{ fontSize: '13px', color: '#3d3b38' }}>{data.desc}</div>
       <Handle type="source" position={Position.Right} id="out" style={{ background: '#3d3b38', border: 'none' }} />
     </div>
   ),
   customOutput: ({ data }) => (
     <div style={{ width: 140, padding: '12px', borderRadius: '2px', backgroundColor: 'transparent', border: '1px solid #242424', textAlign: 'center', fontFamily: "'IBM Plex Mono', monospace" }}>
       <Handle type="target" position={Position.Left} id="in" style={{ background: '#242424', border: 'none' }} />
-      <div style={{ fontSize: '12px', color: '#7a7870', marginBottom: '4px' }}>{data.name}</div>
-      <div style={{ fontSize: '11px', color: '#3d3b38' }}>{data.desc}</div>
+      <div style={{ fontSize: '14px', color: '#7a7870', marginBottom: '4px' }}>{data.name}</div>
+      <div style={{ fontSize: '13px', color: '#3d3b38' }}>{data.desc}</div>
       <Handle type="source" position={Position.Bottom} id="out-bottom" style={{ background: '#6b5f4e', border: 'none' }} />
     </div>
   )
@@ -79,7 +79,7 @@ const initialEdges = [
   { id: 'e1', source: 'input', sourceHandle: 'out', target: 'trackA', targetHandle: 'in', type: 'smoothstep', style: { stroke: '#3d3b38', strokeWidth: 1.5 } },
   { id: 'e2', source: 'input', sourceHandle: 'out', target: 'trackB', targetHandle: 'in', type: 'smoothstep', style: { stroke: '#3d3b38', strokeWidth: 1.5 } },
   { id: 'e3', source: 'trackA', sourceHandle: 'out', target: 'output', targetHandle: 'in', type: 'smoothstep', style: { stroke: '#3d3b38', strokeWidth: 1.5 } },
-  { id: 'e4', source: 'output', sourceHandle: 'out-bottom', target: 'trackB', targetHandle: 'in-top', type: 'step', style: { stroke: '#6b5f4e', strokeWidth: 1, strokeDasharray: '5,3' }, label: 'feedback', labelStyle: { fill: '#6b5f4e', fontSize: 10, fontFamily: 'monospace' }, animated: true }
+  { id: 'e4', source: 'output', sourceHandle: 'out-bottom', target: 'trackB', targetHandle: 'in-top', type: 'step', style: { stroke: '#6b5f4e', strokeWidth: 1, strokeDasharray: '5,3' }, label: 'feedback', labelStyle: { fill: '#6b5f4e', fontSize: 12, fontFamily: 'monospace' }, animated: true }
 ];
 
 const getLayoutedElements = (nodes, edges) => {
@@ -144,14 +144,14 @@ const ContaminationBarChart = () => {
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data} layout="vertical" margin={{ top: 8, right: 48, left: 8, bottom: 8 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="#2a2a2a" horizontal={false} />
-          <XAxis type="number" stroke="#5a5752" tick={{ fill: '#7a7870', fontSize: 12, fontFamily: "'IBM Plex Mono', monospace" }} />
-          <YAxis dataKey="name" type="category" stroke="#5a5752" width={130} tick={{ fill: '#e8e6e0', fontSize: 12, fontFamily: "'IBM Plex Mono', monospace" }} />
+          <XAxis type="number" stroke="#5a5752" tick={{ fill: '#7a7870', fontSize: 14, fontFamily: "'IBM Plex Mono', monospace" }} />
+          <YAxis dataKey="name" type="category" stroke="#5a5752" width={130} tick={{ fill: '#e8e6e0', fontSize: 14, fontFamily: "'IBM Plex Mono', monospace" }} />
           <Tooltip cursor={{ fill: 'rgba(255,255,255,0.02)' }} contentStyle={{ backgroundColor: '#111', border: '1px solid #333', fontFamily: "'IBM Plex Mono', monospace", color: '#e8e6e0' }} />
           <Bar dataKey="count" radius={[0, 4, 4, 0]} barSize={56} isAnimationActive={false}>
             {data.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={entry.fill} />
             ))}
-            <LabelList dataKey="count" position="right" fill="#9a9690" fontSize={13} fontFamily="'IBM Plex Mono', monospace" isAnimationActive={false} />
+            <LabelList dataKey="count" position="right" fill="#9a9690" fontSize={15} fontFamily="'IBM Plex Mono', monospace" isAnimationActive={false} />
           </Bar>
         </BarChart>
       </ResponsiveContainer>
@@ -176,7 +176,7 @@ const LockedSplitBarChart = () => {
     if (active && payload && payload.length) {
       return (
         <div style={{ backgroundColor: '#111', border: '1px solid #333', padding: '12px', fontFamily: "'IBM Plex Mono', monospace" }}>
-          <div style={{ fontSize: '10px', color: '#7a7870', marginBottom: '8px', letterSpacing: '1px' }}>DATA SPLIT (1,532 TOTAL)</div>
+          <div style={{ fontSize: '12px', color: '#7a7870', marginBottom: '8px', letterSpacing: '1px' }}>DATA SPLIT (1,532 TOTAL)</div>
           {payload.map((entry, index) => {
              let sub = '';
              if (entry.dataKey === 'Train') sub = '160 A + 480 C';
@@ -185,9 +185,9 @@ const LockedSplitBarChart = () => {
              if (entry.dataKey === 'Non-Lens') sub = '285 confirmed';
              if (entry.dataKey === 'Grade B') sub = 'never trained on';
              return (
-               <div key={index} style={{ color: entry.color, marginBottom: '6px', fontSize: '12px' }}>
+               <div key={index} style={{ color: entry.color, marginBottom: '6px', fontSize: '14px' }}>
                  <span style={{ fontWeight: '500' }}>{entry.name}:</span> {entry.value} 
-                 <div style={{ color: '#5a5752', fontSize: '10px', marginTop: '2px' }}>{sub}</div>
+                 <div style={{ color: '#5a5752', fontSize: '12px', marginTop: '2px' }}>{sub}</div>
                </div>
              );
           })}
@@ -202,7 +202,7 @@ const LockedSplitBarChart = () => {
     if (width < 35) return null;
     const fill = ['Test', 'Non-Lens', 'Grade B'].includes(dataKey) ? '#4a4846' : '#111111';
     return (
-      <text x={x + width / 2} y={y + height / 2} fill={fill} textAnchor="middle" dominantBaseline="central" fontFamily="'IBM Plex Mono', monospace" fontSize="13" fontWeight="600">
+      <text x={x + width / 2} y={y + height / 2} fill={fill} textAnchor="middle" dominantBaseline="central" fontFamily="'IBM Plex Mono', monospace" fontSize="15" fontWeight="600">
         {value}
       </text>
     );
@@ -215,7 +215,7 @@ const LockedSplitBarChart = () => {
           <XAxis type="number" hide />
           <YAxis dataKey="name" type="category" hide />
           <Tooltip cursor={{ fill: 'transparent' }} content={<CustomSplitTooltip />} />
-          <Legend wrapperStyle={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '11px', paddingTop: '10px' }} />
+          <Legend wrapperStyle={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '13px', paddingTop: '10px' }} />
           <Bar dataKey="Train" stackId="a" fill="#5a5752" isAnimationActive={false}>
             <LabelList dataKey="Train" content={renderLabel} />
           </Bar>
@@ -251,8 +251,8 @@ const AUROCBarV6V9 = () => {
     const isV7 = data[index].label === 'V7';
     return (
       <g>
-        {isV7 && <text x={x + 10} y={y + height / 2} fill="#8aad8a" dominantBaseline="central" fontSize="11" fontFamily="'IBM Plex Mono', monospace">+0.1258 from V6</text>}
-        <text x={x + width + 10} y={y + height / 2} fill={isV7 ? '#e8e6e0' : '#7a7870'} dominantBaseline="central" fontSize="13" fontWeight={isV7 ? 600 : 400} fontFamily="'IBM Plex Mono', monospace">{value}</text>
+        {isV7 && <text x={x + 10} y={y + height / 2} fill="#8aad8a" dominantBaseline="central" fontSize="13" fontFamily="'IBM Plex Mono', monospace">+0.1258 from V6</text>}
+        <text x={x + width + 10} y={y + height / 2} fill={isV7 ? '#e8e6e0' : '#7a7870'} dominantBaseline="central" fontSize="15" fontWeight={isV7 ? 600 : 400} fontFamily="'IBM Plex Mono', monospace">{value}</text>
       </g>
     );
   };
@@ -262,8 +262,8 @@ const AUROCBarV6V9 = () => {
       <ResponsiveContainer width="100%" height="100%">
         <BarChart layout="vertical" data={data} margin={{ top: 20, right: 60, left: 0, bottom: 20 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="#2a2a2a" horizontal={false} />
-          <XAxis type="number" domain={[0.68, 0.9]} stroke="#5a5752" tick={{ fill: '#7a7870', fontSize: 12, fontFamily: "'IBM Plex Mono', monospace" }} />
-          <YAxis dataKey="label" type="category" stroke="#5a5752" width={50} tick={{ fill: '#e8e6e0', fontSize: 13, fontFamily: "'IBM Plex Mono', monospace" }} />
+          <XAxis type="number" domain={[0.68, 0.9]} stroke="#5a5752" tick={{ fill: '#7a7870', fontSize: 14, fontFamily: "'IBM Plex Mono', monospace" }} />
+          <YAxis dataKey="label" type="category" stroke="#5a5752" width={50} tick={{ fill: '#e8e6e0', fontSize: 15, fontFamily: "'IBM Plex Mono', monospace" }} />
           <Tooltip cursor={{ fill: 'rgba(255,255,255,0.02)' }} contentStyle={{ backgroundColor: '#111', border: '1px solid #333', fontFamily: "'IBM Plex Mono', monospace", color: '#e8e6e0' }} />
           <Bar dataKey="val" radius={[0, 4, 4, 0]} barSize={48} isAnimationActive={false}>
             {data.map((entry, index) => (
@@ -294,14 +294,14 @@ const FinalBarRechart = () => {
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data} margin={{ top: 30, right: 20, left: 0, bottom: 20 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="#2a2a2a" vertical={false} />
-          <XAxis dataKey="label" stroke="#5a5752" tick={{ fill: '#e8e6e0', fontSize: 13, fontFamily: "'IBM Plex Mono', monospace" }} />
-          <YAxis domain={[0.68, 0.90]} stroke="#5a5752" tick={{ fill: '#7a7870', fontSize: 12, fontFamily: "'IBM Plex Mono', monospace" }} />
+          <XAxis dataKey="label" stroke="#5a5752" tick={{ fill: '#e8e6e0', fontSize: 15, fontFamily: "'IBM Plex Mono', monospace" }} />
+          <YAxis domain={[0.68, 0.90]} stroke="#5a5752" tick={{ fill: '#7a7870', fontSize: 14, fontFamily: "'IBM Plex Mono', monospace" }} />
           <Tooltip cursor={{ fill: 'rgba(255,255,255,0.02)' }} contentStyle={{ backgroundColor: '#111', border: '1px solid #333', fontFamily: "'IBM Plex Mono', monospace", color: '#e8e6e0' }} />
           <Bar dataKey="val" radius={[4, 4, 0, 0]} barSize={40} isAnimationActive={false}>
             {data.map((entry, index) => (
               <Cell key={index} fill={entry.fill} stroke={entry.stroke} strokeWidth={entry.hi ? 1.5 : 1} />
             ))}
-            <LabelList dataKey="val" position="top" fill="#e8e6e0" fontSize={12} fontFamily="'IBM Plex Mono', monospace" isAnimationActive={false} />
+            <LabelList dataKey="val" position="top" fill="#e8e6e0" fontSize={14} fontFamily="'IBM Plex Mono', monospace" isAnimationActive={false} />
           </Bar>
         </BarChart>
       </ResponsiveContainer>
@@ -321,14 +321,14 @@ const ValTestGapBarChart = () => {
       <ResponsiveContainer width="100%" height="100%">
         <BarChart layout="vertical" data={data} margin={{ top: 20, right: 60, left: 20, bottom: 20 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="#2a2a2a" horizontal={false} />
-          <XAxis type="number" domain={[0.84, 0.96]} stroke="#5a5752" tick={{ fill: '#7a7870', fontSize: 12, fontFamily: "'IBM Plex Mono', monospace" }} />
-          <YAxis dataKey="label" type="category" stroke="#5a5752" width={80} tick={{ fill: '#e8e6e0', fontSize: 13, fontFamily: "'IBM Plex Mono', monospace" }} />
+          <XAxis type="number" domain={[0.84, 0.96]} stroke="#5a5752" tick={{ fill: '#7a7870', fontSize: 14, fontFamily: "'IBM Plex Mono', monospace" }} />
+          <YAxis dataKey="label" type="category" stroke="#5a5752" width={80} tick={{ fill: '#e8e6e0', fontSize: 15, fontFamily: "'IBM Plex Mono', monospace" }} />
           <Tooltip cursor={{ fill: 'rgba(255,255,255,0.02)' }} contentStyle={{ backgroundColor: '#111', border: '1px solid #333', fontFamily: "'IBM Plex Mono', monospace", color: '#e8e6e0' }} />
           <Bar dataKey="val" radius={[0, 4, 4, 0]} barSize={28} isAnimationActive={false}>
             {data.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={entry.fill} />
             ))}
-            <LabelList dataKey="val" position="right" fill="#e8e6e0" fontSize={13} fontFamily="'IBM Plex Mono', monospace" isAnimationActive={false} />
+            <LabelList dataKey="val" position="right" fill="#e8e6e0" fontSize={15} fontFamily="'IBM Plex Mono', monospace" isAnimationActive={false} />
           </Bar>
         </BarChart>
       </ResponsiveContainer>
@@ -349,8 +349,8 @@ const AUROCLineRechart = () => {
       <ResponsiveContainer width="100%" height="100%">
         <LineChart data={data} margin={{ top: 20, right: 20, left: 0, bottom: 20 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="#2a2a2a" />
-          <XAxis dataKey="label" stroke="#5a5752" tick={{ fill: '#7a7870', fontSize: 12, fontFamily: "'IBM Plex Mono', monospace" }} />
-          <YAxis domain={[0.7, 0.9]} stroke="#5a5752" tick={{ fill: '#7a7870', fontSize: 12, fontFamily: "'IBM Plex Mono', monospace" }} />
+          <XAxis dataKey="label" stroke="#5a5752" tick={{ fill: '#7a7870', fontSize: 14, fontFamily: "'IBM Plex Mono', monospace" }} />
+          <YAxis domain={[0.7, 0.9]} stroke="#5a5752" tick={{ fill: '#7a7870', fontSize: 14, fontFamily: "'IBM Plex Mono', monospace" }} />
           <Tooltip contentStyle={{ backgroundColor: '#111', border: '1px solid #333' }} />
           <Line type="monotone" dataKey="val" stroke="#e8e6e0" strokeWidth={2} dot={{ fill: '#e8e6e0' }} isAnimationActive={false} />
         </LineChart>
@@ -367,37 +367,37 @@ const ConfusionMatrixGrid = () => {
         {/* Empty top-left */}
         <div></div>
         {/* Col Headers */}
-        <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'center', paddingBottom: '8px', color: '#5a5752', fontSize: '12px' }}>Predicted: Non-Lens</div>
-        <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'center', paddingBottom: '8px', color: '#5a5752', fontSize: '12px' }}>Predicted: Lens</div>
+        <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'center', paddingBottom: '8px', color: '#5a5752', fontSize: '14px' }}>Predicted: Non-Lens</div>
+        <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'center', paddingBottom: '8px', color: '#5a5752', fontSize: '14px' }}>Predicted: Lens</div>
         
         {/* Row 1 */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: '12px', color: '#5a5752', fontSize: '12px', textAlign: 'right' }}>Actual:<br/>Lens</div>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: '12px', color: '#5a5752', fontSize: '14px', textAlign: 'right' }}>Actual:<br/>Lens</div>
         {/* FN */}
         <div style={{ background: 'rgba(173,138,138,0.06)', border: '1.5px solid #2a2a2a', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '16px' }}>
-          <div style={{ fontSize: '11px', color: '#3d3b38', letterSpacing: '1px', marginBottom: '8px' }}>FN</div>
+          <div style={{ fontSize: '13px', color: '#3d3b38', letterSpacing: '1px', marginBottom: '8px' }}>FN</div>
           <div style={{ fontSize: '36px', color: '#ad8a8a', fontWeight: '200', marginBottom: '4px' }}>15</div>
-          <div style={{ fontSize: '12px', color: '#5a5752' }}>30%</div>
+          <div style={{ fontSize: '14px', color: '#5a5752' }}>30%</div>
         </div>
         {/* TP */}
         <div style={{ background: 'rgba(232,230,224,0.06)', border: '1.5px solid #2a2a2a', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '16px' }}>
-          <div style={{ fontSize: '11px', color: '#3d3b38', letterSpacing: '1px', marginBottom: '8px' }}>TP</div>
+          <div style={{ fontSize: '13px', color: '#3d3b38', letterSpacing: '1px', marginBottom: '8px' }}>TP</div>
           <div style={{ fontSize: '36px', color: '#e8e6e0', fontWeight: '200', marginBottom: '4px' }}>35</div>
-          <div style={{ fontSize: '12px', color: '#5a5752' }}>70%</div>
+          <div style={{ fontSize: '14px', color: '#5a5752' }}>70%</div>
         </div>
 
         {/* Row 2 */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: '12px', color: '#5a5752', fontSize: '12px', textAlign: 'right' }}>Actual:<br/>Non-Lens</div>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: '12px', color: '#5a5752', fontSize: '14px', textAlign: 'right' }}>Actual:<br/>Non-Lens</div>
         {/* TN */}
         <div style={{ background: 'rgba(232,230,224,0.06)', border: '1.5px solid #2a2a2a', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '16px' }}>
-          <div style={{ fontSize: '11px', color: '#3d3b38', letterSpacing: '1px', marginBottom: '8px' }}>TN</div>
+          <div style={{ fontSize: '13px', color: '#3d3b38', letterSpacing: '1px', marginBottom: '8px' }}>TN</div>
           <div style={{ fontSize: '36px', color: '#e8e6e0', fontWeight: '200', marginBottom: '4px' }}>143</div>
-          <div style={{ fontSize: '12px', color: '#5a5752' }}>95.3%</div>
+          <div style={{ fontSize: '14px', color: '#5a5752' }}>95.3%</div>
         </div>
         {/* FP */}
         <div style={{ background: 'rgba(173,138,138,0.06)', border: '1.5px solid #2a2a2a', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '16px' }}>
-          <div style={{ fontSize: '11px', color: '#3d3b38', letterSpacing: '1px', marginBottom: '8px' }}>FP</div>
+          <div style={{ fontSize: '13px', color: '#3d3b38', letterSpacing: '1px', marginBottom: '8px' }}>FP</div>
           <div style={{ fontSize: '36px', color: '#ad8a8a', fontWeight: '200', marginBottom: '4px' }}>7</div>
-          <div style={{ fontSize: '12px', color: '#5a5752' }}>4.7%</div>
+          <div style={{ fontSize: '14px', color: '#5a5752' }}>4.7%</div>
         </div>
       </div>
     </div>
@@ -422,7 +422,7 @@ const EntropyBarRechart = () => {
     const isHi = entry.label === 'Noise Inj.';
     const labelText = entry.note ? `${value}  ${entry.note}` : `${value}`;
     return (
-      <text x={x + width + 10} y={y + height / 2} fill={isHi ? '#c8b89a' : '#7a7870'} dominantBaseline="central" fontSize="12" fontFamily="'IBM Plex Mono', monospace">
+      <text x={x + width + 10} y={y + height / 2} fill={isHi ? '#c8b89a' : '#7a7870'} dominantBaseline="central" fontSize="14" fontFamily="'IBM Plex Mono', monospace">
         {labelText}
       </text>
     );
@@ -433,11 +433,11 @@ const EntropyBarRechart = () => {
       <ResponsiveContainer width="100%" height="100%">
         <BarChart layout="vertical" data={data} margin={{ top: 36, right: 200, left: 8, bottom: 8 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="#2a2a2a" horizontal={false} />
-          <XAxis type="number" domain={[0, 1.585]} stroke="#5a5752" tick={{ fill: '#7a7870', fontSize: 11, fontFamily: "'IBM Plex Mono', monospace" }} />
-          <YAxis dataKey="label" type="category" stroke="#5a5752" width={100} tick={{ fill: '#e8e6e0', fontSize: 12, fontFamily: "'IBM Plex Mono', monospace" }} />
+          <XAxis type="number" domain={[0, 1.585]} stroke="#5a5752" tick={{ fill: '#7a7870', fontSize: 13, fontFamily: "'IBM Plex Mono', monospace" }} />
+          <YAxis dataKey="label" type="category" stroke="#5a5752" width={100} tick={{ fill: '#e8e6e0', fontSize: 14, fontFamily: "'IBM Plex Mono', monospace" }} />
           <Tooltip cursor={{ fill: 'rgba(255,255,255,0.02)' }} contentStyle={{ backgroundColor: '#111', border: '1px solid #333', fontFamily: "'IBM Plex Mono', monospace", color: '#e8e6e0' }} />
-          <ReferenceLine x={1.585} stroke="#3a3836" strokeDasharray="4 3" label={{ position: 'top', value: 'Max entropy', fill: '#3d3b38', fontSize: 10, fontFamily: "'IBM Plex Mono', monospace" }} />
-          <ReferenceLine x={0.5} stroke="#6b5f4e" strokeDasharray="4 3" label={{ position: 'top', value: 'High-conf', fill: '#6b5f4e', fontSize: 10, fontFamily: "'IBM Plex Mono', monospace" }} />
+          <ReferenceLine x={1.585} stroke="#3a3836" strokeDasharray="4 3" label={{ position: 'top', value: 'Max entropy', fill: '#3d3b38', fontSize: 12, fontFamily: "'IBM Plex Mono', monospace" }} />
+          <ReferenceLine x={0.5} stroke="#6b5f4e" strokeDasharray="4 3" label={{ position: 'top', value: 'High-conf', fill: '#6b5f4e', fontSize: 12, fontFamily: "'IBM Plex Mono', monospace" }} />
           <Bar dataKey="val" radius={[0, 4, 4, 0]} barSize={36} isAnimationActive={false}>
             {data.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={entry.fill} stroke={entry.stroke} strokeWidth={entry.label === 'Noise Inj.' ? 1.5 : 0.5} />

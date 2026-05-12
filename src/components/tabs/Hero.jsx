@@ -45,18 +45,18 @@ export default function Hero({ setActiveTab }) {
                 </div>
                 <div className="stat-item">
                   <div className="stat-label">REAL EUCLID IMAGES</div>
-                  <div className="stat-value playfair">205</div>
-                  <div className="stat-sub">Substructure Evaluated</div>
+                  <div className="stat-value playfair">2,415</div>
+                  <div className="stat-sub">Grade A+B+C</div>
                 </div>
                 <div className="stat-item">
-                  <div className="stat-label">DOMAIN ADAPT. METHODS</div>
-                  <div className="stat-value playfair">3</div>
-                  <div className="stat-sub">Track B — CORAL, DANN, ADDA</div>
+                  <div className="stat-label">SUBSTRUCTURE METHODS</div>
+                  <div className="stat-value playfair">7</div>
+                  <div className="stat-sub">Track B — Baseline to Deep Ensemble</div>
                 </div>
                 <div className="stat-item">
                   <div className="stat-label">LENSES DETECTED</div>
                   <div className="stat-value playfair">42</div>
-                  <div className="stat-sub">In 200-Image Test Set</div>
+                  <div className="stat-sub">150 Neg. + 50 Pos. Test Set</div>
                 </div>
                 <div className="stat-item">
                   <div className="stat-label">SUBSTRUCTURE CLASSES</div>

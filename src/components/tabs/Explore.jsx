@@ -181,12 +181,11 @@ function DetailModal({ item, meta, onClose }) {
     return () => document.removeEventListener('keydown', handler);
   }, [onClose]);
 
-  // Prevent body scroll while modal open
   useEffect(() => {
     document.body.style.overflow = 'hidden';
     document.body.classList.add('modal-open');
-    return () => { 
-      document.body.style.overflow = ''; 
+    return () => {
+      document.body.style.overflow = '';
       document.body.classList.remove('modal-open');
     };
   }, []);
@@ -201,7 +200,6 @@ function DetailModal({ item, meta, onClose }) {
 
   const isFallback = item.p_lens_source === 'v7_fallback';
 
-  // Substructure percentages with largest-remainder rounding
   let subPcts = null;
   if (item.substructure) {
     const { smooth: sm, cdm, axion: ax } = roundToHundred(
@@ -211,6 +209,8 @@ function DetailModal({ item, meta, onClose }) {
     );
     subPcts = { smooth: sm, cdm, axion: ax };
   }
+
+  const isLens = item.verdict === 'LENS';
 
   return (
     <div className="exp-modal-overlay" ref={overlayRef} onClick={handleOverlayClick}>
@@ -232,11 +232,7 @@ function DetailModal({ item, meta, onClose }) {
             </div>
           )}
           <div className="exp-modal-img-wrap">
-            <FallbackImg
-              src={imgSrc}
-              alt={`${item.id} ${modalView}`}
-              className="exp-modal-img"
-            />
+            <FallbackImg src={imgSrc} alt={`${item.id} ${modalView}`} className="exp-modal-img" />
             {modalView === 'gradcam' && (
               <div className="exp-gradcam-legend">
                 <span className="exp-gradcam-legend-bar" />
@@ -249,130 +245,114 @@ function DetailModal({ item, meta, onClose }) {
 
         {/* ── Right: metadata ── */}
         <div className="exp-modal-right">
-          {/* Stats row */}
-          <div className="exp-modal-stats">
-            <div className="exp-modal-stat">
-              <div className="exp-modal-stat-label">RA</div>
-              <div className="exp-modal-stat-val">{item.ra.toFixed(4)}</div>
+
+          {/* Section 1 — Coordinates */}
+          <div className="exp-modal-section">
+            <div className="exp-modal-section-label">Coordinates</div>
+            <div className="exp-modal-coords-row">
+              <div className="exp-modal-coord">
+                <span className="exp-modal-coord-key">RA</span>
+                <span className="exp-modal-coord-val">{item.ra.toFixed(4)}</span>
+              </div>
+              <div className="exp-modal-coord">
+                <span className="exp-modal-coord-key">DEC</span>
+                <span className="exp-modal-coord-val">{item.dec.toFixed(4)}</span>
+              </div>
+              <div className="exp-modal-coord">
+                <span className="exp-modal-coord-key">Grade</span>
+                <span className={`exp-modal-coord-val exp-modal-grade--${item.grade.toLowerCase()}`}>{item.grade}</span>
+              </div>
             </div>
-            <div className="exp-modal-stat">
-              <div className="exp-modal-stat-label">DEC</div>
-              <div className="exp-modal-stat-val">{item.dec.toFixed(4)}</div>
+          </div>
+
+          <div className="exp-modal-divider" />
+
+          {/* Section 2 — Binary Classification */}
+          <div className="exp-modal-section">
+            <div className="exp-modal-section-label">Binary Classification — V12 Ensemble</div>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div className={`exp-modal-verdict-v2 exp-modal-verdict--${isLens ? 'lens' : 'not'}`}>
+                <span className="exp-modal-verdict-dot">{isLens ? '●' : '○'}</span>
+                <span className="exp-modal-verdict-text">{isLens ? 'LENS' : 'NOT A LENS'}</span>
+              </div>
+              <span className="exp-modal-verdict-model-note">(Predicted by model)</span>
             </div>
-            <div className="exp-modal-stat">
-              <div className="exp-modal-stat-label">P(LENS)</div>
-              <div className="exp-modal-stat-val">
+            <div className="exp-modal-plens-row">
+              <span className="exp-modal-plens-label">P(lens)</span>
+              <div className="exp-modal-plens-bar-wrap">
+                <div className="exp-modal-plens-bar-track">
+                  <div className="exp-modal-plens-bar-fill" style={{ width: `${Math.min(100, item.p_lens * 100).toFixed(1)}%`, backgroundColor: isLens ? 'var(--accent)' : '#555' }} />
+                  <div className="exp-modal-plens-bar-tick" style={{ left: `${meta.threshold * 100}%` }} />
+                </div>
+              </div>
+              <span className="exp-modal-plens-val">
                 {item.p_lens.toFixed(3)}
-                {isFallback && (
-                  <span className="exp-fallback-marker" title="Score from single model (V7), not full ensemble">~</span>
-                )}
-              </div>
+                {isFallback && <span className="exp-fallback-marker" title="Score from V7 single model, not full V12 ensemble">~</span>}
+              </span>
             </div>
-            <div className="exp-modal-stat">
-              <div className="exp-modal-stat-label">GRADE</div>
-              <div className={`exp-modal-stat-val exp-modal-grade--${item.grade.toLowerCase()}`}>
-                {item.grade}
+            <div className="exp-modal-threshold-note">Threshold: {meta.threshold.toFixed(2)} · AUROC: {auroc}</div>
+
+            {!isLens && item.grade === 'A' && (
+              <div className="exp-modal-fn-alert">
+                <span className="exp-modal-fn-icon">!</span>
+                <span><strong>False negative.</strong> Grade A = expert-confirmed lens candidate. Missed at the {meta.threshold.toFixed(2)} threshold.</span>
               </div>
-            </div>
+            )}
+            {!isLens && item.grade === 'C' && (
+              <div className="exp-modal-grade-note">
+                Grade C — low-confidence catalog candidate. Model verdict aligns with expert assessment.
+              </div>
+            )}
+            {!isLens && item.has_gradcam && (
+              <div className="exp-modal-gradcam-note">
+                <p className="exp-modal-gradcam-note-title">Reading the Grad-CAM</p>
+                <p>Diffuse or edge-biased attention confirms no compelling lens structure. Switch to GRAD-CAM above to inspect.</p>
+              </div>
+            )}
           </div>
 
-          {/* Verdict badge */}
-          <div className={`exp-modal-verdict exp-modal-verdict--${item.verdict === 'LENS' ? 'lens' : 'not'}`}>
-            <span className="exp-modal-verdict-main">
-              {item.verdict === 'LENS' ? '● LENS' : '○ NOT A LENS'}
-            </span>
-            <span className="exp-modal-verdict-sub">
-              (Model prediction)
-            </span>
-          </div>
-
-          {/* ── LENS panel ── */}
-          {item.verdict === 'LENS' && item.substructure && subPcts && (
-            <div className="exp-modal-sub-section">
-              <div className="exp-modal-section-title">Substructure Prediction</div>
-              <div className="exp-modal-sub-boxes">
-                {[
-                  { key: 'smooth', label: 'SMOOTH', pct: subPcts.smooth },
-                  { key: 'cdm', label: 'CDM', pct: subPcts.cdm },
-                  { key: 'axion', label: 'AXION', pct: subPcts.axion },
-                ].map(({ key, label, pct }) => (
-                  <div
-                    key={key}
-                    className={`exp-modal-sub-box ${item.substructure.top_class === label ? 'active' : ''}`}
-                  >
-                    <div className="exp-modal-sub-name">{label}</div>
-                    <div className="exp-modal-sub-pct">{pct}<span>%</span></div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="exp-modal-sub-info">
-                <p className="exp-modal-sub-info-title">What does this mean?</p>
-                <p>This classifies what type of dark matter substructure may be distorting the lens — <em>not</em> a direct detection of dark matter itself. Because the true dark matter ground-truth is unknown for real Euclid images, the model can only be trained on mathematical simulations. Applying this simulation-trained model to real telescope data means all predictions carry significant uncertainty.</p>
-
+          {/* Section 3 — Substructure (LENS only) */}
+          {isLens && item.substructure && subPcts && (
+            <>
+              <div className="exp-modal-divider" />
+              <div className="exp-modal-section">
+                <div className="exp-modal-section-label">Substructure Classification</div>
+                <div className="exp-modal-sub-boxes">
+                  {[
+                    { key: 'smooth', label: 'SMOOTH', pct: subPcts.smooth },
+                    { key: 'cdm',    label: 'CDM',    pct: subPcts.cdm    },
+                    { key: 'axion',  label: 'AXION',  pct: subPcts.axion  },
+                  ].map(({ key, label, pct }) => (
+                    <div key={key} className={`exp-modal-sub-box ${item.substructure.top_class === label ? 'active' : ''}`}>
+                      <div className="exp-modal-sub-name">{label}</div>
+                      <div className="exp-modal-sub-pct">{pct}<span>%</span></div>
+                    </div>
+                  ))}
+                </div>
                 <div className="exp-modal-entropy-row">
-                  <span className="exp-modal-entropy-label">Model uncertainty</span>
+                  <span className="exp-modal-entropy-label">Model Uncertainty</span>
                   <EntropyBar entropy={item.substructure.entropy} />
                 </div>
-
                 <div className={`exp-modal-conf-tag ${item.substructure.confidence === 'HIGH' ? 'high' : 'low'}`}>
                   {item.substructure.confidence === 'HIGH'
-                    ? '✓ HIGH CONFIDENCE — entropy below 0.5 bits, model strongly prefers one class'
-                    : `⚠ UNCERTAIN — The model's uncertainty is high for this image (entropy = ${item.substructure.entropy.toFixed(3)} / 1.585 bits). This is expected — Euclid Q1 resolution limits substructure detectability.`}
+                    ? '✓ HIGH CONFIDENCE — entropy below 0.5 bits'
+                    : `⚠ UNCERTAIN — entropy ${item.substructure.entropy.toFixed(3)} / 1.585 bits`}
                 </div>
-
                 <p className="exp-modal-disclaimer">
-                  These predictions are not ground truth. Q1 telescope data has a PSF resolution that limits substructure detectability. Treat these as indicative only.
+                  Classifies dark matter substructure type (Smooth / CDM / Axion) — not a direct detection. Trained on simulations only; Euclid Q1 PSF limits substructure detectability.
                 </p>
               </div>
-            </div>
+            </>
           )}
 
-          {/* ── NOT A LENS panel ── */}
-          {item.verdict === 'NOT_A_LENS' && (
-            <div className="exp-modal-not-lens-section">
-              <div className="exp-modal-section-title">Why NOT A LENS?</div>
-
-              <div className="exp-modal-not-lens-body">
-                <p>The model assigned this image a score of <strong>{item.p_lens.toFixed(3)}</strong> — below the {meta.threshold.toFixed(2)} threshold required to be classified as a lens candidate.</p>
-
-                {item.grade === 'A' && (
-                  <div className="exp-modal-fn-alert">
-                    <span className="exp-modal-fn-icon">!</span>
-                    <span><strong>False negative.</strong> This is a Grade A image — an expert-confirmed lens candidate from the ESA SLDE catalog. The model missed it. At AUROC {auroc} on this test set, some real lenses are missed at the {meta.threshold.toFixed(2)} threshold.</span>
-                  </div>
-                )}
-
-                {item.grade === 'C' && (
-                  <div className="exp-modal-grade-note">
-                    This is a Grade C image — a low-confidence candidate from the catalog, treated as a non-lens for evaluation. The model's verdict is consistent with the expert assessment.
-                  </div>
-                )}
-
-                {item.has_gradcam && (
-                  <div className="exp-modal-gradcam-note">
-                    <p className="exp-modal-gradcam-note-title">Why is GradCAM still shown?</p>
-                    <p>The attention map for a non-lens is scientifically interesting — it shows <em>where the model looked and found nothing compelling</em>. Diffuse blue attention or edge-biased red heat confirms the model saw no central galaxy structure worth flagging. This is a diagnostic, not a failure. Switch to GRAD-CAM above to inspect it.</p>
-                  </div>
-                )}
-
-                <p className="exp-modal-disclaimer">
-                  The model is not perfect. At the {meta.threshold.toFixed(2)} threshold on this test set: AUROC = {auroc}. Some real lenses are missed.
-                </p>
-              </div>
-            </div>
-          )}
-
-          {/* Filename */}
+          {/* Footer */}
+          <div className="exp-modal-divider" />
           <div className="exp-modal-filename">
-            <span className="exp-modal-filename-label">FILE</span>
+            <span className="exp-modal-filename-label">File</span>
             <span className="exp-modal-filename-val">{item.filename}</span>
           </div>
-
           {isFallback && (
-            <div className="exp-modal-fallback-note">
-              ~ Score from V7 single model (fallback) — not the full V12 ensemble.
-            </div>
+            <div className="exp-modal-fallback-note">~ Score from V7 single model (fallback) — not the full V12 ensemble.</div>
           )}
         </div>
       </div>

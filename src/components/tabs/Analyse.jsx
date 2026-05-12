@@ -339,7 +339,13 @@ export default function Analyse() {
   return (
     <div className="tab-content" style={{ paddingBottom: '100px' }}>
       {/* Spin keyframe injected once */}
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+      <style>{`
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes slideDown {
+          from { opacity: 0; transform: translateY(-8px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
 
       <OrientationStrip title="ANALYSE" description="Upload your own FITS file and run the detection model directly in the browser.">
         <div style={{
@@ -394,16 +400,16 @@ export default function Analyse() {
             </div>
           </div>
           {!isBoxCollapsed && (
-            <div style={{ marginTop: '20px', borderTop: '1px solid var(--border)', paddingTop: '20px' }}>
-              <p style={{ fontSize: '14px', color: 'var(--text-primary)', opacity: 0.9, lineHeight: 1.8, margin: '0 0 16px 0' }}>
-                V12 is an ensemble of three separate models and cannot be exported to a single ONNX file for browser-side inference. V7 (Zoobot ConvNeXt-Nano) is the best single model that is properly calibrated — its threshold of 0.623 is meaningful, unlike V10's 0.23 or V11's 0.30.
+            <div style={{ marginTop: '20px', borderTop: '1px solid var(--border)', paddingTop: '20px', animation: 'slideDown 0.25s ease-out both' }}>
+              <p style={{ fontSize: '15px', color: 'var(--text-primary)', opacity: 0.9, lineHeight: 1.8, margin: '0 0 16px 0' }}>
+                V12 is an ensemble of three separate models and cannot be exported to a single ONNX file for browser-side inference. Beyond that, loading three full models simultaneously would make the page far too heavy to run in a browser — the combined weight makes real-time client-side inference impractical. V7 (Zoobot ConvNeXt-Nano) is the best single model that is properly calibrated — its threshold of 0.623 is meaningful, unlike V10's 0.23 or V11's 0.30.
               </p>
-              <p style={{ fontSize: '14px', color: 'var(--text-primary)', opacity: 0.9, lineHeight: 1.8, margin: '0 0 24px 0' }}>
-                V7 has 15M parameters (fast in-browser), accepts single-channel input, and is officially deployed in the ESA Euclid pipeline.
+              <p style={{ fontSize: '15px', color: 'var(--text-primary)', opacity: 0.9, lineHeight: 1.8, margin: '0 0 24px 0' }}>
+                V7 has only 15M parameters, making it fast and lightweight for in-browser inference. It accepts single-channel input and is officially deployed in the ESA Euclid pipeline — the right balance between accuracy and practicality.
               </p>
               <div style={{ 
                 marginTop: '14px', padding: '12px 16px', backgroundColor: 'var(--surface-2)', 
-                fontSize: '11px', color: 'var(--accent)', fontStyle: 'italic',
+                fontSize: '13px', color: 'var(--accent)', fontStyle: 'italic',
                 borderLeft: '2px solid var(--accent-dim)', letterSpacing: '0.03em'
               }}>
                 AUROC = 0.8541 · Precision = 0.7037 · Threshold = 0.623 · Parameters = 15M
@@ -432,9 +438,9 @@ export default function Analyse() {
                { label: 'Data Treatment', value: 'Linear Raw Counts', desc: 'Pipeline handles background and log-scaling automatically.' },
             ].map(item => (
               <div key={item.label}>
-                <div style={{ fontSize: '9px', color: 'var(--accent)', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '8px', fontWeight: 600 }}>{item.label}</div>
-                <div style={{ fontSize: '14px', color: 'var(--text-primary)', marginBottom: '6px', fontWeight: 500 }}>{item.value}</div>
-                <div style={{ fontSize: '11px', color: 'var(--text-secondary)', lineHeight: 1.6 }}>{item.desc}</div>
+                <div style={{ fontSize: '12px', color: 'var(--accent)', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '8px', fontWeight: 600 }}>{item.label}</div>
+                                 <div style={{ fontSize: '16px', color: 'var(--text-primary)', marginBottom: '6px', fontWeight: 500 }}>{item.value}</div>
+                                 <div style={{ fontSize: '13px', color: 'var(--text-secondary)', lineHeight: 1.6 }}>{item.desc}</div>
               </div>
             ))}
           </div>
@@ -539,9 +545,9 @@ export default function Analyse() {
         {/* ── Info footer ───────────────────────────────────── */}
         <div style={{
           marginTop: '80px', padding: '20px 24px', borderLeft: '2px solid var(--accent)',
-          fontSize: '12px', color: 'var(--text-secondary)', lineHeight: 1.8, maxWidth: '780px', margin: '80px auto 0 auto'
+          fontSize: '14px', color: 'var(--text-secondary)', lineHeight: 1.8, maxWidth: '780px', margin: '80px auto 0 auto'
         }}>
-          <strong style={{ color: 'var(--text-primary)', display: 'block', marginBottom: '8px' }}>About this analysis</strong>
+          <strong style={{ color: 'var(--text-primary)', display: 'block', marginBottom: '8px', fontSize: '15px' }}>About this analysis</strong>
           Results are produced by V7 — Zoobot ConvNeXt-Nano, a 15M parameter model trained on real ESA Euclid Q1 images. AUROC = 0.8541 on 200 held-out test images. At threshold 0.623, precision = 0.70. <strong>Inference runs entirely in your browser — your file is never uploaded anywhere.</strong>
           <br /><br />
           The model was trained specifically on Euclid VIS-band 300×300px cutouts at 0.1 arcsec/px. Results on images from other telescopes or at different resolutions may not be reliable.

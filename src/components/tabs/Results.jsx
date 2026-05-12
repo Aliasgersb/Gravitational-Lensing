@@ -30,6 +30,23 @@ export default function Results() {
 
         {activeSection === 'BINARY DETECTOR' && (
           <div>
+            {/* Best model label */}
+            <div style={{
+              display: 'flex', alignItems: 'center', gap: '12px',
+              marginBottom: '16px'
+            }}>
+              <span style={{
+                fontSize: '11px', color: 'var(--text-tertiary)',
+                textTransform: 'uppercase', letterSpacing: '0.18em',
+                fontFamily: "'IBM Plex Mono', monospace"
+              }}>Best Model</span>
+              <span style={{ width: '1px', height: '12px', backgroundColor: 'var(--border)', display: 'inline-block' }} />
+              <span className="playfair" style={{
+                fontSize: '17px', color: 'var(--accent)',
+                letterSpacing: '0.04em'
+              }}>V12 — Ensemble</span>
+            </div>
+
             {/* Top Metric Boxes */}
             <div className="metrics-grid-container" style={{ marginBottom: '24px' }}>
               <div className="metrics-grid">
@@ -268,7 +285,7 @@ export default function Results() {
 
             {/* All Methods Tried */}
             <div className="res-section">
-              <h3 className="res-title playfair">Domain Adaptation Methods — Track B</h3>
+              <h3 className="res-title playfair">Methods Used — Track B</h3>
               <div className="res-table-wrap">
                 <table className="results-table">
                   <thead>
@@ -278,30 +295,29 @@ export default function Results() {
                       <th>ENTROPY (bits)</th>
                       <th>UNCERTAIN</th>
                       <th>HIGH-CONFIDENCE</th>
-                      <th>CRITERIA PASSED</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
-                      <td>Baseline (Method 1)</td><td>MC Dropout on original model, no adaptation</td><td>1.1236</td><td>94.6%</td><td>11 / 205</td><td>0 / 4</td>
+                      <td>Baseline (Method 1)</td><td>MC Dropout on original model, no adaptation</td><td>1.1236</td><td>94.6%</td><td>11 / 205</td>
                     </tr>
                     <tr className="muted">
-                      <td>CORAL (Method 2)</td><td>Covariance alignment, 50 epochs</td><td>0.1429</td><td>100%</td><td>0 / 205</td><td className="strikethrough">0 / 4</td>
+                      <td>CORAL (Method 2)</td><td>Covariance alignment, 50 epochs</td><td>0.1429</td><td>100%</td><td>0 / 205</td>
                     </tr>
                     <tr className="muted">
-                      <td>DANN (Method 3)</td><td>Adversarial domain adaptation, λ=0.5</td><td>1.5807</td><td>100%</td><td>0 / 205</td><td className="strikethrough">0 / 4</td>
+                      <td>DANN (Method 3)</td><td>Adversarial domain adaptation, λ=0.5</td><td>1.5807</td><td>100%</td><td>0 / 205</td>
                     </tr>
                     <tr className="muted">
-                      <td>ADDA (Method 4)</td><td>Adversarial discriminative adaptation, 50 epochs</td><td>1.5732</td><td>100%</td><td>0 / 205</td><td className="strikethrough">0 / 4</td>
+                      <td>ADDA (Method 4)</td><td>Adversarial discriminative adaptation, 50 epochs</td><td>1.5732</td><td>100%</td><td>0 / 205</td>
                     </tr>
                     <tr className="highlighted best-row">
-                      <td><strong>Noise Injection (Method 5)</strong></td><td>Add real Euclid noise to simulation training</td><td><strong>0.7524</strong></td><td><strong>71.2%</strong></td><td><strong>59 / 205</strong></td><td><strong>4 / 4</strong></td>
+                      <td><strong>Noise Injection (Method 5)</strong></td><td>Add real Euclid noise to simulation training</td><td><strong>0.7524</strong></td><td><strong>71.2%</strong></td><td><strong>59 / 205</strong></td>
                     </tr>
                     <tr>
-                      <td>PSF + Noise + TTA (Method 6)</td><td>PSF blur + progressive noise + test-time augmentation</td><td>1.0759</td><td>88.8%</td><td>23 / 205</td><td>3 / 4</td>
+                      <td>PSF + Noise + TTA (Method 6)</td><td>PSF blur + progressive noise + test-time augmentation</td><td>1.0759</td><td>88.8%</td><td>23 / 205</td>
                     </tr>
                     <tr>
-                      <td>Deep Ensemble (Method 7)</td><td>3 seeds × Method 5, majority vote</td><td>0.9626</td><td>90.2%</td><td>20 / 205</td><td>—</td>
+                      <td>Deep Ensemble (Method 7)</td><td>3 seeds × Method 5, majority vote</td><td>0.9626</td><td>90.2%</td><td>20 / 205</td>
                     </tr>
                   </tbody>
                 </table>
