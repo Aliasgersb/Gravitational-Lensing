@@ -140,14 +140,14 @@ const ContaminationBarChart = () => {
     { name: 'Leakage (Overlap)', count: 204, fill: '#c83232' },
   ];
   return (
-    <div style={{ width: '100%', height: 380 }}>
+    <div style={{ width: '100%', height: 280 }}>
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data} layout="vertical" margin={{ top: 8, right: 48, left: 8, bottom: 8 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="#2a2a2a" horizontal={false} />
           <XAxis type="number" stroke="#5a5752" tick={{ fill: '#7a7870', fontSize: 14, fontFamily: "'IBM Plex Mono', monospace" }} />
           <YAxis dataKey="name" type="category" stroke="#5a5752" width={130} tick={{ fill: '#e8e6e0', fontSize: 14, fontFamily: "'IBM Plex Mono', monospace" }} />
           <Tooltip cursor={{ fill: 'rgba(255,255,255,0.02)' }} contentStyle={{ backgroundColor: '#111', border: '1px solid #333', fontFamily: "'IBM Plex Mono', monospace", color: '#e8e6e0' }} />
-          <Bar dataKey="count" radius={[0, 4, 4, 0]} barSize={56} isAnimationActive={false}>
+          <Bar dataKey="count" radius={[0, 4, 4, 0]} barSize={32} isAnimationActive={false}>
             {data.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={entry.fill} />
             ))}
@@ -216,19 +216,19 @@ const LockedSplitBarChart = () => {
           <YAxis dataKey="name" type="category" hide />
           <Tooltip cursor={{ fill: 'transparent' }} content={<CustomSplitTooltip />} />
           <Legend wrapperStyle={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '13px', paddingTop: '10px' }} />
-          <Bar dataKey="Train" stackId="a" fill="#5a5752" isAnimationActive={false}>
+          <Bar dataKey="Train" stackId="a" fill="#5a5752" barSize={32} isAnimationActive={false}>
             <LabelList dataKey="Train" content={renderLabel} />
           </Bar>
-          <Bar dataKey="Val" stackId="a" fill="#c8b89a" isAnimationActive={false}>
+          <Bar dataKey="Val" stackId="a" fill="#c8b89a" barSize={32} isAnimationActive={false}>
             <LabelList dataKey="Val" content={renderLabel} />
           </Bar>
-          <Bar dataKey="Test" stackId="a" fill="#e8e6e0" isAnimationActive={false}>
+          <Bar dataKey="Test" stackId="a" fill="#e8e6e0" barSize={32} isAnimationActive={false}>
             <LabelList dataKey="Test" content={renderLabel} />
           </Bar>
-          <Bar dataKey="Non-Lens" stackId="a" fill="#2a2a2a" stroke="#4a4846" strokeDasharray="4 2" isAnimationActive={false}>
+          <Bar dataKey="Non-Lens" stackId="a" fill="#2a2a2a" stroke="#4a4846" strokeDasharray="4 2" barSize={32} isAnimationActive={false}>
             <LabelList dataKey="Non-Lens" content={renderLabel} />
           </Bar>
-          <Bar dataKey="Grade B" stackId="a" fill="#1a1a1a" stroke="#3a3836" strokeDasharray="4 2" isAnimationActive={false}>
+          <Bar dataKey="Grade B" stackId="a" fill="#1a1a1a" stroke="#3a3836" strokeDasharray="4 2" barSize={32} isAnimationActive={false}>
             <LabelList dataKey="Grade B" content={renderLabel} />
           </Bar>
         </BarChart>
@@ -258,14 +258,14 @@ const AUROCBarV6V9 = () => {
   };
 
   return (
-    <div style={{ width: '100%', height: 380 }}>
+    <div style={{ width: '100%', height: 280 }}>
       <ResponsiveContainer width="100%" height="100%">
         <BarChart layout="vertical" data={data} margin={{ top: 20, right: 60, left: 0, bottom: 20 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="#2a2a2a" horizontal={false} />
           <XAxis type="number" domain={[0.68, 0.9]} stroke="#5a5752" tick={{ fill: '#7a7870', fontSize: 14, fontFamily: "'IBM Plex Mono', monospace" }} />
           <YAxis dataKey="label" type="category" stroke="#5a5752" width={50} tick={{ fill: '#e8e6e0', fontSize: 15, fontFamily: "'IBM Plex Mono', monospace" }} />
           <Tooltip cursor={{ fill: 'rgba(255,255,255,0.02)' }} contentStyle={{ backgroundColor: '#111', border: '1px solid #333', fontFamily: "'IBM Plex Mono', monospace", color: '#e8e6e0' }} />
-          <Bar dataKey="val" radius={[0, 4, 4, 0]} barSize={48} isAnimationActive={false}>
+          <Bar dataKey="val" radius={[0, 4, 4, 0]} barSize={32} isAnimationActive={false}>
             {data.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={entry.fill} stroke={entry.stroke} strokeWidth={entry.label === 'V7' ? 1.5 : 1} />
             ))}
@@ -297,7 +297,7 @@ const FinalBarRechart = () => {
           <XAxis dataKey="label" stroke="#5a5752" tick={{ fill: '#e8e6e0', fontSize: 15, fontFamily: "'IBM Plex Mono', monospace" }} />
           <YAxis domain={[0.68, 0.90]} stroke="#5a5752" tick={{ fill: '#7a7870', fontSize: 14, fontFamily: "'IBM Plex Mono', monospace" }} />
           <Tooltip cursor={{ fill: 'rgba(255,255,255,0.02)' }} contentStyle={{ backgroundColor: '#111', border: '1px solid #333', fontFamily: "'IBM Plex Mono', monospace", color: '#e8e6e0' }} />
-          <Bar dataKey="val" radius={[4, 4, 0, 0]} barSize={40} isAnimationActive={false}>
+          <Bar dataKey="val" radius={[4, 4, 0, 0]} barSize={32} isAnimationActive={false}>
             {data.map((entry, index) => (
               <Cell key={index} fill={entry.fill} stroke={entry.stroke} strokeWidth={entry.hi ? 1.5 : 1} />
             ))}
@@ -324,7 +324,7 @@ const ValTestGapBarChart = () => {
           <XAxis type="number" domain={[0.84, 0.96]} stroke="#5a5752" tick={{ fill: '#7a7870', fontSize: 14, fontFamily: "'IBM Plex Mono', monospace" }} />
           <YAxis dataKey="label" type="category" stroke="#5a5752" width={80} tick={{ fill: '#e8e6e0', fontSize: 15, fontFamily: "'IBM Plex Mono', monospace" }} />
           <Tooltip cursor={{ fill: 'rgba(255,255,255,0.02)' }} contentStyle={{ backgroundColor: '#111', border: '1px solid #333', fontFamily: "'IBM Plex Mono', monospace", color: '#e8e6e0' }} />
-          <Bar dataKey="val" radius={[0, 4, 4, 0]} barSize={28} isAnimationActive={false}>
+          <Bar dataKey="val" radius={[0, 4, 4, 0]} barSize={32} isAnimationActive={false}>
             {data.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={entry.fill} />
             ))}
@@ -438,7 +438,7 @@ const EntropyBarRechart = () => {
           <Tooltip cursor={{ fill: 'rgba(255,255,255,0.02)' }} contentStyle={{ backgroundColor: '#111', border: '1px solid #333', fontFamily: "'IBM Plex Mono', monospace", color: '#e8e6e0' }} />
           <ReferenceLine x={1.585} stroke="#3a3836" strokeDasharray="4 3" label={{ position: 'top', value: 'Max entropy', fill: '#3d3b38', fontSize: 12, fontFamily: "'IBM Plex Mono', monospace" }} />
           <ReferenceLine x={0.5} stroke="#6b5f4e" strokeDasharray="4 3" label={{ position: 'top', value: 'High-conf', fill: '#6b5f4e', fontSize: 12, fontFamily: "'IBM Plex Mono', monospace" }} />
-          <Bar dataKey="val" radius={[0, 4, 4, 0]} barSize={36} isAnimationActive={false}>
+          <Bar dataKey="val" radius={[0, 4, 4, 0]} barSize={32} isAnimationActive={false}>
             {data.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={entry.fill} stroke={entry.stroke} strokeWidth={entry.label === 'Noise Inj.' ? 1.5 : 0.5} />
             ))}
@@ -527,8 +527,8 @@ export default function Journey() {
               <div className="jrn-phase-label">Phase 1 — Invalidated Baselines (V2–V5)</div>
               <h3 className="jrn-phase-header playfair">The numbers looked extraordinary. Then we found the bug.</h3>
 
-              <div className="jrn-cols-40-60">
-                <div>
+              <div className="jrn-content-stack">
+                <div className="jrn-text-content">
                   <p className="jrn-p">Early models (V2–V5) used EfficientNet-B0 pretrained on ImageNet. V2 achieved <GlossaryTooltip term="AUROC" /> 0.9910. V3 failed to converge entirely. V4 reached 3 of 5 criteria with <GlossaryTooltip term="AUROC" /> 0.8717. V5 extended training on all 250 Grade A lenses reached <GlossaryTooltip term="AUROC" /> 0.9018.</p>
                   <p className="jrn-p">All of these numbers are invalid. The evaluation set was a subset of the training data. 204 of 205 evaluation positives were inside the 250 Grade A training set — confirmed by SkyCoord cross-match at &lt;2 arcsec (a method of checking whether two catalog entries point at the same patch of sky, within a tiny angular tolerance of 2 arcseconds). The model was being graded on its own homework.</p>
                   <p className="jrn-p">V5 <GlossaryTooltip term="Grad-CAM">Grad-CAM</GlossaryTooltip> confirmed why the invalidated results were untrustworthy even beyond the split issue: the model attended to <span style={{color:'var(--text-primary)', fontWeight:'400', textDecoration:'underline'}}>corners and edges</span> rather than arc structure — a brightness bias. It was detecting "large bright galaxy" as a proxy for a lens, not the gravitational arc itself. False positives were bright ellipticals; false negatives were faint compact lenses.</p>
@@ -536,7 +536,7 @@ export default function Journey() {
                     <p>"<GlossaryTooltip term="AUROC" /> 0.99 felt like success. It was a measurement error. The only way to know is to verify the split programmatically, every time."</p>
                   </div>
                 </div>
-                <div className="jrn-chart-box">
+                <div className="jrn-chart-fullwidth">
                   <div className="jrn-chart-title">Data Leakage Analysis</div>
                   <ContaminationBarChart />
                 </div>
@@ -582,8 +582,8 @@ export default function Journey() {
               <div className="jrn-phase-label">Phase 2 — First Validated Result (V6)</div>
               <h3 className="jrn-phase-header playfair">Fixing the foundation before building anything else.</h3>
 
-              <div className="jrn-cols">
-                <div>
+              <div className="jrn-content-stack">
+                <div className="jrn-text-content">
                   <p className="jrn-p">Before training any new model, a contamination-proof split was constructed. Method: SkyCoord cross-match of all 250 Grade A files against Confirmed Lenses (Independent Set) at &lt;2 arcsec. Files with a match → training pool. Files with no match → test set (50 files).</p>
                   <p className="jrn-p">The 285 Verified Non-Lens Set has zero overlap with any catalog entry — confirmed independently. This split is locked permanently: once set, it is never changed or regenerated, ensuring the test set remains truly unseen for the entire duration of the project.</p>
                   <p className="jrn-p">V6 used the sim-pretrained backbone (best_model.pth — the Track B substructure model trained on 30k noiseless simulations). This was a deliberate test of simulation-to-real transfer. The result showed it was the wrong prior for noisy real images.</p>
@@ -591,10 +591,10 @@ export default function Journey() {
                     <p>"0.7283 felt like failure after seeing 0.99. It was the first true result this project had produced."</p>
                   </div>
                 </div>
-                <div className="jrn-chart-box jrn-chart-box-spaced">
-                <div className="jrn-chart-title">Dataset Split Composition</div>
-                <LockedSplitBarChart />
-              </div>
+                <div className="jrn-chart-fullwidth">
+                  <div className="jrn-chart-title">Dataset Split Composition</div>
+                  <LockedSplitBarChart />
+                </div>
               </div>
 
               <div className="jrn-table-wrap">
@@ -651,8 +651,8 @@ export default function Journey() {
               <div className="jrn-phase-label">Phase 3 — Galaxy-Pretrained Backbones (V7–V9)</div>
               <h3 className="jrn-phase-header playfair">The right prior changes everything.</h3>
 
-              <div className="jrn-cols">
-                <div>
+              <div className="jrn-content-stack">
+                <div className="jrn-text-content">
                   <p className="jrn-p">The key insight: a model pretrained on 30k noiseless simulations has the wrong inductive bias for noisy real galaxy images. Inductive bias refers to the patterns a model learns to look for based on its training data — a model trained on simulations learns to recognise perfectly clean arc morphology, which rarely exists in real instrument data. Zoobot — pretrained on ~100 million real galaxy morphologies across heterogeneous surveys — was the correct choice. ESA's own Lines et al. 2025 (SLDE Paper C) confirmed Zoobot as the best performer on Q1. It is deployed in the official ESA Euclid pipeline.</p>
                   <p className="jrn-p">V7 (Zoobot ConvNeXt-Nano, greyscale, 14.9M params) produced an immediate +0.1258 AUROC jump over V6 — the largest single improvement in the project. V8 tested ConvNeXt-Small but the greyscale variant was unavailable; the 3-channel version underperformed. V9 added 200 challenging negative samples from Verified Non-Lens Set — AUROC improved marginally but precision degraded from 0.70 to 0.55.</p>
                   <div className="jrn-callout">
@@ -661,7 +661,7 @@ export default function Journey() {
                     <p className="jrn-callout-note">Single-channel input is used here because the Euclid VIS instrument is single-band, and the Zoobot greyscale encoder was pretrained on single-band galaxy surveys — making it a direct architectural match without any channel replication or normalisation mismatch.</p>
                   </div>
                 </div>
-                <div className="jrn-chart-box">
+                <div className="jrn-chart-fullwidth">
                   <div className="jrn-chart-title">AUROC Progression — V6 → V9</div>
                   <AUROCBarV6V9 />
                 </div>
@@ -694,12 +694,12 @@ export default function Journey() {
 
               <p className="jrn-p">DINOv2 Vision Transformers (Meta AI, pretrained on 142M images via self-supervised learning) were tested next. Unlike convolutional networks that extract local features through sliding filters, ViT (Vision Transformer) models divide an image into fixed patches and process the entire sequence jointly — a fundamentally different way of extracting global structure. ViT-S/14 (22M params, V10) and ViT-B/14 (86M params, V11) both outperformed V7 by AUROC. But both showed a calibration problem: thresholds of 0.23 and 0.30, compared to V7's clean 0.623.</p>
               <p className="jrn-p">Calibration matters in practice. A well-calibrated model producing a P(lens) of 0.623 is meaningful — it means "62% confident this is a lens." A poorly calibrated model requiring a threshold of 0.23 means you must flag everything above 23% confidence as a lens, which in a survey of millions of galaxies produces a far larger number of false alarms, most of which require expensive human review.</p>
-              <div className="jrn-chart-box">
+              <div className="jrn-chart-fullwidth">
                 <div className="jrn-chart-title">Final AUROC Comparison</div>
                 <FinalBarRechart />
               </div>
               <p className="jrn-p">V11 achieved the highest single-model AUROC at 0.8776, but val AUROC was 0.9381 — a 0.06 gap confirming overfitting. With only 160 training positives, an 86-million-parameter model has sufficient capacity to partially memorise patterns in the small validation set rather than generalise to genuinely unseen data. Temperature scaling was attempted on V10 to fix calibration — it broke the AUROC due to a TTA+logit averaging interaction bug. Abandoned.</p>
-              <div className="jrn-chart-box">
+              <div className="jrn-chart-fullwidth">
                 <div className="jrn-chart-title">Val vs Test AUROC Gap — Overfitting Signal</div>
                 <ValTestGapBarChart />
               </div>
@@ -970,7 +970,7 @@ export default function Journey() {
               <div className="jrn-phase-label">Conclusions</div>
               <h3 className="jrn-phase-header playfair">What the data finally revealed.</h3>
 
-              <div className="jrn-chart-box" style={{ marginBottom: '48px' }}>
+              <div className="jrn-chart-fullwidth" style={{ marginBottom: '48px' }}>
                 <div className="jrn-chart-title">Complete Model <GlossaryTooltip term="AUROC" /> Comparison — All Validated Versions</div>
                 <FinalBarRechart />
               </div>
