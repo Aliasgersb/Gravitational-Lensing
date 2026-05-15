@@ -74,10 +74,10 @@ All models below are evaluated on the same held-out test set: **50 Grade A posit
 | V9 | Zoobot ConvNeXt-Nano + Hard Negatives | Real Galaxy Morphology | 0.8587 | 0.546 | 0.720 | 0.621 | 0.480 |
 | V10 | DINOv2-Small (ViT-S/14) | Self-Supervised (LVD-142M) | 0.8756 | 0.576 | 0.760 | 0.655 | 0.230 |
 | V11 | DINOv2-Base (ViT-B/14) | Self-Supervised (LVD-142M) | 0.8776 | 0.556 | 0.800 | 0.656 | 0.300 |
-| **V12** | **Ensemble (V7×0.3 + V10×0.2 + V11×0.5)** | **Weighted Logit Averaging** | **0.8871** | **0.833** | 0.700 | **0.761** | **0.700** |
+| **V12 (Best)** | **Ensemble (V7 + V10 + V11)** | **Weighted Logit Averaging** | **0.8871** | **0.8333** | **0.7000** | **0.7609** | **0.7000** |
 | V15 | DINOv2-Base + 394 pseudo-labeled positives | Self-Supervised (LVD-142M) | 0.8687 | — | — | — | — |
 
-<sub>V7 is the production model deployed in the web application — best precision (0.704), best probability calibration (threshold=0.623 is meaningful), best Spearman correlation (0.8296), and 15M parameters suitable for browser-native ONNX inference.</sub>
+<sub>V12 is the superior model and the primary research outcome of this project, achieving the highest AUROC and F1 score on the held-out test set. V7 is the production model deployed in the web application for its efficiency and 15M parameters, enabling browser-native ONNX inference with high precision (0.704).</sub>
 
 <sub>V1–V5 are invalidated due to data leakage (training and evaluation data overlapped) and are not shown. V6 is the first honest result. V13 and V14 are data-mining steps, not independently evaluated models. V16 (hard negative augmentation) failed its gate at AUROC=0.8421 (-0.0355 vs V11 baseline).</sub>
 
@@ -87,7 +87,7 @@ All models below are evaluated on the same held-out test set: **50 Grade A posit
 - **Ensemble complementarity:** Combining ConvNeXt and ViT architectures (V12) achieved +0.0095 AUROC over the best single model (V11=0.8776), confirming that their error patterns are partially uncorrelated.
 - **160 clean labeled positives is the hard ceiling:** V15 (394 pseudo-labeled positives, +146% data) scored AUROC=0.8687 — *lower* than V11 on 160 clean labels. V16 (256 hard negatives) dropped AUROC by 0.0355. Both confirm label quality outweighs data quantity at this scale.
 - **Hard negatives cut false positives:** Adding 200 verified negatives (V9–V11) reduced FPR from 0.091 (V7) to 0.024–0.035 on held-out images, at the cost of precision.
-- **Calibration is critical for a production model:** V10 and V11 have thresholds of 0.23 and 0.30 — indicating poorly calibrated probabilities. V7's threshold of 0.623 is meaningfully interpretable. This is why V7 powers the web application, not V12.
+- **Calibration and Production Deployment:** While V12 provides the highest scientific performance, V10 and V11 show poorly calibrated probabilities (thresholds 0.23–0.30). V7's threshold of 0.623 is more meaningfully interpretable for production environments, which is why it powers the real-time browser inference tool.
 
 ---
 
