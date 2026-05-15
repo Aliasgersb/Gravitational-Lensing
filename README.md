@@ -85,7 +85,7 @@ All models below are evaluated on the same held-out test set: **50 Grade A posit
 
 - **Backbone pretraining matters more than architecture scale:** Switching from a simulation-pretrained EfficientNet (V6, AUROC=0.7283) to a galaxy-morphology-pretrained Zoobot encoder (V7, AUROC=0.8541) yielded **+0.1258 AUROC** — the single largest gain in the entire project.
 - **Ensemble complementarity:** Combining ConvNeXt and ViT architectures (V12) achieved +0.0095 AUROC over the best single model (V11=0.8776), confirming that their error patterns are partially uncorrelated.
-- **160 clean labeled positives is the hard ceiling:** V15 (394 pseudo-labeled positives, +146% data) scored AUROC=0.8687 — *lower* than V11 on 160 clean labels. V16 (256 hard negatives) dropped AUROC by 0.0355. Both confirm label quality outweighs data quantity at this scale.
+- **160 clean labeled positives is the hard ceiling:** V15 (394 pseudo-labeled positives, +146% data) scored AUROC=0.8687 — *lower* than V11 on 160 clean labels. V16 (285 hard negatives) dropped AUROC by 0.0355. Both confirm label quality outweighs data quantity at this scale.
 - **Hard negatives cut false positives:** Adding 200 verified negatives (V9–V11) reduced FPR from 0.091 (V7) to 0.024–0.035 on held-out images, at the cost of precision.
 - **Calibration and Production Deployment:** While V12 provides the highest scientific performance, V10 and V11 show poorly calibrated probabilities (thresholds 0.23–0.30). V7's threshold of 0.623 is more meaningfully interpretable for production environments, which is why it powers the real-time browser inference tool.
 
