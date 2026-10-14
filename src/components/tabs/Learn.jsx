@@ -220,7 +220,7 @@ export default function Learn() {
           <div className="ls-tag">09 — THE MODEL</div>
           <h2 className="ls-h2 playfair">How We Trained the Detector</h2>
           <p className="ls-p ls-p-narrow">
-            The challenge: only 160 confirmed lens images were available for training. Training a model from scratch on this little data would fail. The solution was to start from neural networks already trained on millions of galaxy images — and fine-tune them on the Euclid data.
+            The challenge: only 160 high-confidence candidate lens images were available for training (about 90% expected to be lenses; source TODO). Training a model from scratch on this little data would fail. The solution was to start from neural networks already trained on millions of galaxy images — and fine-tune them on the Euclid data.
           </p>
 
           <div className="ls-pipeline">
@@ -251,15 +251,15 @@ export default function Learn() {
             <div className="lp-node">
               <div className="lp-num">05</div>
               <div className="lp-title">Verdict</div>
-              <div className="lp-desc">Lens or Not a Lens, with a calibrated confidence score.</div>
+              <div className="lp-desc">Lens or Not a Lens, with a confidence score.</div>
             </div>
           </div>
 
           <p className="ls-p ls-p-narrow" style={{ marginTop: '48px' }}>
-            The key breakthrough was choosing Zoobot — a neural network pretrained on 100 million citizen-science galaxy classifications. It already understood galaxy shapes and textures before seeing a single Euclid image. Fine-tuning it on 160 real Euclid Grade A lens cutouts improved AUROC by over 12 points — from 0.73 to 0.85 — compared to the EfficientNet baseline trained without galaxy pretraining.
+            The key breakthrough was choosing Zoobot — a neural network pretrained on volunteer galaxy classifications (Walmsley et al.; TODO (author to provide): citation). Fine-tuning it on 160 real Euclid Grade A lens cutouts improved AUROC by over 12 points (0.7283 to 0.8541) compared to the simulation-pretrained EfficientNet-B0 baseline, reflecting the combined benefit of architecture and galaxy-morphology pretraining.
           </p>
           <p className="ls-p ls-p-narrow">
-            For substructure classification, seven methods were evaluated — from adversarial <GlossaryTooltip term="Domain Adaptation">domain adaptation</GlossaryTooltip> to noise injection retraining. Three approaches collapsed entirely, predicting a single class for every image. The best method, noise injection retraining, reduced prediction uncertainty by 33% and produced confident classifications on 59 of 205 real Euclid lenses. But a fundamental physical limit remains: the sub-arcsecond arc perturbations that distinguish CDM from axion halos are smaller than Euclid Q1's <GlossaryTooltip term="Point Spread Function">point spread function</GlossaryTooltip>. The telescope is not yet sharp enough to resolve the signal. This is an honest null result, not a modelling failure.
+            For substructure classification, seven methods were evaluated — from domain adaptation to noise injection retraining. The best method, noise injection retraining, reduced mean entropy by 33% (from 1.1236 to 0.7524 bits) and produced confident classifications (entropy &lt; 0.5 bits) on 59 of 205 real Euclid cutouts. Under the entropy measures reported, the classifiers did not identify substructure with high confidence on these images (Euclid PSF blur is an unverified hypothesis for the performance gap). Entropy measures confidence, not accuracy.
           </p>
         </div>
 

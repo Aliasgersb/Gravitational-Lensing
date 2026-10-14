@@ -402,17 +402,17 @@ export default function Analyse() {
           {!isBoxCollapsed && (
             <div style={{ marginTop: '20px', borderTop: '1px solid var(--border)', paddingTop: '20px', animation: 'slideDown 0.25s ease-out both' }}>
               <p style={{ fontSize: '15px', color: 'var(--text-primary)', opacity: 0.9, lineHeight: 1.8, margin: '0 0 16px 0' }}>
-                V12 is an ensemble of three separate models and cannot be exported to a single ONNX file for browser-side inference. Beyond that, loading three full models simultaneously would make the page far too heavy to run in a browser — the combined weight makes real-time client-side inference impractical. V7 (Zoobot ConvNeXt-Nano) is the best single model that is properly calibrated — its threshold of 0.623 is meaningful, unlike V10's 0.23 or V11's 0.30.
+                V12 is an ensemble of three separate models and was not exported to a single ONNX graph for browser-side inference. Loading three full models simultaneously would also increase download and runtime overhead in the browser. V7 (Zoobot ConvNeXt-Nano) is the best single model that provides a balanced operating threshold of 0.623 (precision 0.7040), unlike V10's 0.23 or V11's 0.30.
               </p>
               <p style={{ fontSize: '15px', color: 'var(--text-primary)', opacity: 0.9, lineHeight: 1.8, margin: '0 0 24px 0' }}>
-                V7 has only 15M parameters, making it fast and lightweight for in-browser inference. It accepts single-channel input and is officially deployed in the ESA Euclid pipeline — the right balance between accuracy and practicality.
+                V7 has about 14.95 million parameters, making it lightweight for in-browser inference. It accepts single-channel input and evaluates an architecture tested in ESA Euclid studies — balancing accuracy and deployment practicality.
               </p>
               <div style={{ 
                 marginTop: '14px', padding: '12px 16px', backgroundColor: 'var(--surface-2)', 
                 fontSize: '13px', color: 'var(--accent)', fontStyle: 'italic',
                 borderLeft: '2px solid var(--accent-dim)', letterSpacing: '0.03em'
               }}>
-                AUROC = 0.8541 (FP32, 4× TTA) · Precision = 0.7037 · Threshold = 0.623 · Parameters = 15M · Browser: INT8, single-pass
+                AUROC = 0.8541 (Python FP32, 4× TTA) · Precision = 0.7037 · Threshold = 0.623 · Parameters = about 14.95M · Browser: INT8, single-pass (FP32 4× TTA metrics do not directly apply to the INT8 model; TODO (author to provide): test-set metrics for the INT8 model)
               </div>
             </div>
           )}
@@ -548,7 +548,7 @@ export default function Analyse() {
           fontSize: '14px', color: 'var(--text-secondary)', lineHeight: 1.8, maxWidth: '780px', margin: '80px auto 0 auto'
         }}>
           <strong style={{ color: 'var(--text-primary)', display: 'block', marginBottom: '8px', fontSize: '15px' }}>About this analysis</strong>
-          Results are produced by V7 — Zoobot ConvNeXt-Nano, a 15M parameter model trained on real ESA Euclid Q1 images. AUROC = 0.8541 on 200 held-out test images. At threshold 0.623, precision = 0.70. <strong>Inference runs entirely in your browser — your file is never uploaded anywhere.</strong>
+          Results are produced by V7 — Zoobot ConvNeXt-Nano (about 14.95 million parameters) trained on real ESA Euclid Q1 images. In Python evaluation (FP32, 4× TTA), V7 achieved AUROC = 0.8541 and precision = 0.7037 at threshold 0.623 on 200 test images (the in-browser model runs INT8 without TTA; TODO (author to provide): benchmark metrics for INT8). <strong>Inference runs entirely in your browser — your file is never uploaded anywhere.</strong>
           <br /><br />
           The model was trained specifically on Euclid VIS-band 300×300px cutouts at 0.1 arcsec/px. Results on images from other telescopes or at different resolutions may not be reliable.
         </div>

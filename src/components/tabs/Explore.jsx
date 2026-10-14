@@ -65,7 +65,7 @@ function AboutBanner({ meta }) {
             </div>
             <div className="exp-about-item">
               <div className="exp-about-label">Grade A vs Grade C</div>
-              <div className="exp-about-text">Grade A images are expert-confirmed high-confidence lens candidates from the ESA SLDE catalog. Grade C are low-confidence candidates treated as non-lenses. A Grade A image labelled NOT A LENS here means our model made a false negative on an expert candidate.</div>
+              <div className="exp-about-text">Grade A images are high-confidence candidates from the ESA SLDE catalog (about 90% expected to be lenses; source TODO). Grade C are low-confidence candidates treated as non-lenses. A Grade A image labelled NOT A LENS here means our model made a false negative on an SLDE candidate.</div>
             </div>
             <div className="exp-about-item">
               <div className="exp-about-label">Grad-CAM</div>
@@ -73,7 +73,7 @@ function AboutBanner({ meta }) {
             </div>
             <div className="exp-about-item exp-about-item--wide">
               <div className="exp-about-label">Substructure</div>
-              <div className="exp-about-text">For images classified as LENS, a second model predicts whether the lens appears smooth, CDM-like (cold dark matter subhalos), or axion-like. Because the true underlying dark matter distribution is fundamentally unknown for real telescope images, this model can only be trained on simulated data. Furthermore, Euclid Q1 data has a PSF resolution that blurs sub-arcsecond features, so these predictions carry significant uncertainty. They are exploratory, not ground truth.</div>
+              <div className="exp-about-text">For images classified as LENS, a second model predicts whether the lens appears smooth, CDM-like (cold dark matter subhalos), or axion-like. Because the true underlying dark matter distribution is fundamentally unknown for real telescope images, this model can only be trained on simulated data. Furthermore, domain shift between simulations and real Euclid cutouts means these predictions carry significant uncertainty (Euclid PSF blur is an unverified hypothesis for the performance gap). They are exploratory, not ground truth.</div>
             </div>
           </div>
         </div>
@@ -295,7 +295,7 @@ function DetailModal({ item, meta, onClose }) {
             {!isLens && item.grade === 'A' && (
               <div className="exp-modal-fn-alert">
                 <span className="exp-modal-fn-icon">!</span>
-                <span><strong>False negative.</strong> Grade A = expert-confirmed lens candidate. Missed at the {meta.threshold.toFixed(2)} threshold.</span>
+                <span><strong>False negative.</strong> Grade A = high-confidence candidate (~90% expected lenses; source TODO). Missed at the {meta.threshold.toFixed(2)} threshold.</span>
               </div>
             )}
             {!isLens && item.grade === 'C' && (

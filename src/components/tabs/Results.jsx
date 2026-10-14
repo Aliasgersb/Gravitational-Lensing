@@ -100,11 +100,11 @@ export default function Results() {
             <div className="res-section">
               <h3 className="res-title playfair">About This Test Set</h3>
               <div className="res-kv-grid">
-                <div className="res-kv-row"><div className="res-kv-key">Images evaluated:</div><div className="res-kv-val">200 (50 confirmed lens candidates + 150 non-lenses)</div></div>
-                <div className="res-kv-row"><div className="res-kv-key">Positive source:</div><div className="res-kv-val">Grade A from ESA SLDE Q1 catalog — expert-confirmed lens candidates</div></div>
+                <div className="res-kv-row"><div className="res-kv-key">Images evaluated:</div><div className="res-kv-val">200 (50 Grade A candidates + 150 Grade C candidates)</div></div>
+                <div className="res-kv-row"><div className="res-kv-key">Positive source:</div><div className="res-kv-val">Grade A from ESA SLDE Q1 catalog — high-confidence candidates (~90% expected lenses; source TODO)</div></div>
                 <div className="res-kv-row"><div className="res-kv-key">Negative source:</div><div className="res-kv-val">Grade C — low-confidence candidates treated as non-lenses</div></div>
                 <div className="res-kv-row"><div className="res-kv-key">Split:</div><div className="res-kv-val">Locked before any training. Never modified. Seed = 42.</div></div>
-                <div className="res-kv-row"><div className="res-kv-key">Threshold:</div><div className="res-kv-val">0.70 — images scoring above this are classified as LENS</div></div>
+                <div className="res-kv-row"><div className="res-kv-key">Threshold:</div><div className="res-kv-val">0.70 — selected to maximise F1 on the 200-image test set (test metrics are therefore optimistic)</div></div>
                 <div className="res-kv-row"><div className="res-kv-key">Contamination note:</div><div className="res-kv-val">Models V2–V5 were trained on data that overlapped the test set. Their results are invalid and shown in the table marked as INVALIDATED for transparency.</div></div>
               </div>
             </div>
@@ -128,7 +128,7 @@ export default function Results() {
                   </thead>
                   <tbody>
                     <tr className="muted">
-                      <td>V2</td><td>EfficientNet-B0 (ImageNet)</td><td>0.9910</td><td>0.892</td><td>0.976</td><td>0.932</td><td>0.50</td><td className="strikethrough">INVALIDATED</td>
+                      <td>V2</td><td>EfficientNet-B0 (ImageNet)</td><td>0.9910</td><td>0.8920</td><td>0.9760</td><td>0.9320</td><td>0.5000</td><td className="strikethrough">INVALIDATED</td>
                     </tr>
                     <tr className="muted">
                       <td>V3</td><td>EfficientNet-B0</td><td>0.6700</td><td>—</td><td>—</td><td>—</td><td>—</td><td className="strikethrough">FAILED</td>
@@ -137,28 +137,28 @@ export default function Results() {
                       <td>V4</td><td>EfficientNet-B0 (ImageNet)</td><td>0.8717</td><td>—</td><td>—</td><td>—</td><td>—</td><td className="strikethrough">INVALIDATED</td>
                     </tr>
                     <tr className="muted">
-                      <td>V5</td><td>EfficientNet-B0 (ImageNet)</td><td>0.9018</td><td>0.877</td><td>0.624</td><td>0.729</td><td>0.50</td><td className="strikethrough">INVALIDATED</td>
+                      <td>V5</td><td>EfficientNet-B0 (ImageNet)</td><td>0.9018</td><td>0.8770</td><td>0.6240</td><td>0.7290</td><td>0.5000</td><td className="strikethrough">INVALIDATED</td>
                     </tr>
                     <tr>
-                      <td>V6</td><td>EfficientNet-B0 (sim backbone)</td><td>0.7283</td><td>0.579</td><td>0.440</td><td>0.500</td><td>0.583</td><td>VALIDATED ✓</td>
+                      <td>V6</td><td>EfficientNet-B0 (sim backbone)</td><td>0.7283</td><td>0.5790</td><td>0.4400</td><td>0.5000</td><td>0.5830</td><td>VALIDATED ✓</td>
                     </tr>
                     <tr>
-                      <td>V7</td><td>Zoobot ConvNeXt-Nano</td><td>0.8541</td><td>0.704</td><td>0.760</td><td>0.731</td><td>0.623</td><td>VALIDATED ✓</td>
+                      <td>V7</td><td>Zoobot ConvNeXt-Nano</td><td>0.8541</td><td>0.7040</td><td>0.7600</td><td>0.7310</td><td>0.6230</td><td>VALIDATED ✓</td>
                     </tr>
                     <tr>
                       <td>V8</td><td>Zoobot ConvNeXt-Small</td><td>0.8499</td><td>0.4096</td><td>0.6800</td><td>0.5113</td><td>0.2700</td><td>VALIDATED ✓</td>
                     </tr>
                     <tr>
-                      <td>V9</td><td>Zoobot ConvNeXt-Nano + challenging negative samples</td><td>0.8587</td><td>0.545</td><td>0.720</td><td>0.621</td><td>0.480</td><td>VALIDATED ✓</td>
+                      <td>V9</td><td>Zoobot ConvNeXt-Nano + challenging negative samples</td><td>0.8587</td><td>0.5450</td><td>0.7200</td><td>0.6210</td><td>0.4800</td><td>VALIDATED ✓</td>
                     </tr>
                     <tr>
-                      <td>V10</td><td>DINOv2-S + challenging negative samples</td><td>0.8756</td><td>0.576</td><td>0.760</td><td>0.655</td><td>0.230</td><td>VALIDATED ✓</td>
+                      <td>V10</td><td>DINOv2-S + challenging negative samples</td><td>0.8756</td><td>0.5760</td><td>0.7600</td><td>0.6550</td><td>0.2300</td><td>VALIDATED ✓</td>
                     </tr>
                     <tr>
-                      <td>V11</td><td>DINOv2-B + challenging negative samples</td><td>0.8776</td><td>0.556</td><td>0.800</td><td>0.656</td><td>0.300</td><td>VALIDATED ✓</td>
+                      <td>V11</td><td>DINOv2-B + challenging negative samples</td><td>0.8776</td><td>0.5560</td><td>0.8000</td><td>0.6560</td><td>0.3000</td><td>VALIDATED ✓</td>
                     </tr>
                     <tr className="highlighted best-row">
-                      <td>V12</td><td>Ensemble V7+V10+V11 (0.3/0.2/0.5)</td><td><strong>0.8871</strong></td><td><strong>0.833</strong></td><td><strong>0.700</strong></td><td><strong>0.761</strong></td><td>0.700</td><td><strong>BEST ✓</strong></td>
+                      <td>V12</td><td>Ensemble V7+V10+V11 (0.3/0.2/0.5)</td><td><strong>0.8871</strong></td><td><strong>0.8333</strong></td><td><strong>0.7000</strong></td><td><strong>0.7609</strong></td><td>0.7000</td><td><strong>BEST ✓</strong></td>
                     </tr>
                     <tr className="muted">
                       <td>V13</td><td>Teacher model (V12 as teacher)</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>DATA MINING</td>
@@ -176,29 +176,29 @@ export default function Results() {
                 </table>
               </div>
               <div className="res-footnote">
-                INVALIDATED = test set overlapped training data. Results not trustworthy. FAILED = model failed to converge. FAILED GATE = performance dropped below V11 baseline (-0.0355 AUROC). Operating thresholds were selected based on optimal F1 on the evaluation split.
+                INVALIDATED = test set overlapped training data. Results not trustworthy. FAILED = model failed to converge. FAILED GATE = performance dropped below V11 baseline (-0.0355 AUROC). The threshold 0.70 for V12 was selected to maximise F1 on the 200-image test set; test metrics are therefore optimistic (TODO (author to provide): exact split used for selecting operating thresholds of V6–V11). Ensemble weights (V7=0.3, V10=0.2, V11=0.5): TODO (author to provide): how weights were chosen. V13 and V14 are data-mining steps to extract high-confidence candidates (P &gt; 0.98), not independently evaluated models. V15: TODO (author to provide): precision, recall, F1, threshold, and pseudo-label generation method. V16 added 285 verified EDF-South non-lenses to training but dropped AUROC to 0.8421, failing its gate.
               </div>
             </div>
 
             {/* Population Inference */}
             <div className="res-section">
-              <h3 className="res-title playfair">Population Inference & Discovery</h3>
+              <h3 className="res-title playfair">Population Inference & Candidate Screening</h3>
               <p style={{ color: 'var(--text-secondary)', lineHeight: '1.6', fontSize: '14px', marginBottom: '16px', fontFamily: "'IBM Plex Mono', monospace" }}>
-                Following the finalization of the V12 ensemble, the model was run on 1,415 untouched Euclid Q1 files (247 Grade B, 1,168 Grade C) that had zero overlap with the training, validation, or test sets. This served as the ultimate test of out-of-distribution discovery.
+                Following the finalization of the V12 ensemble, the model was run on 1,415 untouched Euclid Q1 files (247 Grade B, 1,168 Grade C) that had zero overlap with the training, validation, or test sets. This served as a test of out-of-distribution candidate screening. No flagged object has been independently verified.
               </p>
               <div className="res-list">
                 <div className="res-list-item">
                   <div className="res-list-label">PURE GRADE B CANDIDATES</div>
-                  <div className="res-list-text">Of the 86 human-vetted, independent Grade B files, the V12 model flagged <strong style={{color:'var(--text-primary)'}}>33 (38.4%)</strong> as high-confidence lenses (P ≥ 0.70). These represent the most scientifically credible new candidates produced by the project.</div>
+                  <div className="res-list-text">Of the 86 independent Grade B files with positive declination, the V12 model flagged <strong style={{color:'var(--text-primary)'}}>33 (38.4%)</strong> at threshold 0.70 (recall of ~70% was measured on Grade A test images, not Grade B; TODO (author to provide): recall measured on Grade B). No flagged candidate has been independently verified.</div>
                 </div>
                 <div className="res-list-item">
                   <div className="res-list-label">OUT-OF-DISTRIBUTION LIMITATIONS</div>
-                  <div className="res-list-text">While V12 achieved a 4.67% (7/150) false-positive rate on the in-split Grade C test set at threshold t=0.70, the 45.0% (526/1,168) flag rate on the unseen Grade C holdout set (44.2% across all 1,415 files) reflects severe real-world distribution shift and a large population of hard lens-like non-lens morphologies (such as edge-on spirals, tidal features, and ring galaxies), emphasizing the necessity of human vetting in astronomical discovery pipelines.</div>
+                  <div className="res-list-text">While V12 achieved a 4.67% (7/150) false-positive rate on the in-split Grade C test set at threshold t=0.70, the holdout flag rate is 45.0% (526/1,168) (44.2% across all 1,415 files); the cause is not established. Specific morphology causes (such as edge-on spirals, tidal features, or ring galaxies) have not been verified. TODO (author to provide): how the test negatives were sampled.</div>
                 </div>
                 <div className="res-list-item" style={{ borderLeftColor: '#c8b89a', backgroundColor: 'rgba(200, 184, 154, 0.05)' }}>
                   <div className="res-list-label" style={{ color: '#c8b89a' }}>OPEN SCIENCE DATA RELEASE</div>
                   <div className="res-list-text">
-                    The complete scan results, including a 32-page visual discovery gallery of the top candidates and full scoring logs, are permanently hosted and citable via Zenodo: <br/>
+                    The complete scan results, including a 32-page visual candidate gallery of top candidates and full scoring logs, are permanently hosted and citable via Zenodo: <br/>
                     <a href="https://doi.org/10.5281/zenodo.20037150" target="_blank" rel="noopener noreferrer" style={{ color: '#c8b89a', textDecoration: 'underline', marginTop: '8px', display: 'inline-block' }}>
                       doi.org/10.5281/zenodo.20037150
                     </a>
@@ -221,15 +221,15 @@ export default function Results() {
                 </div>
                 <div className="res-list-item">
                   <div className="res-list-label">MORE DATA HELPS LESS THAN LABEL QUALITY</div>
-                  <div className="res-list-text">Adding 234 pseudo-labeled positives (V15, 394 total positive training samples, +146% positive data) scored AUROC 0.8687 (lower than V11 on 160 clean positive labels) due to pseudo-label noise. In contrast, V16 (adding 285 verified EDF-South non-lenses) dropped AUROC by 0.0355 because of negative-class distribution shift relative to the Grade C test set negatives (rather than poor label quality).</div>
+                  <div className="res-list-text">Adding 234 pseudo-labeled positives (V15, 394 total positive training samples, +146% positive data) scored AUROC 0.8687 (lower than V11 on 160 clean positive labels); the cause of the lower score is not established (unverified hypothesis: pseudo-label noise). In contrast, V16 (adding 285 verified EDF-South non-lenses) dropped AUROC by 0.0355; the cause of the drop is not established (unverified hypothesis: negative-class distribution shift relative to the Grade C test set negatives).</div>
                 </div>
                 <div className="res-list-item">
                   <div className="res-list-label">CHALLENGING NEGATIVE SAMPLES REDUCE FALSE POSITIVES</div>
                   <div className="res-list-text">Adding 200 challenging negative samples to training (V9–V11) dropped the false positive rate on independent images from 9.1% (V7) to 2.4–3.5%. At the cost of precision.</div>
                 </div>
                 <div className="res-list-item">
-                  <div className="res-list-label">CALIBRATION MATTERS FOR A PRODUCTION MODEL</div>
-                  <div className="res-list-text">V10 and V11 have AUROC above V7 but their optimal thresholds are 0.23 and 0.30 — indicating miscalibrated probabilities. V7's threshold of 0.623 is meaningful. This is why V7 is used in the Analyse tab.</div>
+                  <div className="res-list-label">OPERATING THRESHOLD FOR PRODUCTION</div>
+                  <div className="res-list-text">V10 and V11 have AUROC above V7 but their optimal thresholds are 0.23 and 0.30 — indicating skewed threshold behavior. V7's threshold of 0.623 provides a balanced operating point (precision 0.7040). This is why V7 is used in the Analyse tab.</div>
                 </div>
                 <div className="res-list-item">
                   <div className="res-list-label">FOCAL LOSS IS NOT RECOMMENDED</div>
@@ -334,7 +334,7 @@ export default function Results() {
                       <td>Baseline (Method 1)</td><td>MC Dropout on original model, no adaptation</td><td>1.1236</td><td>94.6%</td><td>11 / 205</td>
                     </tr>
                     <tr className="muted">
-                      <td>CORAL (Method 2)</td><td>Covariance alignment, 50 epochs</td><td>0.1429</td><td>100%</td><td>0 / 205</td>
+                      <td>CORAL (Method 2) [Under Review]*</td><td>Covariance alignment, 50 epochs</td><td>0.1429*</td><td>100%*</td><td>0 / 205*</td>
                     </tr>
                     <tr className="muted">
                       <td>DANN (Method 3)</td><td>Adversarial domain adaptation, λ=0.5</td><td>1.5807</td><td>100%</td><td>0 / 205</td>
@@ -355,7 +355,7 @@ export default function Results() {
                 </table>
               </div>
               <div className="res-footnote">
-                Entropy max = 1.585 bits (uniform over 3 classes). High-confidence = entropy &lt; 0.5 bits. Criteria: 1. No single-class mode collapse or severe class skew, 2. Mean entropy &lt; 1.10 bits, 3. Mean entropy &lt; 0.90 bits, 4. At least 25% (≥ 52 / 205) high-confidence predictions (entropy &lt; 0.5 bits). Although CORAL achieved a raw mean entropy of 0.1429 bits, its high-confidence count is recorded as 0 / 205 (100% uncertain/invalid) because the model suffered complete mode collapse into the CDM class. Predictive entropy across the 205 unlabeled real Euclid cutouts measures model confidence and domain-shift stability rather than ground-truth substructure accuracy.
+                Entropy max = 1.585 bits (uniform over 3 classes). High-confidence = entropy &lt; 0.5 bits. Uncertain % is the fraction of images with predictive entropy ≥ 0.5 bits. Evaluation criteria: 1. No single-class mode collapse or severe class skew (TODO (author to provide): objective measurable definition), 2. Mean entropy &lt; 1.10 bits, 3. Mean entropy &lt; 0.90 bits, 4. At least 25% (≥ 52 / 205) high-confidence predictions (entropy &lt; 0.5 bits). TODO (author to provide): reason for each cut-off, and whether it was set before or after the results. *CORAL row is under review: a reported mean entropy of 0.1429 bits is internally inconsistent with 0 / 205 high-confidence predictions (&lt; 0.5 bits) and 100% uncertain; a mean of 0.1429 bits requires at least one image with entropy &lt; 0.5 bits. TODO (author to provide): raw entropy and high-confidence output for CORAL. Regarding Criteria Passed: criteria 2 (&lt; 1.10) and 3 (&lt; 0.90) are met by 0.1429 bits, criterion 4 (≥ 52 high-confidence) is not met, and criterion 1 depends on whether the "CDM collapse" label disqualifies the model. The count of 1 / 4 is retained pending confirmation of how criterion 1 is judged. Predictive entropy across the 205 unlabeled real Euclid cutouts measures model confidence and domain-shift stability rather than ground-truth substructure accuracy. Note on Model Regeneration: An earlier substructure model had a head weight remapping bug producing uniform ~33/33/34 predictions; the current version was regenerated, and Track B results must be re-checked.
               </div>
             </div>
 
@@ -364,8 +364,8 @@ export default function Results() {
               <h3 className="res-title playfair">Why Methods 2, 3, 4 Failed</h3>
               <div className="res-list">
                 <div className="res-list-item">
-                  <div className="res-list-label">THE CORE PROBLEM: 30,000 SIMULATIONS VS 205 REAL IMAGES</div>
-                  <div className="res-list-text">Every domain adaptation method tried to align simulation features to real image features. But with a 30,000:205 simulation-to-real domain sample-size asymmetry (146× more simulation data), the models converged to the dominant simulation class rather than adapting. CORAL produced 100% CDM predictions. ADDA produced 100% axion predictions.</div>
+                  <div className="res-list-label">SIMULATION VS REAL DATA ASYMMETRY</div>
+                  <div className="res-list-text">Every domain adaptation method tried to align simulation features to real image features. But with a simulation-to-real domain sample-size asymmetry reported as 30,000:205 (TODO (author to provide): source for 30,000 simulation count; 146× more simulation data), the models converged to the dominant simulation class rather than adapting. CORAL produced 100% CDM predictions. ADDA produced 100% axion predictions.</div>
                 </div>
                 <div className="res-list-item">
                   <div className="res-list-label">WHY NOISE INJECTION WORKED</div>
@@ -383,12 +383,12 @@ export default function Results() {
               <h3 className="res-title playfair">Key Findings</h3>
               <div className="res-list">
                 <div className="res-list-item">
-                  <div className="res-list-label">SUBSTRUCTURE SIGNAL IS BELOW EUCLID Q1 DETECTION THRESHOLD</div>
-                  <div className="res-list-text">The PSF FWHM of Q1 data is ~0.18 arcsec (~1.8 pixels). Substructure signatures are sub-arcsecond arc perturbations. The telescope blurs exactly the features needed to tell substructure classes apart. A dedicated sensitivity study found only 2.35% of pixels inside the Einstein radius are sensitive to subhalos under Euclid-like PSF conditions.</div>
+                  <div className="res-list-label">SUBSTRUCTURE SIGNAL AND RESOLUTION</div>
+                  <div className="res-list-text">The PSF FWHM of Q1 data is ~0.18 arcsec (~1.8 pixels). Substructure signatures are sub-arcsecond arc perturbations. A dedicated sensitivity study reported only 2.35% of pixels inside the Einstein radius are sensitive to subhalos under Euclid-like PSF conditions.</div>
                 </div>
                 <div className="res-list-item">
-                  <div className="res-list-label">THIS IS A PHYSICS LIMITATION, NOT AN ARCHITECTURE LIMITATION</div>
-                  <div className="res-list-text">We tested 7 different approaches including three domain adaptation methods and a deep ensemble. The conclusion is consistent: this task cannot be solved with Q1 data quality at this scale. The DeepLense GSoC 2025 team independently reached the same conclusion. ESA confirmed Q1 PSF is inadequate for substructure studies.</div>
+                  <div className="res-list-label">TASK COMPLEXITY ACROSS METHODS</div>
+                  <div className="res-list-text">We tested 7 different approaches including three domain adaptation methods and a deep ensemble. Under the entropy measures reported, the classifiers did not identify substructure with high confidence on these images. Entropy measures confidence, not accuracy.</div>
                 </div>
                 <div className="res-list-item">
                   <div className="res-list-label">THE 59 HIGH-CONFIDENCE PREDICTIONS ARE EXPLORATORY, NOT GROUND TRUTH</div>
@@ -411,7 +411,7 @@ export default function Results() {
 
             {/* Scientific Conclusion */}
             <div className="res-conclusion-box">
-              <p>"The simulation-to-real substructure domain gap is unsolvable at current Q1 data quality. The limitation is physics — not model architecture, not data quantity, not training methodology. This result is consistent with ESA's own assessment and an independent finding by the DeepLense GSoC 2025 team. Track B is scientifically complete."</p>
+              <p>"Under the entropy measures reported, the classifiers did not identify substructure with high confidence on these images. Entropy measures confidence, not accuracy. Track B concluded after evaluating seven domain adaptation and noise-injection methods."</p>
             </div>
 
           </div>

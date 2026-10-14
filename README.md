@@ -47,7 +47,7 @@ This project builds and benchmarks a complete detection pipeline on the first pu
 Two research tracks are addressed:
 
 - **Track A — Binary Lens Detection:** Does this galaxy image contain a strong lensing event? Culminates in a weighted ensemble achieving AUROC = **0.8871**.
-- **Track B — Substructure Classification:** Given a confirmed lens, is the dark matter distribution smooth, CDM-subhalo-dominated, or axion-like? Concluded after 7 methods — the signal lies below the detection threshold of Q1 PSF quality, a finding consistent with the ESA Euclid Consortium's own assessment.
+- **Track B — Substructure Classification:** Given a confirmed lens, is the dark matter distribution smooth, CDM-subhalo-dominated, or axion-like? Under the entropy measures reported across 7 methods, the classifiers did not identify substructure with high confidence on these images. Entropy measures confidence, not accuracy.
 
 The standardized evaluation split is published in the Zenodo data release and was never modified across any experiment.
 
@@ -61,42 +61,46 @@ All models are evaluated on the same held-out test set: **50 Grade A positives +
 
 | Version | Backbone | Pretraining | AUROC (TTA) | Precision | Recall | F1 | Threshold |
 | :--- | :--- | :--- | :---: | :---: | :---: | :---: | :---: |
-| V6 | EfficientNet-B0 | Simulation (DeepLense) | 0.7283 | 0.579 | 0.440 | 0.500 | 0.583 |
-| V7 | Zoobot ConvNeXt-Nano | Real Galaxy Morphology | 0.8541 | 0.704 | 0.760 | 0.731 | 0.623 |
+| V6 | EfficientNet-B0 | Simulation (DeepLense) | 0.7283 | 0.5790 | 0.4400 | 0.5000 | 0.5830 |
+| V7 | Zoobot ConvNeXt-Nano | Real Galaxy Morphology | 0.8541 | 0.7040 | 0.7600 | 0.7310 | 0.6230 |
 | V8 | Zoobot ConvNeXt-Small | Real Galaxy Morphology | 0.8499 | 0.4096 | 0.6800 | 0.5113 | 0.2700 |
-| V9 | Zoobot ConvNeXt-Nano + Hard Negatives | Real Galaxy Morphology | 0.8587 | 0.545 | 0.720 | 0.621 | 0.480 |
-| V10 | DINOv2-Small (ViT-S/14) | Self-Supervised (LVD-142M) | 0.8756 | 0.576 | 0.760 | 0.655 | 0.230 |
-| V11 | DINOv2-Base (ViT-B/14) | Self-Supervised (LVD-142M) | 0.8776 | 0.556 | 0.800 | 0.656 | 0.300 |
+| V9 | Zoobot ConvNeXt-Nano + Hard Negatives | Real Galaxy Morphology | 0.8587 | 0.5450 | 0.7200 | 0.6210 | 0.4800 |
+| V10 | DINOv2-Small (ViT-S/14) | Self-Supervised (LVD-142M) | 0.8756 | 0.5760 | 0.7600 | 0.6550 | 0.2300 |
+| V11 | DINOv2-Base (ViT-B/14) | Self-Supervised (LVD-142M) | 0.8776 | 0.5560 | 0.8000 | 0.6560 | 0.3000 |
 | **V12 (Best)** | **Ensemble (V7 + V10 + V11)** | **Galaxy Prior + LVD-142M** | **0.8871** | **0.8333** | **0.7000** | **0.7609** | **0.7000** |
 | V15 | DINOv2-Base + pseudo-labeled positives | Self-Supervised (LVD-142M) | 0.8687 | — | — | — | — |
 
-<sub>Operating thresholds were selected based on optimal F1 on the evaluation split. V12 is the primary research outcome, achieving the highest AUROC and F1 on the held-out test set. V7 is the production model deployed in the web application: its 14.9M parameters and single-channel input make it suitable for browser-native ONNX inference, and its threshold of 0.623 gives a calibrated operating point (precision 0.704). V2–V5 are excluded from primary results (V2, V4, and V5 were invalidated by data leakage; V3 failed to converge due to label noise). V6 is the first validated result. V13 and V14 are data-mining steps, not independently evaluated models. V16 failed its gate at AUROC 0.8421.</sub>
+<sub>The threshold 0.70 for V12 was selected to maximise F1 on the 200-image test set; test metrics are therefore optimistic. (TODO (author to provide): exact split used for selecting operating thresholds of V6–V11). V12 is the primary research outcome, achieving the highest AUROC and F1 on the held-out test set. Ensemble weights (V7=0.3, V10=0.2, V11=0.5): TODO (author to provide): how weights were chosen. V7 is the production model deployed in the web application: its about 14.95 million parameters and single-channel input make it suitable for browser-native ONNX inference, and its threshold of 0.623 gives an operating point (precision 0.7040). V2–V5 are excluded from primary results (V2, V4, and V5 were invalidated by data leakage; V3 failed to converge due to label noise). V6 is the first validated result. V13 and V14 are data-mining steps to extract high-confidence candidates (P > 0.98), not independently evaluated models. V15: TODO (author to provide): precision, recall, F1, threshold, and pseudo-label generation method. V16 added 285 verified EDF-South non-lenses to training but dropped AUROC to 0.8421, failing its gate.</sub>
 
 **Key findings:**
 
 - Switching from a simulation-pretrained EfficientNet-B0 (V6, AUROC 0.7283) to a galaxy-morphology-pretrained Zoobot ConvNeXt-Nano encoder (V7, AUROC 0.8541) yielded **+0.1258 AUROC** — the largest single gain in the project, reflecting the combined gain of the ConvNeXt-Nano architecture and real galaxy-morphology pretraining.
-- Adding 234 pseudo-labeled positives (`V15`, 394 total positive training samples, +146% positive data) scored AUROC 0.8687 (lower than V11 on 160 clean positive labels) due to pseudo-label noise. In contrast, `V16` (adding 285 verified EDF-South non-lenses) dropped AUROC by 0.0355 because of **negative-class distribution shift** relative to the Grade C test set negatives (rather than poor label quality).
+- Adding 234 pseudo-labeled positives (`V15`, 394 total positive training samples, +146% positive data) scored AUROC 0.8687 (lower than V11 on 160 clean positive labels); the cause of the lower score is not established (unverified hypothesis: pseudo-label noise). In contrast, `V16` (adding 285 verified EDF-South non-lenses) dropped AUROC by 0.0355; the cause of the drop is not established (unverified hypothesis: negative-class distribution shift relative to the Grade C test set negatives).
 - The ensemble gain of V12 over V11 is +0.0095 AUROC. With 50 test positives, differences below roughly 0.02 may not be statistically meaningful (standard error ≈ 0.032); no confidence intervals have been computed.
 
 ---
 
 ### Track B — Dark Matter Substructure Classification
 
-All 7 methods evaluated on 205 real Euclid lens FITS images. Lower entropy = more confident predictions. Maximum possible entropy = log₂(3) = **1.585 bits**. High-confidence threshold: entropy < 0.5 bits.
+All 7 methods evaluated on 205 real Euclid lens FITS images (selection rule and exact file list: TODO (author to provide)). Lower entropy = more confident predictions. Maximum possible entropy = log₂(3) = **1.585 bits**. High-confidence threshold: entropy < 0.5 bits. Uncertain % is the fraction of images with predictive entropy ≥ 0.5 bits.
 
 | Method | Approach | Mean Entropy (bits) | Uncertain % | High-Confidence | Criteria Passed |
 | :--- | :--- | :---: | :---: | :---: | :---: |
 | 1. Baseline MC Dropout | Original model, no adaptation | 1.1236 | 94.6% | 11 / 205 | 0 / 4 |
-| 2. CORAL | Covariance alignment, 50 epochs | 0.1429 | 100% | 0 / 205 | 1 / 4 — CDM collapse |
+| 2. CORAL [Under Review]* | Covariance alignment, 50 epochs | 0.1429* | 100%* | 0 / 205* | 1 / 4* — CDM collapse |
 | 3. DANN | Adversarial domain adaptation, lambda=0.5 | 1.5807 | 100% | 0 / 205 | 0 / 4 — random |
 | 4. ADDA | Adversarial discriminative, 50 epochs | 1.5732 | 100% | 0 / 205 | 0 / 4 — axion collapse |
 | **5. Noise Injection** | **Add Euclid noise (sigma≈0.03) to simulation training** | **0.7524** | **71.2%** | **59 / 205** | **4 / 4 — BEST** |
 | 6. PSF + Noise + TTA | PSF blur + progressive noise + test-time augmentation | 1.0759 | 88.8% | 23 / 205 | 1 / 4 |
 | 7. Deep Ensemble (3 seeds) | 3 × Method 5, majority vote | 0.9626 | 90.2% | 20 / 205 | 1 / 4 |
 
-<sub>**Evaluation Criteria (Criteria Passed column):** 1. No single-class mode collapse or severe class skew, 2. Mean entropy < 1.10 bits, 3. Mean entropy < 0.90 bits, 4. At least 25% (≥ 52 / 205) high-confidence predictions (entropy < 0.5 bits). Although CORAL achieved a raw mean entropy of 0.1429 bits, its high-confidence count is recorded as 0 / 205 (100% uncertain/invalid) because the model suffered complete mode collapse into the CDM class. Predictive entropy across the 205 unlabeled real Euclid cutouts measures model confidence and domain-shift stability rather than ground-truth substructure accuracy.</sub>
+<sub>**Evaluation Criteria (Criteria Passed column):** 1. No single-class mode collapse or severe class skew (TODO (author to provide): objective measurable definition), 2. Mean entropy < 1.10 bits, 3. Mean entropy < 0.90 bits, 4. At least 25% (≥ 52 / 205) high-confidence predictions (entropy < 0.5 bits). TODO (author to provide): reason for each cut-off, and whether it was set before or after the results.</sub>
+<br />
+<sub>* **CORAL Row Status:** The reported mean entropy of 0.1429 bits is internally inconsistent with 0 / 205 high-confidence predictions (< 0.5 bits) and 100% uncertain; a mean of 0.1429 bits requires at least one image with entropy < 0.5 bits. This row is marked under review. TODO (author to provide): raw entropy and high-confidence output for CORAL. Regarding Criteria Passed: criteria 2 (< 1.10) and 3 (< 0.90) are met by 0.1429 bits, criterion 4 (≥ 52 high-confidence) is not met, and criterion 1 depends on whether the "CDM collapse" label disqualifies the model. The count of 1 / 4 is retained pending confirmation of how criterion 1 is judged. Predictive entropy across the 205 unlabeled real Euclid cutouts measures model confidence and domain-shift stability rather than ground-truth substructure accuracy.</sub>
+<br />
+<sub>**Note on Model Regeneration:** An earlier substructure model had a head weight remapping bug producing uniform ~33/33/34 predictions; the current version was regenerated, and Track B results must be re-checked.</sub>
 
-**Scientific conclusion:** All three domain adaptation methods (CORAL, DANN, ADDA) collapsed due to a 30,000:205 simulation-to-real domain sample-size asymmetry. Noise injection reduced entropy by 33% and increased high-confidence predictions 5× over baseline without collapse. Under current Q1 VIS resolution (PSF FWHM ≈ 0.16″–0.18″), the substructure signal lies below the detection limit for domain adaptation models. Track B is scientifically complete; no further work is planned.
+**Scientific conclusion:** Under the entropy measures reported, the classifiers did not identify substructure with high confidence on these images. Entropy measures confidence, not accuracy. All three domain adaptation methods (CORAL, DANN, ADDA) collapsed; the simulation-to-real domain sample-size asymmetry is reported as 30,000:205 (TODO (author to provide): source for 30,000 simulation count). Noise injection reduced entropy by 33% and increased high-confidence predictions 5× over baseline without collapse.
 
 ---
 
@@ -110,15 +114,15 @@ After training concluded, the V12 ensemble was applied to all 1,415 Euclid Q1 ca
 | Grade B — positive declination | 86 | **33** | **38.4%** |
 | Grade B — negative declination (NEG prefix) | 161 | 66 | 41.0% |
 | Grade C holdout | 1,168 | 526 | 45.0% |
-| All-model agreement at P > 0.90 | — | 228 | — |
+| All-model agreement at P > 0.90 (unanimous candidates) | — | 228 | — |
 
-The 38.4% flag rate among positive-declination Grade B candidates reflects conservative candidate selection at threshold 0.70 (where model recall is ~70%). The "NEG" filename prefix in the ESA SLDE catalog denotes negative declination coordinates, not negative ground-truth labels. While V12 demonstrated a **4.67% (7 / 150)** false-positive rate on the in-split Grade C negative test set at threshold t=0.70, the **45.0% (526 / 1,168)** candidate flag rate on the unvetted holdout dataset reflects severe real-world distribution shift and a large population of hard lens-like non-lens morphologies (such as edge-on spirals, tidal features, and ring galaxies), emphasizing the necessity of human vetting in astronomical discovery pipelines. Full results (1,415 rows with per-model scores) and a 32-page visual discovery gallery are published on Zenodo.
+The 38.4% flag rate among positive-declination Grade B candidates was obtained at threshold 0.70 (recall of ~70% was measured on Grade A test images, not Grade B; TODO (author to provide): recall measured on Grade B). The "NEG" filename prefix in the ESA SLDE catalog denotes negative declination coordinates, not negative ground-truth labels. While V12 demonstrated a **4.67% (7 / 150)** false-positive rate on the in-split Grade C negative test set at threshold t=0.70, the holdout flag rate is 45.0% (526 / 1,168); the cause is not established. Specific morphology causes (such as edge-on spirals, tidal features, or ring galaxies) have not been verified. TODO (author to provide): how the test negatives were sampled. No flagged candidate has been independently verified. Full results (1,415 rows with per-model scores) and a 32-page visual candidate gallery are published on Zenodo.
 
 ---
 
 ## Pipeline
 
-The diagram below shows the inference path for a single Euclid VIS FITS cutout through the V12 ensemble. Training code, checkpoints, and the evaluation split are archived on Zenodo.
+The diagram below shows the inference path for a single Euclid VIS FITS cutout through the V12 ensemble and Track B model. Training code, checkpoints, and the evaluation split are archived on Zenodo.
 
 ```mermaid
 flowchart LR
@@ -129,7 +133,8 @@ flowchart LR
     D --> E
     E --> F["P(lens) Score"]
     E --> G["Grad-CAM Heatmap"]
-    E --> H["Substructure Uncertainty"]
+    B --> H["Track B Substructure Model (Separate)"]
+    H --> I["Substructure Uncertainty"]
 ```
 
 | Stage | Detail |
@@ -137,7 +142,9 @@ flowchart LR
 | **Preprocessing** | Centre-crop 300×300 → 10 px border-ring background subtraction → log1p stretch → percentile [1, 99] normalisation → bilinear resize 224×224 |
 | **V7** | ConvNeXt-Nano, Zoobot greyscale prior (`mwalmsley/zoobot-encoder-greyscale-convnext_nano`); 1-channel input, no ImageNet normalisation; feature size 640 |
 | **V10 / V11** | DINOv2 ViT-S/14 and ViT-B/14, self-supervised on LVD-142M; 3-channel input with ImageNet normalisation; feature sizes 384 / 768 |
-| **V12 Ensemble** | Weighted logit averaging (V7 × 0.3, V10 × 0.2, V11 × 0.5) with 4 × 90° rotation TTA |
+| **V12 Ensemble** | Weighted logit averaging (V7 × 0.3, V10 × 0.2, V11 × 0.5; TODO (author to provide): how weights were chosen) with 4 × 90° rotation TTA |
+
+*Note: The in-browser web application runs V7 (INT8 quantized) only. The V12 weighted ensemble and Track B models run offline in Python.*
 
 **Training protocol:** All models use two-stage fine-tuning. Stage 1 trains the classification head only (5 epochs, LR = 1e-3) with the encoder frozen. Stage 2 unlocks the full model with a warmup encoder learning rate (1e-7 → 5e-6) and a fixed head LR of 5e-5, for up to 20 epochs with the best validation AUROC checkpoint saved.
 
@@ -147,7 +154,7 @@ flowchart LR
 
 ### FITS Preprocessing
 
-The pipeline below is deterministic and the exact order of operations must be preserved. V7 takes 1-channel input with no ImageNet normalisation. V10/V11 replicate the single channel to 3 channels and apply ImageNet normalisation.
+The Python pipeline below is deterministic. Note that the browser JavaScript preprocessing differs in four ways: (a) percentiles are taken by index (sorted[floor(n*0.01)] and sorted[floor(n*0.99)]) rather than np.percentile; (b) the sky value is the upper middle element, not the average of two middle values (np.median); (c) pixels are quantised to 8-bit (Math.floor(x*255)) before resizing; (d) resizing uses the browser HTML5 canvas, not OpenCV bilinear. Not yet tested on real FITS files: TODO (author to provide): comparison of browser and Python outputs.
 
 ```python
 from astropy.io import fits
@@ -157,7 +164,7 @@ import cv2
 def preprocess_fits(path, target_size=224):
     """
     Deterministic Euclid VIS preprocessing pipeline.
-    Output for V7: float32 tensor shape (1, 224, 224), range [0, 1].
+    Output for V7: float32 numpy array shape (1, 224, 224), range [0, 1].
     """
     with fits.open(path) as hdul:
         data = next(h.data for h in hdul if h.data is not None and h.data.ndim >= 2)
@@ -224,7 +231,7 @@ input_tensor = torch.from_numpy(input_numpy).unsqueeze(0)  # shape (1, 1, 224, 2
 with torch.no_grad():
     logits = model(input_tensor)
     p_lens = torch.softmax(logits, dim=1)[:, 1].item()
-    # Recommended threshold: 0.623 (V7 optimal F1)
+    # Operating threshold: 0.623 (V7 optimal F1 on validation)
 ```
 
 ### Ensemble Inference (V12)
@@ -232,14 +239,17 @@ with torch.no_grad():
 ```python
 # V12: weighted logit averaging across all three models
 # For full test-time augmentation (TTA), softmax probabilities are averaged across 4 × 90° rotations (k=0, 1, 2, 3 via torch.rot90)
-# Weights: V7=0.3, V10=0.2, V11=0.5
+# Weights: V7=0.3, V10=0.2, V11=0.5 (TODO (author to provide): how weights were chosen)
+# Inputs:
+#   tensor_1ch: float32 tensor shape (1, 1, 224, 224), values in [0, 1]
+#   tensor_3ch_norm: float32 tensor shape (1, 3, 224, 224), 3-channel replicated with ImageNet normalization
 logits_v7  = model_v7(tensor_1ch)          # no ImageNet norm
 logits_v10 = model_v10(tensor_3ch_norm)    # ImageNet norm
 logits_v11 = model_v11(tensor_3ch_norm)    # ImageNet norm
 
 ensemble_logits = 0.3 * logits_v7 + 0.2 * logits_v10 + 0.5 * logits_v11
 p_lens = torch.softmax(ensemble_logits, dim=1)[:, 1].item()
-# Recommended threshold: 0.70 (V12 optimal F1)
+# Recommended threshold: 0.70 (selected to maximise F1 on 200-image test set)
 ```
 
 ---
@@ -250,15 +260,17 @@ All real Euclid images are 300×300 px FITS cutouts at 0.1 arcsec/pixel in the E
 
 | Source | Description | Files | Access |
 | :--- | :--- | :---: | :--- |
-| **Grade A** | High-confidence lens candidates (~90% true lenses) | 250 | Zenodo 20056736 |
-| **Grade B** | Probable lens candidates (70–90% true lenses) | 247 | Zenodo 20056736 |
-| **Grade C** | Low-confidence candidates (used as training negatives) | ~1,918 | Zenodo 20056736 |
-| **Verified Negatives** | Spatially independent confirmed non-lenses (EDF-South) | 285 | Zenodo 20056736 |
-| **Evaluation Split** | Train/val/test split JSON — locked, never regenerate | 1 file | Zenodo 20056736 |
-| **V12 Scan Results** | 1,415 unseen candidates with per-model scores + 32-page gallery | 4 files | Zenodo 20037150 |
+| **Grade A** | High-confidence lens candidates (~90% true lenses; source TODO) | 250 | Zenodo 20056736* |
+| **Grade B** | Probable lens candidates (70–90% true lenses) | 247 | Zenodo 20056736* |
+| **Grade C** | Low-confidence candidates (used as training negatives) | ~1,918 | Zenodo 20056736* |
+| **Verified Negatives** | Spatially independent confirmed non-lenses (EDF-South) | 285 | Zenodo 20056736* |
+| **Evaluation Split** | Train/val/test split JSON — locked, never regenerate | 1 file | Zenodo 20056736* |
+| **V12 Scan Results** | 1,415 unseen candidates with per-model scores + 32-page candidate gallery | 4 files | Zenodo 20037150 |
 | **ESA SLDE Catalog** | Official ESA Euclid Q1 lens candidate catalog | — | Zenodo 15025832 |
 
-The Grade A/B catalog originates from the ESA SLDE working group (see Walmsley et al. 2025, Zenodo 15025832). FITS cutouts were downloaded from the ESA Datalabs cutout service and are released pre-cropped and pre-catalogued. Cutouts derived from ESA Euclid Q1 data — Credit: ESA Euclid/Euclid Consortium/NASA/Q1-2025.
+<sub>* *(Note: DOI 10.5281/zenodo.20056736 returned HTTP 404 upon verification; release status must be checked).*</sub>
+
+The Grade A/B catalog originates from the ESA SLDE working group (see Walmsley et al. 2025 [TODO (author to provide): full citation], Zenodo 15025832). FITS cutouts were downloaded from the ESA Datalabs cutout service and are released pre-cropped and pre-catalogued. Cutouts derived from ESA Euclid Q1 data — Credit: ESA Euclid/Euclid Consortium/NASA/Q1-2025.
 
 ---
 
@@ -277,7 +289,7 @@ The application is built with React and Vite, featuring browser-native inference
 | **Analyse** | Upload Euclid VIS FITS files for real-time, client-side lens detection. |
 | **Results** | Complete benchmarking tables for both Track A and Track B, including the unseen population scan. |
 
-The deployed ONNX model (`lens_detector_v7_int8.onnx`, 14.8 MB) is exported from the V7 checkpoint at opset 18 and dynamically quantized to INT8 (`ConvInteger`, `MatMulInteger`) for fast in-browser execution. Inference runs directly on the main thread via single-threaded WebAssembly / WebGPU fallback (avoiding SharedArrayBuffer/COEP requirements). The JavaScript preprocessing pipeline is a client-side browser implementation that approximates the Python pipeline (using HTML5 Canvas for bilinear resize and integer percentiles).
+The deployed ONNX model (`lens_detector_v7_int8.onnx`, 14.8 MiB (15.5 MB), about 14.95 million parameters) is exported from the V7 checkpoint at opset 18 and dynamically quantized to INT8 (`ConvInteger`, `MatMulInteger`) for fast in-browser execution. Inference runs directly on the main thread; it tries WebGPU first, falls back to WebAssembly (single thread) (avoiding SharedArrayBuffer/COEP requirements). The JavaScript preprocessing pipeline differs from the Python pipeline (as described in Reproducibility). The FP32, 4× TTA metrics reported in the Track A table do not apply to the browser model. TODO (author to provide): benchmark metrics for the INT8 single-pass model on the 200-image test set.
 
 > [!NOTE]
 > The web application is optimized for desktop and laptop displays (screen width ≥ 768 px). Access on mobile and small touch viewports displays a desktop recommendation notice to ensure dense scientific tables and Canvas overlays remain legible.
@@ -286,14 +298,14 @@ The deployed ONNX model (`lens_detector_v7_int8.onnx`, 14.8 MB) is exported from
 
 ## Repository Layout
 
-This repository contains the client-side web application and in-browser inference runtime. Full training pipelines, evaluation split JSONs, raw FITS cutouts, and PyTorch `.pth` model checkpoints are archived on Zenodo ([Record 20037150](https://doi.org/10.5281/zenodo.20037150) & [Record 20056736](https://doi.org/10.5281/zenodo.20056736)).
+This repository contains the client-side web application and in-browser inference runtime. Full training pipelines, evaluation split JSONs, raw FITS cutouts, and PyTorch `.pth` model checkpoints are archived on Zenodo ([Record 20037150](https://doi.org/10.5281/zenodo.20037150) & [Record 20056736](https://doi.org/10.5281/zenodo.20056736) [404 upon verification]).
 
 | Path | Contents |
 | :--- | :--- |
 | [`src/components/`](src/components/) | Navigation, mobile blocker, and all six tab components |
 | [`src/utils/`](src/utils/) | FITS parser, preprocessing pipeline, ONNX runtime runner |
 | [`public/explore/`](public/explore/) | Precomputed 200-image test set assets and Grad-CAM overlays |
-| [`public/models/`](public/models/) | `lens_detector_v7_int8.onnx` — INT8 quantized browser model (14.8 MB) |
+| [`public/models/`](public/models/) | `lens_detector_v7_int8.onnx` — INT8 quantized browser model (14.8 MiB / 15.5 MB) |
 
 ---
 

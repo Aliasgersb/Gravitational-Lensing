@@ -412,11 +412,11 @@ export default function Journey() {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr><td>Grade A (ESA SLDE catalog)</td><td className="td-num">250 <GlossaryTooltip term="FITS">FITS</GlossaryTooltip></td><td>High-confidence lenses (~90% clean). Split: 160 train / 40 val / 50 test.</td></tr>
+                    <tr><td>Grade A (ESA SLDE catalog)</td><td className="td-num">250 <GlossaryTooltip term="FITS">FITS</GlossaryTooltip></td><td>High-confidence lens candidates (expected ~90% lenses; source TODO). Split: 160 train / 40 val / 50 test.</td></tr>
                     <tr><td>Grade B (ESA SLDE catalog)</td><td className="td-num">247 <GlossaryTooltip term="FITS">FITS</GlossaryTooltip></td><td>Probable lenses (70–90% clean). Diagnostic only — never trained on.</td></tr>
                     <tr><td>Grade C (ESA SLDE catalog)</td><td className="td-num">~1,918 <GlossaryTooltip term="FITS">FITS</GlossaryTooltip></td><td>Low-confidence candidates. Used as training negatives.</td></tr>
                     <tr><td>Verified Non-Lens Set</td><td className="td-num">285 <GlossaryTooltip term="FITS">FITS</GlossaryTooltip></td><td>Confirmed non-lenses. Spatially independent. Independent verification set.</td></tr>
-                    <tr><td>DeepLense simulations (Track B)</td><td className="td-num">37,500 .npy</td><td>30k train + 7.5k val. 3 classes, perfectly balanced.</td></tr>
+                    <tr><td>DeepLense simulations (Track B)</td><td className="td-num">37,500 .npy</td><td>Reported as 30k train + 7.5k val (TODO (author to provide): source for count). 3 classes, perfectly balanced.</td></tr>
                   </tbody>
                 </table>
               </div>
@@ -488,7 +488,7 @@ export default function Journey() {
                 <div className="jrn-text-content">
                   <p className="jrn-p">Before training any new model, a contamination-proof split was constructed. Method: SkyCoord cross-match of all 250 Grade A files against Confirmed Lenses (Independent Set) at &lt;2 arcsec. Files with a match → training pool. Files with no match → test set (50 files).</p>
                   <p className="jrn-p">The 285 Verified Non-Lens Set has zero overlap with any catalog entry — confirmed independently. This split is locked permanently: once set, it is never changed or regenerated, ensuring the test set remains truly unseen for the entire duration of the project.</p>
-                  <p className="jrn-p">V6 used the sim-pretrained backbone (best_model.pth — the Track B substructure model trained on 30k noiseless simulations). This was a deliberate test of simulation-to-real transfer. The result showed it was the wrong prior for noisy real images.</p>
+                  <p className="jrn-p">V6 used the sim-pretrained backbone (best_model.pth — the Track B substructure model trained on simulations; TODO (author to provide): source for 30,000 count). This was a deliberate test of simulation-to-real transfer. The result showed it was the wrong prior for noisy real images.</p>
                   <div className="jrn-quote">
                     <p>"0.7283 felt like failure after seeing 0.99. It was the first true result this project had produced."</p>
                   </div>
@@ -555,8 +555,8 @@ export default function Journey() {
 
               <div className="jrn-content-stack">
                 <div className="jrn-text-content">
-                  <p className="jrn-p">The key insight: a model pretrained on 30k noiseless simulations has the wrong inductive bias for noisy real galaxy images. Inductive bias refers to the patterns a model learns to look for based on its training data — a model trained on simulations learns to recognise perfectly clean arc morphology, which rarely exists in real instrument data. Zoobot — pretrained on ~92 million volunteer classifications across heterogeneous galaxy surveys — was the correct choice. ESA's own Lines et al. 2025 (SLDE Paper C) confirmed Zoobot as the best performer on Q1, making it an ESA-evaluated architecture.</p>
-                  <p className="jrn-p">V7 (Zoobot ConvNeXt-Nano, greyscale, 14.9M params) produced an immediate +0.1258 AUROC jump over V6 — the largest single improvement in the project. V8 tested ConvNeXt-Small but the greyscale variant was unavailable; the 3-channel version underperformed. V9 added 200 challenging negative samples from Verified Non-Lens Set — AUROC improved marginally but precision degraded from 0.70 to 0.55.</p>
+                  <p className="jrn-p">The key insight: a model pretrained on simulations (reported as 30,000; TODO (author to provide): source for count) has the wrong inductive bias for noisy real galaxy images. Inductive bias refers to the patterns a model learns to look for based on its training data — a model trained on simulations learns to recognise perfectly clean arc morphology, which rarely exists in real instrument data. Zoobot — pretrained on ~92 million volunteer classifications across heterogeneous galaxy surveys — was the correct choice. ESA's own Lines et al. 2025 (SLDE Paper C) confirmed Zoobot as the best performer on Q1, making it an ESA-evaluated architecture.</p>
+                  <p className="jrn-p">V7 (Zoobot ConvNeXt-Nano, greyscale, about 14.95M params) produced an immediate +0.1258 AUROC jump over V6 — the largest single improvement in the project. V8 tested ConvNeXt-Small but the greyscale variant was unavailable; the 3-channel version underperformed. V9 added 200 challenging negative samples from Verified Non-Lens Set — AUROC improved marginally but precision degraded from 0.70 to 0.55.</p>
                   <div className="jrn-callout">
                     <div className="jrn-callout-label">V7 Architecture</div>
                     <p>Input: single-channel 224×224, values in [0,1], no ImageNet normalisation. Encoder: Zoobot ConvNeXt-Nano greyscale. Head: Dropout(0.3) → Linear(640, 2). Two-stage training: 5 epochs head-only, then up to 20 epochs full fine-tune with encoder LR warmup.</p>
@@ -650,7 +650,7 @@ export default function Journey() {
 
                   <div style={{ marginTop: '110px' }}>
                     <p className="jrn-h3">V15 — The Result</p>
-                    <p className="jrn-p">DINOv2-B retrained on this expanded set produced <GlossaryTooltip term="AUROC" /> 0.8687 — lower than V11's 0.8776 despite having 146% more positives. Label quality beats label quantity. The 234 pseudo-labeled images were scored by the same <GlossaryTooltip term="Ensemble">ensemble</GlossaryTooltip> that contains V11, meaning the Teacher preferentially selects images that look like what V11 already recognises, introducing a selection bias that pseudo-label noise cannot fully overcome.</p>
+                    <p className="jrn-p">DINOv2-B retrained on this expanded set produced <GlossaryTooltip term="AUROC" /> 0.8687 — lower than V11's 0.8776 despite having 146% more positives. The 234 pseudo-labeled images were scored by the same <GlossaryTooltip term="Ensemble">ensemble</GlossaryTooltip> that contains V11, meaning the Teacher preferentially selects images that look like what V11 already recognises, introducing a potential selection bias; the cause of the lower score is not established.</p>
                   </div>
                 </div>
               </div>
@@ -733,6 +733,9 @@ export default function Journey() {
                     ))}
                   </tbody>
                 </table>
+                <div className="jrn-footnote" style={{ marginTop: '12px', fontSize: '12px', color: 'var(--text-secondary)', lineHeight: '1.6', fontFamily: "'IBM Plex Mono', monospace" }}>
+                  The threshold 0.70 was selected to maximise F1 on the 200-image test set; test metrics are therefore optimistic. Ensemble weights (V7=0.3, V10=0.2, V11=0.5): TODO (author to provide): how weights were chosen.
+                </div>
               </div>
             </section>
 
@@ -745,13 +748,10 @@ export default function Journey() {
 
               <div className="jrn-content-stack">
                 <div className="jrn-text-content">
-                  <p className="jrn-p">Track B attempted to classify confirmed lenses as smooth halos, <GlossaryTooltip term="CDM">CDM</GlossaryTooltip> (cold dark matter with particle subhalos), or <GlossaryTooltip term="Axion">axion</GlossaryTooltip> dark matter (smoother halos). The model was trained on 30,000 noiseless DeepLense simulations and evaluated on 205 real Euclid lenses. Shannon entropy measures how uncertain the model is about its prediction — 0 means perfectly confident in a single class, 1.585 bits is completely random (uniform across 3 classes).</p>
+                  <p className="jrn-p">Track B attempted to classify confirmed lenses as smooth halos, <GlossaryTooltip term="CDM">CDM</GlossaryTooltip> (cold dark matter with particle subhalos), or <GlossaryTooltip term="Axion">axion</GlossaryTooltip> dark matter (smoother halos). The model was trained on simulations (reported as 30,000 noiseless DeepLense simulations; TODO (author to provide): source for 30,000 simulation count) and evaluated on 205 real Euclid lenses (selection rule and exact file list: TODO (author to provide)). Shannon entropy measures how uncertain the model is about its prediction — 0 means perfectly confident in a single class, 1.585 bits is completely random (uniform across 3 classes). Uncertain % is the fraction of images with predictive entropy ≥ 0.5 bits.</p>
                   <p className="jrn-p">The baseline model's class distribution on real Euclid lenses reveals the extent of the simulation bias: <strong style={{color:'var(--text-primary)'}}><GlossaryTooltip term="CDM" /> 72.7%, <GlossaryTooltip term="Axion" /> 16.6%, Smooth 10.7%</strong>. The sim model is heavily biased toward <GlossaryTooltip term="CDM" /> — the most common simulation class — even on real images it has never seen. This is the sim-to-real gap in concrete numbers.</p>
-                  <p className="jrn-p">Three classic <GlossaryTooltip term="Domain Adaptation">domain adaptation</GlossaryTooltip> methods (CORAL, DANN, ADDA) collapsed due to the 30,000:205 simulation-to-real domain sample-size asymmetry. Domain adaptation works by finding features common to both source and target data — but with 146× more source samples, those "common features" end up being the simulation's dominant visual patterns, not real lens morphology. Noise injection retraining (Method 5) was the only approach producing meaningful signal — reducing entropy by 33% and increasing high-confidence predictions 5×. Even so, 71.2% of lenses remained uncertain.</p>
-                  <p className="jrn-p">Q1 PSF FWHM ≈ 0.16″–0.18″ (approx. 1.6–1.8 pixels) blurs the sub-arcsecond arc perturbations needed to distinguish dark matter models. The DeepLense GSoC 2025 team reached the same conclusion independently.</p>
-                  <div className="jrn-quote">
-                    <p>"Knowing what cannot be measured at current resolution is itself a scientific result."</p>
-                  </div>
+                  <p className="jrn-p">Three classic <GlossaryTooltip term="Domain Adaptation">domain adaptation</GlossaryTooltip> methods (CORAL, DANN, ADDA) collapsed due to the simulation-to-real domain sample-size asymmetry reported as 30,000:205 (TODO (author to provide): source for 30,000 simulation count). Domain adaptation works by finding features common to both source and target data — but with 146× more source samples, those "common features" end up being the simulation's dominant visual patterns, not real lens morphology. Noise injection retraining (Method 5) was the only approach producing meaningful signal — reducing entropy by 33% and increasing high-confidence predictions 5×. Even so, 71.2% of lenses remained uncertain.</p>
+                  <p className="jrn-p">Under the entropy measures reported, the classifiers did not identify substructure with high confidence on these images. Entropy measures confidence, not accuracy.</p>
                 </div>
                 <div className="jrn-chart-fullwidth">
                   <div className="jrn-chart-title">Shannon Entropy by Method — Lower = More Confident</div>
@@ -764,7 +764,7 @@ export default function Journey() {
                   <thead><tr><th>Method</th><th>Entropy</th><th>Confidence</th><th>% Uncertain</th><th>High-Conf</th><th>Outcome</th></tr></thead>
                   <tbody>
 <tr><td>1. Baseline MC Dropout</td><td className="td-num">1.1236</td><td className="td-num">0.6427</td><td className="td-num">94.6%</td><td className="td-num">11/205</td><td>0/4 criteria</td></tr>
-                    <tr><td>2. CORAL</td><td className="td-num">0.1429</td><td className="td-num">0.9566</td><td className="td-num td-bad">100%</td><td className="td-num">0/205</td><td className="td-bad">Failed — CDM 100%</td></tr>
+                    <tr><td>2. CORAL [Under Review]*</td><td className="td-num">0.1429*</td><td className="td-num">0.9566*</td><td className="td-num td-bad">100%*</td><td className="td-num">0/205*</td><td className="td-bad">Under Review — CDM collapse</td></tr>
                     <tr><td>3. DANN</td><td className="td-num">1.5807</td><td className="td-num">0.3626</td><td className="td-num td-bad">100%</td><td className="td-num">0/205</td><td className="td-bad">Failed — random predictions</td></tr>
                     <tr><td>4. ADDA</td><td className="td-num">1.5732</td><td className="td-num">0.3942</td><td className="td-num td-bad">100%</td><td className="td-num">0/205</td><td className="td-bad">Failed — Axion 100%</td></tr>
                     <tr className="row-highlight"><td>5. Noise Injection ★</td><td className="td-num">0.7524</td><td className="td-num">0.7637</td><td className="td-num">71.2%</td><td className="td-num">59/205</td><td className="td-good">BEST — 4/4 criteria</td></tr>
@@ -772,10 +772,13 @@ export default function Journey() {
                     <tr><td>7. Deep Ensemble</td><td className="td-num">0.9626</td><td className="td-num">0.6771</td><td className="td-num">90.2%</td><td className="td-num">20/205</td><td>Worse than Method 5</td></tr>
                   </tbody>
                 </table>
+                <div className="jrn-footnote" style={{ marginTop: '12px', fontSize: '12px', color: 'var(--text-secondary)', lineHeight: '1.6', fontFamily: "'IBM Plex Mono', monospace" }}>
+                  Entropy max = 1.585 bits (uniform over 3 classes). High-confidence = entropy &lt; 0.5 bits. Uncertain % is the fraction of images with predictive entropy ≥ 0.5 bits. Evaluation criteria: 1. No single-class mode collapse or severe class skew (TODO (author to provide): objective measurable definition), 2. Mean entropy &lt; 1.10 bits, 3. Mean entropy &lt; 0.90 bits, 4. At least 25% (≥ 52 / 205) high-confidence predictions (entropy &lt; 0.5 bits). TODO (author to provide): reason for each cut-off, and whether it was set before or after the results. *CORAL row is under review: a reported mean entropy of 0.1429 bits is internally inconsistent with 0 / 205 high-confidence predictions (&lt; 0.5 bits) and 100% uncertain; a mean of 0.1429 bits requires at least one image with entropy &lt; 0.5 bits. TODO (author to provide): raw entropy and high-confidence output for CORAL. Regarding Criteria Passed: criteria 2 (&lt; 1.10) and 3 (&lt; 0.90) are met by 0.1429 bits, criterion 4 (≥ 52 high-confidence) is not met, and criterion 1 depends on whether the "CDM collapse" label disqualifies the model. The count of 1 / 4 is retained pending confirmation of how criterion 1 is judged. Predictive entropy across the 205 unlabeled real Euclid cutouts measures model confidence and domain-shift stability rather than ground-truth substructure accuracy. Note on Model Regeneration: An earlier substructure model had a head weight remapping bug producing uniform ~33/33/34 predictions; the current version was regenerated, and Track B results must be re-checked.
+                </div>
               </div>
 
               <div className="jrn-conclusion-box">
-                <p>The substructure signal is below the detection threshold in ESA Euclid Q1 data. The <GlossaryTooltip term="PSF">PSF</GlossaryTooltip> blurs exactly the sub-arcsecond features that distinguish dark matter models. This matches ESA’s own assessment and an independent finding from the DeepLense GSoC 2025 team. Knowing what cannot be measured at current resolution is itself a scientific result.</p>
+                <p>Under the entropy measures reported across seven methods, the classifiers did not identify substructure with high confidence on these images. Entropy measures confidence, not accuracy.</p>
               </div>
 
               <div className="jrn-callout" style={{ marginTop: '24px' }}>
@@ -790,19 +793,19 @@ export default function Journey() {
 
             {/* ── PHASE 7 ── */}
             <section className="jrn-phase" id="phase7">
-              <div className="jrn-phase-label">Phase 7 — Population Inference & Discovery</div>
-              <h3 className="jrn-phase-header playfair">The Final Run: Scanning the Unseen Universe</h3>
+              <div className="jrn-phase-label">Phase 7 — Population Inference & Candidate Screening</div>
+              <h3 className="jrn-phase-header playfair">The Final Run: Screening Candidate Cutouts</h3>
 
               <div className="jrn-cols">
                 <div>
-                  <p className="jrn-p">After finalizing the V12 ensemble (<GlossaryTooltip term="AUROC" />=0.8871), we unleashed it on every remaining Euclid Q1 file that had absolutely zero overlap with the 1,000-file "Locked Holdout Set" used for training, validation, or testing. This is the ultimate test of discovery: running inference on completely untouched data to find genuinely new gravitational lens candidates.</p>
+                  <p className="jrn-p">After finalizing the V12 ensemble (<GlossaryTooltip term="AUROC" />=0.8871), we evaluated it on 1,415 Euclid Q1 cutouts (247 Grade B, 1,168 Grade C) outside the 200-image evaluation split.</p>
                   
                   <p className="jrn-h3">Inference Setup</p>
-                  <p className="jrn-p">We scanned 1,415 files (247 Grade B, 1,168 Grade C). We applied Test-Time Augmentation (<GlossaryTooltip term="TTA">TTA</GlossaryTooltip>: 4×90° rotations, averaged softmax) and used a strict classification threshold of P ≥ 0.70 — the exact threshold that yielded optimal F1 score on our locked test set. We required all three architecturally distinct models (V7, V10, V11) to agree.</p>
+                  <p className="jrn-p">We scanned 1,415 files (247 Grade B, 1,168 Grade C). We applied Test-Time Augmentation (<GlossaryTooltip term="TTA">TTA</GlossaryTooltip>: 4×90° rotations, averaged softmax) and applied a classification threshold of P ≥ 0.70 — chosen to maximise F1 on the 200-image evaluation split (which may yield optimistic performance metrics; TODO (author to provide): ensemble weights and combination rule). All-model agreement means all three models (V7, V10, V11) each output P ≥ 0.70 individually.</p>
 
                   <p className="jrn-h3">Scientific Interpretation</p>
-                  <p className="jrn-p">Across the 1,415 files, 625 were flagged (44.2%). However, real lens prevalence is ~0.1–1%. The high overall flag rate is a documented out-of-distribution generalization failure (as noted in ESA's arXiv:2512.05899) when models encounter diverse Grade C morphologies they were never trained on.</p>
-                  <p className="jrn-p">The scientifically valid result lies in the <strong style={{color:'var(--text-primary)'}}>pure Grade B candidates</strong>. Of the 86 human-vetted, independent Grade B files, the model flagged 33 (38.4%) at high confidence. Furthermore, 228 files across the entire scan achieved unanimous P &gt; 0.90 agreement from all three ensemble members. These represent the most credible new candidates for visual follow-up.</p>
+                  <p className="jrn-p">Across the 1,415 files, 625 were flagged (44.2%). However, real lens prevalence is ~0.1–1%. On the 150 Grade C cutouts in the evaluation split, the false-positive rate is 4.67% (7/150), whereas on the 1,168 unseen Grade C holdout cutouts the flag rate is 45.0% (526/1,168). The cause of this gap has not been established; TODO (author to provide): how the 1,168 Grade C holdout images were sampled or filtered.</p>
+                  <p className="jrn-p">Of the 86 positive-declination Grade B cutouts, the model flagged 33 (38.4%) at P ≥ 0.70. Furthermore, 228 files across the entire scan achieved unanimous P &gt; 0.90 agreement from all three ensemble members. The recall of ~70% was measured on Grade A test images, not on Grade B cutouts directly (TODO (author to provide): true-positive rate on Grade B cutouts). Note that no candidate has been independently verified as a lens by spectroscopy or high-resolution follow-up.</p>
                 </div>
 
                 <div>
@@ -815,7 +818,7 @@ export default function Journey() {
                   </div>
 
                   <div className="jrn-table-wrap" style={{ margin: 0 }}>
-                    <div className="jrn-chart-title">Top 10 Most Confident Discoveries (Pure Files)</div>
+                    <div className="jrn-chart-title">Top 10 Candidates (Pure Files)</div>
                     <table className="jrn-table">
                       <thead><tr><th>Rank</th><th>Grade</th><th>RA</th><th>Dec</th><th>P(Lens)</th></tr></thead>
                       <tbody>
@@ -890,7 +893,7 @@ export default function Journey() {
 
                   <div className="jrn-finding-item">
                     <div className="jrn-finding-label">Biggest single improvement</div>
-                    <div className="jrn-finding-value">Switching to Zoobot (galaxy-pretrained) from ImageNet pretraining. +0.1258 <GlossaryTooltip term="AUROC" /> from V6→V7. The right prior mattered more than model size or training time.</div>
+                    <div className="jrn-finding-value">Switching from simulation-trained EfficientNet-B0 to galaxy-morphology pretrained Zoobot ConvNeXt-Nano yielded +0.1258 <GlossaryTooltip term="AUROC" /> (V6→V7), reflecting the combined gain of the ConvNeXt-Nano architecture and galaxy-morphology pretraining.</div>
                   </div>
 
                   <div className="jrn-finding-item">
@@ -906,17 +909,17 @@ export default function Journey() {
 
                   <div className="jrn-finding-item">
                     <div className="jrn-finding-label">By single-model <GlossaryTooltip term="AUROC" /></div>
-                    <div className="jrn-finding-value">V11 (0.8776, DINOv2-B) — but 86M params, threshold=0.30 (miscalibrated), 0.06 val–test gap confirming overfitting on 160 positives.</div>
+                    <div className="jrn-finding-value">V11 (0.8776, DINOv2-B) — but 86M params, threshold=0.30, 0.06 val–test gap confirming overfitting on 160 positives.</div>
                   </div>
 
                   <div className="jrn-finding-item">
                     <div className="jrn-finding-label">By deployment quality</div>
-                    <div className="jrn-finding-value">V7 — <GlossaryTooltip term="AUROC" /> 0.8541, precision 0.7037, threshold 0.623 (meaningful), 15M params, ESA-evaluated architecture. The one to actually use.</div>
+                    <div className="jrn-finding-value">V7 — <GlossaryTooltip term="AUROC" /> 0.8541, precision 0.7037, threshold 0.623, about 14.95M params, ESA-evaluated architecture. The one to actually use.</div>
                   </div>
 
                   <div className="jrn-finding-item">
                     <div className="jrn-finding-label">Data mining (V13–V15)</div>
-                    <div className="jrn-finding-value">234 pseudo-labels mined at P&gt;0.98. +146% positives. <GlossaryTooltip term="AUROC" /> dropped from 0.8776 to 0.8687. Label quality beats label quantity.</div>
+                    <div className="jrn-finding-value">234 pseudo-labels mined at P&gt;0.98. +146% positives. <GlossaryTooltip term="AUROC" /> dropped from 0.8776 to 0.8687. The cause of the lower score has not been established; pseudo-label noise is an unverified hypothesis.</div>
                   </div>
                 </div>
 
@@ -926,32 +929,32 @@ export default function Journey() {
 
                   <div className="jrn-finding-item">
                     <div className="jrn-finding-label">Outcome</div>
-                    <div className="jrn-finding-value">Not possible at Q1 resolution. The Euclid <GlossaryTooltip term="PSF">PSF</GlossaryTooltip> (FWHM ≈ 0.16″–0.18″) blurs exactly the sub-arcsecond features that distinguish Smooth, <GlossaryTooltip term="CDM">CDM</GlossaryTooltip>, and <GlossaryTooltip term="Axion">Axion</GlossaryTooltip> halos. Confirmed by 7 methods, ESA, and DeepLense GSoC 2025 independently.</div>
+                    <div className="jrn-finding-value">Under the entropy measures reported across seven methods, the classifiers did not identify substructure with high confidence on these images. Entropy measures confidence, not accuracy.</div>
                   </div>
 
                   <div className="jrn-finding-item">
                     <div className="jrn-finding-label">Sim-to-real gap</div>
-                    <div className="jrn-finding-value">Model trained on 30k noiseless simulations predicted <GlossaryTooltip term="CDM">CDM</GlossaryTooltip> for 72.7% of real lenses. Direct class-bias transfer — not a learned signal.</div>
+                    <div className="jrn-finding-value">Model trained on simulations (TODO (author to provide): source for 30,000 count) predicted <GlossaryTooltip term="CDM">CDM</GlossaryTooltip> for 72.7% of real lenses, reflecting class distribution skew.</div>
                   </div>
 
                   <div className="jrn-finding-item">
                     <div className="jrn-finding-label">Domain adaptation (CORAL, DANN, ADDA)</div>
-                    <div className="jrn-finding-value">All failed. Each outputted a single class for all 205 real lenses. The 30,000:205 source-to-target imbalance made alignment impossible.</div>
+                    <div className="jrn-finding-value">DANN and ADDA collapsed. CORAL is under review due to internal inconsistency in its reported metrics. Large simulation-to-real sample size asymmetry (reported as 30,000:205; TODO: source for 30,000 count).</div>
                   </div>
 
                   <div className="jrn-finding-item">
                     <div className="jrn-finding-label">Best result — noise injection (Method 5)</div>
-                    <div className="jrn-finding-value">Entropy 0.75 (down 33% from baseline). High-confidence predictions 5×. Still, 71.2% of lenses remained uncertain. 4/4 criteria met.</div>
+                    <div className="jrn-finding-value">Entropy 0.7524 (down 33% from baseline). High-confidence predictions 59 / 205 (5.4×). 71.2% of lenses remained uncertain.</div>
                   </div>
 
                   <div className="jrn-finding-item">
                     <div className="jrn-finding-label">Deep ensemble finding</div>
-                    <div className="jrn-finding-value">Three members agreed on only 20 of 205 images. Individually confident, but in different directions — proving the confidence is spurious. Those 20 are the only defensible predictions.</div>
+                    <div className="jrn-finding-value">Three members agreed on only 20 of 205 images. Ensemble entropy was 0.9626 — worse than the single best model (0.7524). Disagreement among individually confident models demonstrates that single-model confidence does not indicate reliability.</div>
                   </div>
 
                   <div className="jrn-finding-item">
                     <div className="jrn-finding-label">What this means</div>
-                    <div className="jrn-finding-value">The problem is resolution-limited, not model-limited. Better algorithms will not help. The signal does not exist in Q1 data at current <GlossaryTooltip term="PSF">PSF</GlossaryTooltip> quality.</div>
+                    <div className="jrn-finding-value">Under the evaluated setups, domain shift between simulations and real Euclid cutouts prevented confident substructure classification across all seven methods tested.</div>
                   </div>
                 </div>
               </div>
