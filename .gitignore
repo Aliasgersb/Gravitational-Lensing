@@ -35,3 +35,6 @@ desktop.ini
 
 # Vite
 vite.config.js.timestamp-*
+
+# Local resources and dataset archives
+Gravitational Lensing Project/

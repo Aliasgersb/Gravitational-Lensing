@@ -1,4 +1,3 @@
-import React from 'react';
 import OrientationStrip from '../OrientationStrip';
 import GlossaryTooltip from '../GlossaryTooltip';
 
@@ -177,13 +176,13 @@ export default function Learn() {
             <div className="ls-tag">07 — THE TELESCOPE</div>
             <h2 className="ls-h2 playfair">What is ESA Euclid?</h2>
             <p className="ls-p">
-              Euclid is a space telescope launched by the European Space Agency on 1 July 2023. Its mission is to map the geometry of the dark universe over a 10-year survey covering 15,000 square degrees — roughly one third of the full sky.
+              Euclid is a space telescope launched by the European Space Agency on 1 July 2023. Its mission is to map the geometry of the dark universe over a 10-year survey covering ~14,000–15,000 square degrees — roughly one third of the full sky.
             </p>
             <p className="ls-p">
               It images in optical (VIS instrument) and near-infrared (NISP) wavelengths simultaneously, with 0.1 arcseconds per pixel in the optical — a sharper view of the sky than any previous wide-field survey telescope.
             </p>
             <p className="ls-p">
-              The Q1 Early Release Observations were made public in 2024 and contain 497 gravitational lens candidates graded by experts. This project uses those 300×300 pixel VIS cutouts as its raw data.
+              The ESA Euclid Q1 data release contains 497 Grade A and B gravitational lens candidates identified by the SLDE working group. This project uses those 300×300 pixel VIS cutouts as its primary data.
             </p>
           </div>
         </div>
@@ -240,7 +239,7 @@ export default function Learn() {
             <div className="lp-node">
               <div className="lp-num">03</div>
               <div className="lp-title">3 Neural Networks</div>
-              <div className="lp-desc">Zoobot ConvNeXt-Nano, DINOv2-Small, DINOv2-Base — each pretrained on millions of galaxies.</div>
+              <div className="lp-desc">Zoobot ConvNeXt-Nano (galaxy morphology prior), DINOv2-Small, and DINOv2-Base (self-supervised vision priors).</div>
             </div>
             <div className="lp-arrow">&#8594;</div>
             <div className="lp-node">

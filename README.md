@@ -13,22 +13,24 @@
 # Gravitational Lens Detection on ESA Euclid Q1 Data
 
 <p>
-  <a href="https://zenodo.org/records/20037150">
+  <a href="https://doi.org/10.5281/zenodo.20037150">
     <img src="https://img.shields.io/badge/Zenodo-10.5281%2Fzenodo.20037150-blue?style=flat-square" alt="Zenodo Record 1"/>
   </a>
   &nbsp;
-  <a href="https://zenodo.org/records/20056736">
+  <a href="https://doi.org/10.5281/zenodo.20056736">
     <img src="https://img.shields.io/badge/Zenodo-10.5281%2Fzenodo.20056736-blue?style=flat-square" alt="Zenodo Record 2"/>
   </a>
   &nbsp;
-  <img src="https://img.shields.io/badge/arXiv-Pending-b31b1b?style=flat-square" alt="arXiv"/>
+  <a href="https://pytorch.org">
+    <img src="https://img.shields.io/badge/Framework-PyTorch-EE4C2C?style=flat-square&logo=pytorch&logoColor=white" alt="PyTorch"/>
+  </a>
   &nbsp;
-  <img src="https://img.shields.io/badge/Framework-PyTorch-EE4C2C?style=flat-square&logo=pytorch&logoColor=white" alt="PyTorch"/>
-  &nbsp;
-  <img src="https://img.shields.io/badge/Data-ESA%20Euclid%20Q1-1f3a8f?style=flat-square" alt="ESA Euclid Q1"/>
+  <a href="https://www.esa.int/Science_Exploration/Space_Science/Euclid">
+    <img src="https://img.shields.io/badge/Data-ESA%20Euclid%20Q1-1f3a8f?style=flat-square" alt="ESA Euclid Q1"/>
+  </a>
 </p>
 
-**A full-stack deep learning pipeline for automated gravitational lens discovery and dark matter substructure analysis — trained and validated on real observational data from the ESA Euclid Q1 Early Release Observations.**
+**A full-stack deep learning pipeline for automated gravitational lens discovery and dark matter substructure analysis — trained and validated on real observational data from the ESA Euclid Q1 data release.**
 
 </div>
 
@@ -70,24 +72,25 @@ All models below are evaluated on the same held-out test set: **50 Grade A posit
 | Version | Backbone | Pretraining | AUROC (TTA) | Precision | Recall | F1 | Threshold |
 | :--- | :--- | :--- | :---: | :---: | :---: | :---: | :---: |
 | V6 | EfficientNet-B0 | Simulation (DeepLense) | 0.7283 | 0.579 | 0.440 | 0.500 | 0.583 |
-| V7 | Zoobot ConvNeXt-Nano | Real Galaxy Morphology | 0.8541 | **0.704** | 0.760 | 0.731 | 0.623 |
+| V7 | Zoobot ConvNeXt-Nano | Real Galaxy Morphology | 0.8541 | 0.704 | 0.760 | 0.731 | 0.623 |
+| V8 | Zoobot ConvNeXt-Nano (heavy aug) | Real Galaxy Morphology | 0.8499 | 0.437 | 0.760 | 0.555 | 0.523 |
 | V9 | Zoobot ConvNeXt-Nano + Hard Negatives | Real Galaxy Morphology | 0.8587 | 0.546 | 0.720 | 0.621 | 0.480 |
 | V10 | DINOv2-Small (ViT-S/14) | Self-Supervised (LVD-142M) | 0.8756 | 0.576 | 0.760 | 0.655 | 0.230 |
 | V11 | DINOv2-Base (ViT-B/14) | Self-Supervised (LVD-142M) | 0.8776 | 0.556 | 0.800 | 0.656 | 0.300 |
-| **V12 (Best)** | **Ensemble (V7 + V10 + V11)** | **Weighted Logit Averaging** | **0.8871** | **0.8333** | **0.7000** | **0.7609** | **0.7000** |
-| V15 | DINOv2-Base + 394 pseudo-labeled positives | Self-Supervised (LVD-142M) | 0.8687 | — | — | — | — |
+| **V12 (Best)** | **Ensemble (V7 + V10 + V11)** | **Galaxy Prior + LVD-142M (Ensemble)** | **0.8871** | **0.8333** | **0.7000** | **0.7609** | **0.7000** |
+| V15 | DINOv2-Base + 234 pseudo-labeled positives (394 total) | Self-Supervised (LVD-142M) | 0.8687 | — | — | — | — |
 
 <sub>V12 is the superior model and the primary research outcome of this project, achieving the highest AUROC and F1 score on the held-out test set. V7 is the production model deployed in the web application for its efficiency and 15M parameters, enabling browser-native ONNX inference with high precision (0.704).</sub>
 
-<sub>V1–V5 are invalidated due to data leakage (training and evaluation data overlapped) and are not shown. V6 is the first honest result. V13 and V14 are data-mining steps, not independently evaluated models. V16 (hard negative augmentation) failed its gate at AUROC=0.8421 (-0.0355 vs V11 baseline).</sub>
+<sub>V2–V5 are excluded from primary results (V2, V4, and V5 were invalidated by data leakage between train and eval splits; V3 failed to converge due to label noise and focal loss collapse). V6 is the first honest, validated result. There is no V1 model. V13 and V14 are data-mining steps, not independently evaluated models. V16 (hard negative augmentation) failed its gate at AUROC=0.8421 (-0.0355 vs V11 baseline).</sub>
 
 **Key findings:**
 
 - **Backbone pretraining matters more than architecture scale:** Switching from a simulation-pretrained EfficientNet (V6, AUROC=0.7283) to a galaxy-morphology-pretrained Zoobot encoder (V7, AUROC=0.8541) yielded **+0.1258 AUROC** — the single largest gain in the entire project.
-- **Ensemble complementarity:** Combining ConvNeXt and ViT architectures (V12) achieved +0.0095 AUROC over the best single model (V11=0.8776), confirming that their error patterns are partially uncorrelated.
-- **160 clean labeled positives is the hard ceiling:** V15 (394 pseudo-labeled positives, +146% data) scored AUROC=0.8687 — *lower* than V11 on 160 clean labels. V16 (285 hard negatives) dropped AUROC by 0.0355. Both confirm label quality outweighs data quantity at this scale.
-- **Hard negatives cut false positives:** Adding 200 verified negatives (V9–V11) reduced FPR from 0.091 (V7) to 0.024–0.035 on held-out images, at the cost of precision.
-- **Calibration and Production Deployment:** While V12 provides the highest scientific performance, V10 and V11 show poorly calibrated probabilities (thresholds 0.23–0.30). V7's threshold of 0.623 is more meaningfully interpretable for production environments, which is why it powers the real-time browser inference tool.
+- **Ensemble complementarity:** Combining ConvNeXt and ViT architectures (V12) achieved +0.0095 AUROC over the best single model (V11=0.8776). Note: with only 50 test positives, differences below ~0.02 AUROC may not be statistically meaningful (SE ≈ 0.032).
+- **160 clean labeled positives is the hard ceiling:** V15 (234 pseudo-labeled positives added to 160 clean, 394 total, +146% data) scored AUROC=0.8687 — *lower* than V11 on 160 clean labels. V16 (285 hard negatives) dropped AUROC by 0.0355. Both confirm label quality outweighs data quantity at this scale.
+- **Hard negatives reduce FPR on held-out negatives:** Adding 200 verified negatives (V9–V11) reduced FPR from 0.091 (V7) to 0.024–0.035 on the 85 held-out final_negatives, at the cost of precision. Test-set false positives increased (V7: 16 → V9: 30, V10: 28, V11: 32).
+- **Operating Thresholds and Production Deployment:** While V12 provides the highest scientific performance, V10 and V11 show uncalibrated probabilities under class imbalance (optimal thresholds 0.23–0.30). V7's optimal threshold of 0.623 offers a balanced operating point for production environments, which is why it powers the real-time browser inference tool.
 
 ---
 
@@ -98,14 +101,14 @@ All 7 methods evaluated on 205 real Euclid lens FITS images. Lower entropy = mor
 | Method | Approach | Mean Entropy (bits) | Uncertain % | High-Confidence | Criteria Passed |
 | :--- | :--- | :---: | :---: | :---: | :---: |
 | 1. Baseline MC Dropout | Original model, no adaptation | 1.1236 | 94.6% | 11 / 205 | 0 / 4 |
-| 2. CORAL | Covariance alignment, 50 epochs | 0.1429 | 100% | 0 / 205 | 0 / 4 — CDM collapse |
+| 2. CORAL | Covariance alignment, 50 epochs | 0.1429 | 100% | 0 / 205 | 1 / 4 — CDM collapse |
 | 3. DANN | Adversarial domain adaptation, lambda=0.5 | 1.5807 | 100% | 0 / 205 | 0 / 4 — random |
 | 4. ADDA | Adversarial discriminative, 50 epochs | 1.5732 | 100% | 0 / 205 | 0 / 4 — axion collapse |
 | **5. Noise Injection** | **Add Euclid noise (sigma≈0.03) to simulation training** | **0.7524** | **71.2%** | **59 / 205** | **4 / 4 — BEST** |
-| 6. PSF + Noise + TTA | PSF blur + progressive noise + test-time augmentation | 1.0759 | 88.8% | 23 / 205 | 3 / 4 |
-| 7. Deep Ensemble (3 seeds) | 3 x Method 5, majority vote | 0.9626 | 90.2% | 20 / 205 | 2 / 4 |
+| 6. PSF + Noise + TTA | PSF blur + progressive noise + test-time augmentation | 1.0759 | 88.8% | 23 / 205 | 1 / 4 |
+| 7. Deep Ensemble (3 seeds) | 3 x Method 5, majority vote | 0.9626 | 90.2% | 20 / 205 | 1 / 4 |
 
-**Scientific conclusion:** All three domain adaptation methods (CORAL, DANN, ADDA) failed due to the same root cause — a 30,000:205 simulation-to-real class imbalance. Noise injection reduced entropy by 33% and increased high-confidence predictions 5x over baseline without collapse. The substructure signal is below the detection threshold of the Euclid Q1 PSF (FWHM ≈ 0.18 arcsec ≈ 1.8 pixels), independently confirmed by the ESA Euclid Consortium and the DeepLense GSoC 2025 team. **Track B is scientifically complete. No further work is planned.**
+**Scientific conclusion:** All three domain adaptation methods (CORAL, DANN, ADDA) failed due to a 30,000:205 simulation-to-real class imbalance. Noise injection reduced entropy by 33% and increased high-confidence predictions 5x over baseline without collapse. Under current Q1 VIS resolution (PSF FWHM ≈ 0.16″–0.18″), the substructure signal lies below the detection limit for domain adaptation models. **Track B is scientifically complete. No further work is planned.**
 
 ---
 
@@ -116,12 +119,12 @@ After training was concluded, the V12 ensemble was applied to all 1,415 Euclid Q
 | Population | Files Scanned | Flagged at t=0.70 | Flag Rate |
 | :--- | :---: | :---: | :---: |
 | Grade B (all) | 247 | 99 | 40.1% |
-| Grade B — pure candidates (no NEG prefix) | 86 | **33** | **38.4%** |
-| Grade B — NEG-prefix files | 161 | 66 | 41.0% |
+| Grade B — positive declination | 86 | **33** | **38.4%** |
+| Grade B — negative declination (NEG prefix) | 161 | 66 | 41.0% |
 | Grade C holdout | 1,168 | 526 | 45.0% |
 | All-model agreement at P > 0.90 | — | 228 | — |
 
-The 38.4% flag rate among pure Grade B candidates is a real scientific signal, consistent with Grade B's 70–90% expected true lens content. The high Grade C rate reflects out-of-distribution failure on morphologies not well-represented in training — it does not represent a valid lens prevalence estimate. Full results (1,415 rows with per-model scores) and a 32-page visual discovery gallery are published on Zenodo.
+The 38.4% flag rate among positive-declination Grade B candidates reflects conservative candidate selection at threshold 0.70 (where model recall is ~70%). Note: The "NEG" filename prefix in the ESA SLDE catalog denotes negative declination coordinates (southern hemisphere fields), not negative ground-truth labels. The high Grade C rate reflects out-of-distribution false alarms on morphologies not represented in the training negatives. Full results (1,415 rows with per-model scores) and a 32-page visual discovery gallery are published on Zenodo.
 
 ---
 
@@ -176,32 +179,20 @@ All models use a two-stage fine-tuning approach. Stage 1 trains the classificati
 
 ```
 .
-├── training/
-│   ├── v6_efficientnet/          # EfficientNet-B0 sim-backbone baseline
-│   ├── v7_zoobot/                # Zoobot ConvNeXt-Nano (production model)
-│   ├── v9_v10_v11/               # Hard negative + DINOv2 experiments
-│   ├── v12_ensemble/             # Weighted logit ensemble evaluation
-│   └── track_b/                  # Substructure classification (7 methods)
-│
-├── preprocessing/
-│   └── fits_pipeline.py          # Deterministic FITS → tensor pipeline
-│
-├── evaluation/
-│   ├── evaluation_split/
-│   │   └── train_val_test_split.json   # Standardized evaluation split
-│   └── metrics/                  # ROC, PR, calibration evaluation scripts
-│
-├── scan/
-│   └── unseen_q1_scan.py         # V12 population scan over 1,415 files
-│
-├── frontend/                     # React + Vite web application
-│   ├── src/
-│   │   ├── workers/              # ONNX Runtime Web inference workers
-│   │   └── components/           # Explore and Analyse tab components
-│   └── public/
-│
+├── src/
+│   ├── components/           # Navigation, mobile blocker, orientation components
+│   │   └── tabs/             # Hero, Learn, Journey, Explore, Analyse, Results tabs
+│   ├── utils/                # FITS parser, preprocessing pipeline, ONNX runtime runner
+│   └── workers/              # Standalone web worker implementation (optional)
+├── public/
+│   ├── explore/              # Precomputed 200-image test set and gradcam assets
+│   └── models/               # lens_detector_v7_int8.onnx (INT8 quantized browser model)
+├── index.html                # App entrypoint
+├── package.json              # Project dependencies and scripts
 └── README.md
 ```
+
+> **Note on Training Code & Raw Data:** Full training pipelines, evaluation split JSONs, raw cutouts, and PyTorch `.pth` model checkpoints are archived and cited via Zenodo ([Record 20037150](https://doi.org/10.5281/zenodo.20037150) & [Record 20056736](https://doi.org/10.5281/zenodo.20056736)). This repository contains the client-side web application and in-browser inference runtime.
 
 ---
 
@@ -214,6 +205,7 @@ The following pipeline is **deterministic and immutable** — the exact order of
 ```python
 from astropy.io import fits
 import numpy as np
+import cv2
 
 def preprocess_fits(path, target_size=224):
     """
@@ -223,6 +215,10 @@ def preprocess_fits(path, target_size=224):
     with fits.open(path) as hdul:
         data = next(h.data for h in hdul if h.data is not None and h.data.ndim >= 2)
     data = np.squeeze(data).astype(np.float32)
+
+    # Check NaN fraction
+    if np.isnan(data).sum() / data.size > 0.3:
+        raise ValueError("Over 30% NaN pixels. File may be corrupted.")
     data = np.nan_to_num(data, nan=0.0, posinf=0.0, neginf=0.0)
 
     # 1. Centre-crop to 300x300
@@ -246,7 +242,8 @@ def preprocess_fits(path, target_size=224):
     data = np.clip((data - p1) / (p99 - p1 + 1e-8), 0, 1)
 
     # 5. Resize to 224x224 (bilinear interpolation)
-    return data  # shape (300, 300) — resize before feeding to model
+    data = cv2.resize(data, (target_size, target_size), interpolation=cv2.INTER_LINEAR)
+    return data[np.newaxis, ...]  # shape (1, 224, 224)
 ```
 
 ### Model Loading
@@ -310,7 +307,7 @@ All real Euclid images are 300×300 px FITS cutouts at 0.1 arcsec/pixel in the E
 | **V12 Scan Results** | 1,415 unseen candidates with per-model scores + 32-page gallery | 4 files | Zenodo 20037150 |
 | **ESA SLDE Catalog** | Official ESA Euclid Q1 lens candidate catalog | — | Zenodo 15025832 |
 
-The Grade A/B catalog originates from the ESA SLDE working group (see arXiv:2512.05899). FITS cutouts were downloaded from the ESA Datalabs cutout service and are released pre-cropped and pre-catalogued. Cutouts derived from ESA Euclid Q1 data — Credit: ESA Euclid/Euclid Consortium/NASA/Q1-2025.
+The Grade A/B catalog originates from the ESA SLDE working group (see Walmsley et al. 2025, Zenodo 15025832). FITS cutouts were downloaded from the ESA Datalabs cutout service and are released pre-cropped and pre-catalogued. Cutouts derived from ESA Euclid Q1 data — Credit: ESA Euclid/Euclid Consortium/NASA/Q1-2025.
 
 ---
 
@@ -329,7 +326,9 @@ The application is built with React and Vite, featuring browser-native inference
 | **Analyse** | Upload Euclid VIS FITS files for real-time, client-side lens detection. |
 | **Results** | Complete benchmarking tables for both Track A and Track B, including the unseen population scan. |
 
-The ONNX model is exported from the V7 checkpoint at opset 17 with dynamic batch axes. The JavaScript preprocessing pipeline exactly mirrors the Python pipeline documented above.
+The deployed ONNX model (`lens_detector_v7_int8.onnx`, 15.5 MB) is exported from the V7 checkpoint at opset 18 and dynamically quantized to INT8 (`ConvInteger`, `MatMulInteger`) for fast in-browser execution. Inference runs directly on the main thread via single-threaded WebAssembly / WebGPU fallback (avoiding SharedArrayBuffer/COEP requirements). The JavaScript preprocessing pipeline is a client-side browser implementation that approximates the Python pipeline (using HTML5 Canvas for bilinear resize and integer percentiles).
+
+> **Device Compatibility:** The web application is optimized for desktop and laptop displays (screen width ≥ 768px). Access on mobile and small touch viewports displays a desktop recommendation notice to ensure dense scientific tables and Canvas overlays remain legible.
 
 ---
 
@@ -343,7 +342,7 @@ If you use this work, dataset, or pipeline, please cite:
   title        = {Gravitational Lens Detection on ESA Euclid Q1 Data},
   year         = {2026},
   publisher    = {GitHub},
-  howpublished = {\url{https://github.com/aliasgerbhabhrawala/gravitational-lensing}}
+  howpublished = {\url{https://github.com/Aliasgersb/Gravitational-Lensing}}
 }
 
 @dataset{bhabhrawala2026scan,

@@ -1,6 +1,9 @@
 import json
+import os
 
-with open('c:/Users/HP/Downloads/Antigravity/Gravitational Lensing/frontend/public/explore/data.json', 'r') as f:
+script_dir = os.path.dirname(os.path.abspath(__file__))
+data_path = os.path.join(script_dir, '..', '..', 'public', 'explore', 'data.json')
+with open(data_path, 'r') as f:
     data = json.load(f)
 
 counts = {'SMOOTH': 0, 'CDM': 0, 'AXION': 0}

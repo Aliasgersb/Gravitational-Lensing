@@ -1,5 +1,3 @@
-import React from 'react';
-
 export default function OrientationStrip({ title, description, children }) {
   return (
     <div className="orientation-strip">

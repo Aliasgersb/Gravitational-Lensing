@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 const GLOSSARY = {
   'AUROC': 'Area Under the Receiver Operating Characteristic curve; a performance metric where 1.0 is perfect and 0.5 is random guessing.',
@@ -12,7 +12,7 @@ const GLOSSARY = {
   'Grad-CAM': 'Gradient-weighted Class Activation Mapping; a technique to visualize which pixels in an image drove the model\'s decision.',
   'FPR': 'False Positive Rate; the probability that a model incorrectly flags a non-lens galaxy as a gravitational lens candidate.',
   'Domain Adaptation': 'A technique used when a model trained on one dataset (like simulations) must be adapted to work on another (like real images).',
-  'Hubble Constant': 'The unit of measurement that describes the rate at which the universe is expanding.',
+  'Hubble Constant': 'The cosmological parameter describing the expansion rate of the universe (in km/s/Mpc).',
   'Quasar': 'The extremely bright core of a distant galaxy, powered by a supermassive black hole consuming massive amounts of gas.',
   'Spacetime': 'The four-dimensional continuum combining the three dimensions of space and the one dimension of time.',
   'General Relativity': 'Einstein\'s 1915 theory stating that gravity is the curvature of spacetime caused by mass and energy.',
@@ -39,7 +39,6 @@ export default function GlossaryTooltip({ term, children }) {
 
     // Boundary checks
     const viewportWidth = window.innerWidth;
-    const viewportHeight = window.innerHeight;
 
     // Adjust if tooltip would go off-screen horizontally
     if (x - tooltipWidth / 2 < 10) {

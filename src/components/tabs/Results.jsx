@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import OrientationStrip from '../OrientationStrip';
 
 export default function Results() {
@@ -128,7 +128,7 @@ export default function Results() {
                   </thead>
                   <tbody>
                     <tr className="muted">
-                      <td>V2</td><td>EfficientNet-B0 (ImageNet)</td><td>0.9910</td><td>0.892</td><td>0.976</td><td>0.929</td><td>0.50</td><td className="strikethrough">INVALIDATED</td>
+                      <td>V2</td><td>EfficientNet-B0 (ImageNet)</td><td>0.9910</td><td>0.892</td><td>0.976</td><td>0.932</td><td>0.50</td><td className="strikethrough">INVALIDATED</td>
                     </tr>
                     <tr className="muted">
                       <td>V3</td><td>EfficientNet-B0</td><td>0.6700</td><td>—</td><td>—</td><td>—</td><td>—</td><td className="strikethrough">FAILED</td>
@@ -167,13 +167,16 @@ export default function Results() {
                       <td>V14</td><td>Data mining step</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>DATA MINING</td>
                     </tr>
                     <tr>
-                      <td>V15</td><td>DINOv2-B + 394 pseudo-labeled positives</td><td>0.8687</td><td>—</td><td>—</td><td>—</td><td>—</td><td>VALIDATED ✓</td>
+                      <td>V15</td><td>DINOv2-B + 234 pseudo-labeled positives (394 total)</td><td>0.8687</td><td>—</td><td>—</td><td>—</td><td>—</td><td>VALIDATED ✓</td>
+                    </tr>
+                    <tr className="muted">
+                      <td>V16</td><td>DINOv2-B + 285 Hard Negatives</td><td>0.8421</td><td>—</td><td>—</td><td>—</td><td>—</td><td className="strikethrough">FAILED GATE</td>
                     </tr>
                   </tbody>
                 </table>
               </div>
               <div className="res-footnote">
-                INVALIDATED = test set overlapped training data. Results not trustworthy. FAILED = model failed to converge.
+                INVALIDATED = test set overlapped training data. Results not trustworthy. FAILED = model failed to converge. FAILED GATE = performance dropped below V11 baseline (-0.0355 AUROC).
               </div>
             </div>
 
@@ -190,7 +193,7 @@ export default function Results() {
                 </div>
                 <div className="res-list-item">
                   <div className="res-list-label">OUT-OF-DISTRIBUTION LIMITATIONS</div>
-                  <div className="res-list-text">The model exhibited a 44.2% overall flag rate across all 1,415 files, driven by false positives on diverse Grade C morphologies never seen in training. This confirms the generalization limits documented by ESA.</div>
+                  <div className="res-list-text">The model exhibited a 44.2% overall flag rate across all 1,415 files, driven by false alarms on diverse unseen Grade C holdout morphologies not represented in the training set. This confirms the generalization limits documented by ESA.</div>
                 </div>
                 <div className="res-list-item" style={{ borderLeftColor: '#c8b89a', backgroundColor: 'rgba(200, 184, 154, 0.05)' }}>
                   <div className="res-list-label" style={{ color: '#c8b89a' }}>OPEN SCIENCE DATA RELEASE</div>
@@ -241,7 +244,7 @@ export default function Results() {
               <ul className="res-bullet-list">
                 <li><strong>Only 50 true test positives.</strong> AUROC differences smaller than ~0.02 between models may not be statistically meaningful at this sample size.</li>
                 <li><strong>Grade A is not ground truth.</strong> ESA experts estimate ~10% of Grade A are false positives. Some "true positives" in our test set may not actually be lenses.</li>
-                <li><strong>Distribution shift.</strong> All training and test data comes from two ESA sky fields. Performance on other sky regions or future Euclid data releases is unknown.</li>
+                <li><strong>Distribution shift.</strong> All training and test data comes from the three Euclid Deep Fields (EDF-N, EDF-S, EDF-F). Performance on wide-field sky regions or future Euclid data releases is unknown.</li>
                 <li><strong>Threshold is a choice.</strong> At t=0.70, recall is 0.70 — meaning 30% of real lenses in our test set were missed. A lower threshold catches more lenses but increases false positives. There is no universally correct threshold.</li>
               </ul>
             </div>
@@ -297,7 +300,7 @@ export default function Results() {
                   </div>
                 </div>
                 <div style={{ flex: 1, borderLeft: '1px solid var(--border)', paddingLeft: '24px', fontSize: '13px', color: 'var(--text-secondary)', lineHeight: '1.6' }}>
-                  <strong>Note:</strong> Zero smooth predictions are expected as catalogued lenses show visible arc distortion. These results are <em>indicative hypotheses only</em> and do not constitute ground-truth detections.
+                  <strong>Note:</strong> N=42 is the subset of the 200-image binary test set flagged as LENS at threshold 0.70 (35 true positives + 7 false alarms from Grade C). The N=205 figure cited elsewhere refers to the separate real Euclid lens catalog used for Track B evaluation. Zero smooth predictions are expected as catalogued lenses show visible arc distortion. These results are <em>indicative hypotheses only</em> and do not constitute ground-truth detections.
                 </div>
               </div>
             </div>
@@ -362,7 +365,7 @@ export default function Results() {
               <div className="res-list">
                 <div className="res-list-item">
                   <div className="res-list-label">THE CORE PROBLEM: 30,000 SIMULATIONS VS 205 REAL IMAGES</div>
-                  <div className="res-list-text">Every domain adaptation method tried to align simulation features to real image features. But with 147× more simulation data, the models converged to the dominant simulation class rather than adapting. CORAL produced 100% CDM predictions. ADDA produced 100% axion predictions.</div>
+                  <div className="res-list-text">Every domain adaptation method tried to align simulation features to real image features. But with 146× more simulation data, the models converged to the dominant simulation class rather than adapting. CORAL produced 100% CDM predictions. ADDA produced 100% axion predictions.</div>
                 </div>
                 <div className="res-list-item">
                   <div className="res-list-label">WHY NOISE INJECTION WORKED</div>

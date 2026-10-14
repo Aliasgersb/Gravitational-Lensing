@@ -11,8 +11,6 @@
   },
   "dependencies": {
     "@dagrejs/dagre": "^3.0.0",
-    "@xyflow/react": "^12.10.2",
-    "fitsjs": "^0.6.6",
     "onnxruntime-web": "^1.25.1",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",

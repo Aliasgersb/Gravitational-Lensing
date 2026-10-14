@@ -41,7 +41,7 @@ const INFERNO_CMAP = [
 export async function parseFITS(file) {
   return new Promise((resolve, reject) => {
     try {
-      const fits = new FITS(file, function() {
+      new FITS(file, function() {
         try {
           const hdu = this.getHDU();
           if (!hdu) {

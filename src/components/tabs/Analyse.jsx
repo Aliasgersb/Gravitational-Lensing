@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import OrientationStrip from '../OrientationStrip';
 import { preprocessFITS } from '../../utils/fitsPipeline';
 import { initONNX, runONNX } from '../../utils/onnxInference';
@@ -370,7 +370,7 @@ export default function Analyse() {
           {modelState === 'error' && (
             <>
               <span style={{ color: 'var(--negative)' }}>●</span>
-              <span style={{ color: 'var(--negative)' }}>Offline</span>
+              <span style={{ color: 'var(--negative)' }} title={loadError}>Offline{loadError ? ` (${loadError})` : ''}</span>
               <button onClick={handleRetry} style={{ marginLeft: '12px', color: 'var(--accent)', textDecoration: 'underline', fontSize: '11px', background: 'none', border: 'none', cursor: 'pointer' }}>Retry</button>
             </>
           )}
@@ -412,7 +412,7 @@ export default function Analyse() {
                 fontSize: '13px', color: 'var(--accent)', fontStyle: 'italic',
                 borderLeft: '2px solid var(--accent-dim)', letterSpacing: '0.03em'
               }}>
-                AUROC = 0.8541 · Precision = 0.7037 · Threshold = 0.623 · Parameters = 15M
+                AUROC = 0.8541 (FP32, 4× TTA) · Precision = 0.7037 · Threshold = 0.623 · Parameters = 15M · Browser: INT8, single-pass
               </div>
             </div>
           )}

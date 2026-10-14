@@ -1,5 +1,3 @@
-import React from 'react';
-
 export default function Nav({ activeTab, setActiveTab }) {
   const tabs = ['OVERVIEW', 'LEARN', 'JOURNEY', 'EXPLORE', 'ANALYSE', 'RESULTS'];
 

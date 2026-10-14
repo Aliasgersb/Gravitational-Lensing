@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Nav from './components/Nav';
 import Hero from './components/tabs/Hero';
 import Learn from './components/tabs/Learn';
@@ -12,10 +12,12 @@ import './App.css';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('OVERVIEW');
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(() => (typeof window !== 'undefined' ? isMobileDevice() : false));
 
   useEffect(() => {
-    setIsMobile(isMobileDevice());
+    const handleResize = () => setIsMobile(isMobileDevice());
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   if (isMobile) {

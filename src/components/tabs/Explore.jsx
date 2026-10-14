@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import OrientationStrip from '../OrientationStrip';
 
 // ── Largest-remainder rounding so percentages always sum to 100 ──────────────
@@ -61,7 +61,7 @@ function AboutBanner({ meta }) {
             </div>
             <div className="exp-about-item">
               <div className="exp-about-label">Threshold</div>
-              <div className="exp-about-text">Images scoring above {meta.threshold.toFixed(2)} are labelled LENS. This is a chosen operating point, not a physical truth. At this threshold our model achieves AUROC = {auroc} on this exact set of images.</div>
+              <div className="exp-about-text">Images scoring above {meta.threshold.toFixed(2)} are labelled LENS. This is a chosen operating point, not a physical truth. At this threshold our model achieves Precision = 0.833, Recall = 0.700, F1 = 0.761. Overall test AUROC = {auroc} (threshold-independent).</div>
             </div>
             <div className="exp-about-item">
               <div className="exp-about-label">Grade A vs Grade C</div>
@@ -379,10 +379,10 @@ export default function Explore() {
       .catch(e => { setError(e.message); setLoading(false); });
   }, []);
 
-  // Reset sub-filter when verdict filter changes away from LENS
-  useEffect(() => {
-    if (verdictFilter !== 'LENS') setSubFilter('ALL TYPES');
-  }, [verdictFilter]);
+  const handleVerdictChange = (val) => {
+    setVerdictFilter(val);
+    if (val !== 'LENS') setSubFilter('ALL TYPES');
+  };
 
   const handleCardClick = useCallback((item) => setSelectedItem(item), []);
   const handleModalClose = useCallback(() => setSelectedItem(null), []);
@@ -456,7 +456,7 @@ export default function Explore() {
               <button
                 key={val}
                 className={`exp-filter-tab ${verdictFilter === val ? 'active' : ''}`}
-                onClick={() => setVerdictFilter(val)}
+                onClick={() => handleVerdictChange(val)}
               >
                 {label}
               </button>
