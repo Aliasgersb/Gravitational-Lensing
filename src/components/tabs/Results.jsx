@@ -149,7 +149,7 @@ export default function Results() {
                       <td>V8</td><td>Zoobot ConvNeXt-Small</td><td>0.8499</td><td>0.4096</td><td>0.6800</td><td>0.5113</td><td>0.2700</td><td>VALIDATED ✓</td>
                     </tr>
                     <tr>
-                      <td>V9</td><td>Zoobot ConvNeXt-Nano + challenging negative samples</td><td>0.8587</td><td>0.546</td><td>0.720</td><td>0.621</td><td>0.480</td><td>VALIDATED ✓</td>
+                      <td>V9</td><td>Zoobot ConvNeXt-Nano + challenging negative samples</td><td>0.8587</td><td>0.545</td><td>0.720</td><td>0.621</td><td>0.480</td><td>VALIDATED ✓</td>
                     </tr>
                     <tr>
                       <td>V10</td><td>DINOv2-S + challenging negative samples</td><td>0.8756</td><td>0.576</td><td>0.760</td><td>0.655</td><td>0.230</td><td>VALIDATED ✓</td>
@@ -176,7 +176,7 @@ export default function Results() {
                 </table>
               </div>
               <div className="res-footnote">
-                INVALIDATED = test set overlapped training data. Results not trustworthy. FAILED = model failed to converge. FAILED GATE = performance dropped below V11 baseline (-0.0355 AUROC).
+                INVALIDATED = test set overlapped training data. Results not trustworthy. FAILED = model failed to converge. FAILED GATE = performance dropped below V11 baseline (-0.0355 AUROC). Operating thresholds were selected based on optimal F1 on the evaluation split.
               </div>
             </div>
 
@@ -193,7 +193,7 @@ export default function Results() {
                 </div>
                 <div className="res-list-item">
                   <div className="res-list-label">OUT-OF-DISTRIBUTION LIMITATIONS</div>
-                  <div className="res-list-text">The model exhibited a 44.2% overall flag rate across all 1,415 files, driven by false alarms on diverse unseen Grade C holdout morphologies not represented in the training set. This confirms the generalization limits documented by ESA.</div>
+                  <div className="res-list-text">While V12 achieved a 4.67% (7/150) false-positive rate on the in-split Grade C test set at threshold t=0.70, the 45.0% (526/1,168) flag rate on the unseen Grade C holdout set (44.2% across all 1,415 files) reflects severe real-world distribution shift and a large population of hard lens-like non-lens morphologies (such as edge-on spirals, tidal features, and ring galaxies), emphasizing the necessity of human vetting in astronomical discovery pipelines.</div>
                 </div>
                 <div className="res-list-item" style={{ borderLeftColor: '#c8b89a', backgroundColor: 'rgba(200, 184, 154, 0.05)' }}>
                   <div className="res-list-label" style={{ color: '#c8b89a' }}>OPEN SCIENCE DATA RELEASE</div>
@@ -213,7 +213,7 @@ export default function Results() {
               <div className="res-list">
                 <div className="res-list-item">
                   <div className="res-list-label">GALAXY-PRETRAINED BACKBONES ARE ESSENTIAL</div>
-                  <div className="res-list-text">Switching from a simulation-pretrained backbone (V6, AUROC=0.7283) to Zoobot pretrained on real galaxy images (V7, AUROC=0.8541) gave +0.1258 AUROC improvement. The model needs to have already seen galaxies.</div>
+                  <div className="res-list-text">Switching from a simulation-pretrained EfficientNet-B0 (V6, AUROC 0.7283) to a galaxy-morphology-pretrained Zoobot ConvNeXt-Nano encoder (V7, AUROC 0.8541) yielded +0.1258 AUROC, reflecting the combined gain of the ConvNeXt-Nano architecture and real galaxy-morphology pretraining.</div>
                 </div>
                 <div className="res-list-item">
                   <div className="res-list-label">ENSEMBLE BEATS ANY SINGLE MODEL</div>
@@ -221,7 +221,7 @@ export default function Results() {
                 </div>
                 <div className="res-list-item">
                   <div className="res-list-label">MORE DATA HELPS LESS THAN LABEL QUALITY</div>
-                  <div className="res-list-text">V15 used 394 training positives (vs 160 for V11) by mining pseudo-labels. Result: AUROC=0.8687 — worse than V11's 0.8776. Pseudo-label noise offset the quantity gain.</div>
+                  <div className="res-list-text">Adding 234 pseudo-labeled positives (V15, 394 total positive training samples, +146% positive data) scored AUROC 0.8687 (lower than V11 on 160 clean positive labels) due to pseudo-label noise. In contrast, V16 (adding 285 verified EDF-South non-lenses) dropped AUROC by 0.0355 because of negative-class distribution shift relative to the Grade C test set negatives (rather than poor label quality).</div>
                 </div>
                 <div className="res-list-item">
                   <div className="res-list-label">CHALLENGING NEGATIVE SAMPLES REDUCE FALSE POSITIVES</div>
@@ -355,7 +355,7 @@ export default function Results() {
                 </table>
               </div>
               <div className="res-footnote">
-                Entropy max = 1.585 bits (uniform over 3 classes). High-confidence = entropy &lt; 0.5 bits. Criteria: entropy &lt; 0.9, uncertain fraction &lt; 80%, high-confidence count &gt; 40, no class collapse.
+                Entropy max = 1.585 bits (uniform over 3 classes). High-confidence = entropy &lt; 0.5 bits. Criteria: 1. No single-class mode collapse or severe class skew, 2. Mean entropy &lt; 1.10 bits, 3. Mean entropy &lt; 0.90 bits, 4. At least 25% (≥ 52 / 205) high-confidence predictions (entropy &lt; 0.5 bits). Although CORAL achieved a raw mean entropy of 0.1429 bits, its high-confidence count is recorded as 0 / 205 (100% uncertain/invalid) because the model suffered complete mode collapse into the CDM class. Predictive entropy across the 205 unlabeled real Euclid cutouts measures model confidence and domain-shift stability rather than ground-truth substructure accuracy.
               </div>
             </div>
 
@@ -365,7 +365,7 @@ export default function Results() {
               <div className="res-list">
                 <div className="res-list-item">
                   <div className="res-list-label">THE CORE PROBLEM: 30,000 SIMULATIONS VS 205 REAL IMAGES</div>
-                  <div className="res-list-text">Every domain adaptation method tried to align simulation features to real image features. But with 146× more simulation data, the models converged to the dominant simulation class rather than adapting. CORAL produced 100% CDM predictions. ADDA produced 100% axion predictions.</div>
+                  <div className="res-list-text">Every domain adaptation method tried to align simulation features to real image features. But with a 30,000:205 simulation-to-real domain sample-size asymmetry (146× more simulation data), the models converged to the dominant simulation class rather than adapting. CORAL produced 100% CDM predictions. ADDA produced 100% axion predictions.</div>
                 </div>
                 <div className="res-list-item">
                   <div className="res-list-label">WHY NOISE INJECTION WORKED</div>

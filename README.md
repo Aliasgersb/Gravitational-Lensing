@@ -64,18 +64,18 @@ All models are evaluated on the same held-out test set: **50 Grade A positives +
 | V6 | EfficientNet-B0 | Simulation (DeepLense) | 0.7283 | 0.579 | 0.440 | 0.500 | 0.583 |
 | V7 | Zoobot ConvNeXt-Nano | Real Galaxy Morphology | 0.8541 | 0.704 | 0.760 | 0.731 | 0.623 |
 | V8 | Zoobot ConvNeXt-Small | Real Galaxy Morphology | 0.8499 | 0.4096 | 0.6800 | 0.5113 | 0.2700 |
-| V9 | Zoobot ConvNeXt-Nano + Hard Negatives | Real Galaxy Morphology | 0.8587 | 0.546 | 0.720 | 0.621 | 0.480 |
+| V9 | Zoobot ConvNeXt-Nano + Hard Negatives | Real Galaxy Morphology | 0.8587 | 0.545 | 0.720 | 0.621 | 0.480 |
 | V10 | DINOv2-Small (ViT-S/14) | Self-Supervised (LVD-142M) | 0.8756 | 0.576 | 0.760 | 0.655 | 0.230 |
 | V11 | DINOv2-Base (ViT-B/14) | Self-Supervised (LVD-142M) | 0.8776 | 0.556 | 0.800 | 0.656 | 0.300 |
 | **V12 (Best)** | **Ensemble (V7 + V10 + V11)** | **Galaxy Prior + LVD-142M** | **0.8871** | **0.8333** | **0.7000** | **0.7609** | **0.7000** |
 | V15 | DINOv2-Base + pseudo-labeled positives | Self-Supervised (LVD-142M) | 0.8687 | — | — | — | — |
 
-<sub>V12 is the primary research outcome, achieving the highest AUROC and F1 on the held-out test set. V7 is the production model deployed in the web application: its 14.9M parameters and single-channel input make it suitable for browser-native ONNX inference, and its threshold of 0.623 gives a calibrated operating point (precision 0.704). V2–V5 are excluded from primary results (V2, V4, and V5 were invalidated by data leakage; V3 failed to converge due to label noise). V6 is the first validated result. V13 and V14 are data-mining steps, not independently evaluated models. V16 failed its gate at AUROC 0.8421.</sub>
+<sub>Operating thresholds were selected based on optimal F1 on the evaluation split. V12 is the primary research outcome, achieving the highest AUROC and F1 on the held-out test set. V7 is the production model deployed in the web application: its 14.9M parameters and single-channel input make it suitable for browser-native ONNX inference, and its threshold of 0.623 gives a calibrated operating point (precision 0.704). V2–V5 are excluded from primary results (V2, V4, and V5 were invalidated by data leakage; V3 failed to converge due to label noise). V6 is the first validated result. V13 and V14 are data-mining steps, not independently evaluated models. V16 failed its gate at AUROC 0.8421.</sub>
 
 **Key findings:**
 
-- Switching from a simulation-pretrained EfficientNet (V6, AUROC 0.7283) to a galaxy-morphology-pretrained Zoobot encoder (V7, AUROC 0.8541) yielded **+0.1258 AUROC** — the largest single gain in the project.
-- Adding 234 pseudo-labeled positives (V15, 394 total, +146% training data) scored AUROC 0.8687 — lower than V11 on 160 clean labels. V16 (285 hard negatives) dropped AUROC by 0.0355. Both results confirm label quality outweighs data quantity at this scale.
+- Switching from a simulation-pretrained EfficientNet-B0 (V6, AUROC 0.7283) to a galaxy-morphology-pretrained Zoobot ConvNeXt-Nano encoder (V7, AUROC 0.8541) yielded **+0.1258 AUROC** — the largest single gain in the project, reflecting the combined gain of the ConvNeXt-Nano architecture and real galaxy-morphology pretraining.
+- Adding 234 pseudo-labeled positives (`V15`, 394 total positive training samples, +146% positive data) scored AUROC 0.8687 (lower than V11 on 160 clean positive labels) due to pseudo-label noise. In contrast, `V16` (adding 285 verified EDF-South non-lenses) dropped AUROC by 0.0355 because of **negative-class distribution shift** relative to the Grade C test set negatives (rather than poor label quality).
 - The ensemble gain of V12 over V11 is +0.0095 AUROC. With 50 test positives, differences below roughly 0.02 may not be statistically meaningful (standard error ≈ 0.032); no confidence intervals have been computed.
 
 ---
@@ -94,7 +94,9 @@ All 7 methods evaluated on 205 real Euclid lens FITS images. Lower entropy = mor
 | 6. PSF + Noise + TTA | PSF blur + progressive noise + test-time augmentation | 1.0759 | 88.8% | 23 / 205 | 1 / 4 |
 | 7. Deep Ensemble (3 seeds) | 3 × Method 5, majority vote | 0.9626 | 90.2% | 20 / 205 | 1 / 4 |
 
-**Scientific conclusion:** All three domain adaptation methods (CORAL, DANN, ADDA) collapsed due to a 30,000:205 simulation-to-real class imbalance. Noise injection reduced entropy by 33% and increased high-confidence predictions 5× over baseline without collapse. Under current Q1 VIS resolution (PSF FWHM ≈ 0.16″–0.18″), the substructure signal lies below the detection limit for domain adaptation models. Track B is scientifically complete; no further work is planned.
+<sub>**Evaluation Criteria (Criteria Passed column):** 1. No single-class mode collapse or severe class skew, 2. Mean entropy < 1.10 bits, 3. Mean entropy < 0.90 bits, 4. At least 25% (≥ 52 / 205) high-confidence predictions (entropy < 0.5 bits). Although CORAL achieved a raw mean entropy of 0.1429 bits, its high-confidence count is recorded as 0 / 205 (100% uncertain/invalid) because the model suffered complete mode collapse into the CDM class. Predictive entropy across the 205 unlabeled real Euclid cutouts measures model confidence and domain-shift stability rather than ground-truth substructure accuracy.</sub>
+
+**Scientific conclusion:** All three domain adaptation methods (CORAL, DANN, ADDA) collapsed due to a 30,000:205 simulation-to-real domain sample-size asymmetry. Noise injection reduced entropy by 33% and increased high-confidence predictions 5× over baseline without collapse. Under current Q1 VIS resolution (PSF FWHM ≈ 0.16″–0.18″), the substructure signal lies below the detection limit for domain adaptation models. Track B is scientifically complete; no further work is planned.
 
 ---
 
@@ -110,7 +112,7 @@ After training concluded, the V12 ensemble was applied to all 1,415 Euclid Q1 ca
 | Grade C holdout | 1,168 | 526 | 45.0% |
 | All-model agreement at P > 0.90 | — | 228 | — |
 
-The 38.4% flag rate among positive-declination Grade B candidates reflects conservative candidate selection at threshold 0.70 (where model recall is ~70%). The "NEG" filename prefix in the ESA SLDE catalog denotes negative declination coordinates, not negative ground-truth labels. The high Grade C rate reflects out-of-distribution false alarms on morphologies not represented in the training negatives. Full results (1,415 rows with per-model scores) and a 32-page visual discovery gallery are published on Zenodo.
+The 38.4% flag rate among positive-declination Grade B candidates reflects conservative candidate selection at threshold 0.70 (where model recall is ~70%). The "NEG" filename prefix in the ESA SLDE catalog denotes negative declination coordinates, not negative ground-truth labels. While V12 demonstrated a **4.67% (7 / 150)** false-positive rate on the in-split Grade C negative test set at threshold t=0.70, the **45.0% (526 / 1,168)** candidate flag rate on the unvetted holdout dataset reflects severe real-world distribution shift and a large population of hard lens-like non-lens morphologies (such as edge-on spirals, tidal features, and ring galaxies), emphasizing the necessity of human vetting in astronomical discovery pipelines. Full results (1,415 rows with per-model scores) and a 32-page visual discovery gallery are published on Zenodo.
 
 ---
 
@@ -179,7 +181,7 @@ def preprocess_fits(path, target_size=224):
     border_mask[:, -10:] = True
     data = np.maximum(data - np.median(data[border_mask]), 0)
 
-    # 3. Logarithmic stretch
+    # 3. Logarithmic stretch: ESA Datalabs cutouts are background-subtracted and non-negative, enabling log1p compression without negative-value artifacts
     data = np.log1p(data)
 
     # 4. Percentile [1, 99] min-max normalisation
@@ -215,7 +217,10 @@ model = ZoobotLensDetector(encoder, feat_size=640)
 model.load_state_dict(torch.load('v7_zoobot_convnext_nano.pth', map_location='cpu'))
 model.eval()
 
-# Inference — input shape (B, 1, 224, 224), values in [0, 1]
+# Inference — input_tensor is a 4D batched tensor shape (1, 1, 224, 224) from preprocess_fits
+input_numpy = preprocess_fits('path/to/cutout.fits')  # shape (1, 224, 224)
+input_tensor = torch.from_numpy(input_numpy).unsqueeze(0)  # shape (1, 1, 224, 224), values in [0, 1]
+
 with torch.no_grad():
     logits = model(input_tensor)
     p_lens = torch.softmax(logits, dim=1)[:, 1].item()
@@ -226,6 +231,7 @@ with torch.no_grad():
 
 ```python
 # V12: weighted logit averaging across all three models
+# For full test-time augmentation (TTA), softmax probabilities are averaged across 4 × 90° rotations (k=0, 1, 2, 3 via torch.rot90)
 # Weights: V7=0.3, V10=0.2, V11=0.5
 logits_v7  = model_v7(tensor_1ch)          # no ImageNet norm
 logits_v10 = model_v10(tensor_3ch_norm)    # ImageNet norm
