@@ -1,7 +1,4 @@
 import { useEffect, useState } from 'react';
-import ReactFlow, { Handle, Position } from 'reactflow';
-import 'reactflow/dist/style.css';
-import dagre from '@dagrejs/dagre';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Cell, LineChart, Line, Legend, LabelList, ReferenceLine } from 'recharts';
 import OrientationStrip from '../OrientationStrip';
 import GlossaryTooltip from '../GlossaryTooltip';
@@ -36,101 +33,6 @@ function useSectionSpy(ids) {
   }, [ids]);
   return active;
 }
-
-/* ── React Flow + Dagre: Two-Track Pipeline ── */
-const pipelineNodeTypes = {
-  customTrack: ({ data }) => (
-    <div style={{ width: 220, padding: '16px', borderRadius: '2px', backgroundColor: data.bg, border: `1.5px solid ${data.borderColor}`, textAlign: 'center', fontFamily: "'IBM Plex Mono', monospace" }}>
-      <Handle type="target" position={Position.Left} id="in" style={{ background: data.borderColor, border: 'none' }} />
-      {data.title === 'TRACK B' && <Handle type="target" position={Position.Top} id="in-top" style={{ background: data.borderColor, border: 'none' }} />}
-      <div style={{ fontSize: '12px', color: data.borderColor, letterSpacing: '2px', marginBottom: '8px' }}>{data.title}</div>
-      <div style={{ fontSize: '17px', color: '#e8e6e0', fontWeight: '500', marginBottom: '8px' }}>{data.name}</div>
-      <div style={{ fontSize: '14px', color: '#7a7870', marginBottom: '4px' }}>{data.desc1}</div>
-      <div style={{ fontSize: '13px', color: '#3d3b38' }}>{data.desc2}</div>
-      <Handle type="source" position={Position.Right} id="out" style={{ background: data.borderColor, border: 'none' }} />
-    </div>
-  ),
-  customInput: ({ data }) => (
-    <div style={{ width: 120, padding: '12px', borderRadius: '2px', backgroundColor: 'transparent', border: '1px solid #3d3b38', textAlign: 'center', fontFamily: "'IBM Plex Mono', monospace" }}>
-      <div style={{ fontSize: '12px', color: '#3d3b38', letterSpacing: '1px', marginBottom: '8px' }}>INPUT</div>
-      <div style={{ fontSize: '15px', color: '#7a7870', marginBottom: '4px' }}>{data.name}</div>
-      <div style={{ fontSize: '13px', color: '#3d3b38' }}>{data.desc}</div>
-      <Handle type="source" position={Position.Right} id="out" style={{ background: '#3d3b38', border: 'none' }} />
-    </div>
-  ),
-  customOutput: ({ data }) => (
-    <div style={{ width: 140, padding: '12px', borderRadius: '2px', backgroundColor: 'transparent', border: '1px solid #242424', textAlign: 'center', fontFamily: "'IBM Plex Mono', monospace" }}>
-      <Handle type="target" position={Position.Left} id="in" style={{ background: '#242424', border: 'none' }} />
-      <div style={{ fontSize: '14px', color: '#7a7870', marginBottom: '4px' }}>{data.name}</div>
-      <div style={{ fontSize: '13px', color: '#3d3b38' }}>{data.desc}</div>
-      <Handle type="source" position={Position.Bottom} id="out-bottom" style={{ background: '#6b5f4e', border: 'none' }} />
-    </div>
-  )
-};
-
-const initialNodes = [
-  { id: 'input', type: 'customInput', data: { name: 'Galaxy', desc: 'FITS image' }, position: { x: 0, y: 0 } },
-  { id: 'trackA', type: 'customTrack', data: { title: 'TRACK A', name: 'Binary Detector', desc1: 'Is this a gravitational lens?', desc2: '→ Lens / Not a Lens', bg: 'rgba(200,184,154,0.04)', borderColor: '#c8b89a' }, position: { x: 0, y: 0 } },
-  { id: 'trackB', type: 'customTrack', data: { title: 'TRACK B', name: 'Substructure Classifier', desc1: 'What type of dark matter?', desc2: 'Smooth / CDM / Axion', bg: 'rgba(107,95,78,0.05)', borderColor: '#6b5f4e' }, position: { x: 0, y: 0 } },
-  { id: 'output', type: 'customOutput', data: { name: 'Lens candidate', desc: '→ routes to Track B' }, position: { x: 0, y: 0 } }
-];
-
-const initialEdges = [
-  { id: 'e1', source: 'input', sourceHandle: 'out', target: 'trackA', targetHandle: 'in', type: 'smoothstep', style: { stroke: '#3d3b38', strokeWidth: 1.5 } },
-  { id: 'e2', source: 'input', sourceHandle: 'out', target: 'trackB', targetHandle: 'in', type: 'smoothstep', style: { stroke: '#3d3b38', strokeWidth: 1.5 } },
-  { id: 'e3', source: 'trackA', sourceHandle: 'out', target: 'output', targetHandle: 'in', type: 'smoothstep', style: { stroke: '#3d3b38', strokeWidth: 1.5 } },
-  { id: 'e4', source: 'output', sourceHandle: 'out-bottom', target: 'trackB', targetHandle: 'in-top', type: 'step', style: { stroke: '#6b5f4e', strokeWidth: 1, strokeDasharray: '5,3' }, label: 'feedback', labelStyle: { fill: '#6b5f4e', fontSize: 12, fontFamily: 'monospace' }, animated: true }
-];
-
-const getLayoutedElements = (nodes, edges) => {
-  const dagreGraph = new dagre.graphlib.Graph();
-  dagreGraph.setDefaultEdgeLabel(() => ({}));
-  dagreGraph.setGraph({ rankdir: 'LR', nodesep: 50, ranksep: 80 });
-
-  nodes.forEach((node) => {
-    dagreGraph.setNode(node.id, { width: 220, height: 120 });
-  });
-
-  edges.forEach((edge) => {
-    dagreGraph.setEdge(edge.source, edge.target);
-  });
-
-  dagre.layout(dagreGraph);
-
-  const layoutedNodes = nodes.map((node) => {
-    const nodeWithPosition = dagreGraph.node(node.id);
-    return {
-      ...node,
-      position: {
-        x: nodeWithPosition.x - 220 / 2,
-        y: nodeWithPosition.y - 120 / 2,
-      },
-    };
-  });
-
-  return { nodes: layoutedNodes, edges };
-};
-
-const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(initialNodes, initialEdges);
-
-const TrackPipelineSVG = () => {
-  return (
-    <div style={{ width: '100%', height: '400px', background: 'transparent' }}>
-      <ReactFlow
-        nodes={layoutedNodes}
-        edges={layoutedEdges}
-        nodeTypes={pipelineNodeTypes}
-        fitView
-        fitViewOptions={{ padding: 0.1 }}
-        proOptions={{ hideAttribution: true }}
-        colorMode="dark"
-        nodesConnectable={false}
-        nodesDraggable={false}
-        elementsSelectable={false}
-      />
-    </div>
-  );
-};
 
 /* ── Recharts: Contamination Visualization ── */
 const ContaminationBarChart = () => {
@@ -496,12 +398,6 @@ export default function Journey() {
 
               <p className="jrn-p">The goal: build a robust, contamination-free machine learning pipeline to detect gravitational lenses in real ESA Euclid Q1 imagery. The non-negotiable rule — no synthetic data in final evaluation, and absolute separation between training and test sets at all times.</p>
               <p className="jrn-p">The project ran two parallel tracks. <span style={{color:'var(--text-primary)', fontWeight:'400', textDecoration:'underline'}}>Track A</span> — binary detection: does this image contain a gravitational lens? <span style={{color:'var(--text-primary)', fontWeight:'400', textDecoration:'underline'}}>Track B</span> — substructure classification: if it is a lens, what type of dark matter halo does it show (Smooth, Cold Dark Matter, or Axion)? Fourteen distinct binary detector versions (V2–V15) were trained and evaluated across Track A, alongside seven domain adaptation methods for Track B.</p>
-              
-              <div className="jrn-chart-box" style={{ marginBottom: '32px' }}>
-                <div className="jrn-chart-title">Two-Track Architecture</div>
-                <TrackPipelineSVG />
-              </div>
-
               <p className="jrn-p">What makes this problem genuinely difficult is that every image is real telescope data — not a simulation — with all the noise, PSF blurring, and artefacts that implies. The entire positive training set consists of 160 confirmed Grade A lens candidates — drawn from the 250-entry ESA SLDE catalog and split into 160 training, 40 validation, and 50 test images. For context, a typical ImageNet classification task has over a million examples per class. The core challenge throughout this project is learning a robust detector from an extremely small, real, and noisy dataset.</p>
 
               {/* Dataset table */}
