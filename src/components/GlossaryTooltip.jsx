@@ -23,6 +23,7 @@ export default function GlossaryTooltip({ term, children }) {
   const definition = GLOSSARY[term];
   const [isVisible, setIsVisible] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [placement, setPlacement] = useState('top');
   const wrapperRef = useRef(null);
 
   useEffect(() => {
@@ -30,28 +31,25 @@ export default function GlossaryTooltip({ term, children }) {
 
     const rect = wrapperRef.current.getBoundingClientRect();
     const tooltipWidth = 280;
-    const tooltipHeight = 100;
+    const tooltipHeight = 110;
     const margin = 12;
 
-    // Calculate centered position above the trigger
+    // Calculate centered position
     let x = rect.left + rect.width / 2;
-    let y = rect.top - margin;
-
-    // Boundary checks
     const viewportWidth = window.innerWidth;
 
     // Adjust if tooltip would go off-screen horizontally
-    if (x - tooltipWidth / 2 < 10) {
-      x = tooltipWidth / 2 + 10;
-    } else if (x + tooltipWidth / 2 > viewportWidth - 10) {
-      x = viewportWidth - tooltipWidth / 2 - 10;
+    if (x - tooltipWidth / 2 < 16) {
+      x = tooltipWidth / 2 + 16;
+    } else if (x + tooltipWidth / 2 > viewportWidth - 16) {
+      x = viewportWidth - tooltipWidth / 2 - 16;
     }
 
     // If not enough space above, show below
-    if (y < tooltipHeight + margin) {
-      y = rect.bottom + margin + tooltipHeight;
-    }
+    const showBelow = rect.top < tooltipHeight + margin;
+    const y = showBelow ? rect.bottom : rect.top;
 
+    setPlacement(showBelow ? 'bottom' : 'top');
     setPosition({ x, y });
   }, [isVisible]);
 
@@ -73,7 +71,7 @@ export default function GlossaryTooltip({ term, children }) {
       </span>
       {isVisible && (
         <div
-          className="ls-tooltip-fixed"
+          className={`ls-tooltip-fixed ${placement === 'bottom' ? 'ls-tooltip-bottom' : ''}`}
           style={{
             left: position.x,
             top: position.y,

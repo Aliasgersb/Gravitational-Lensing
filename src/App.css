@@ -645,8 +645,12 @@ footer {
   font-size: 11px;
   font-family: 'IBM Plex Mono', monospace;
   padding: 14px 16px;
-  width: max-content;
-  max-width: 280px;
+  width: 280px;
+  max-width: calc(100vw - 32px);
+  white-space: normal !important;
+  word-break: normal;
+  overflow-wrap: break-word;
+  box-sizing: border-box;
   line-height: 1.6;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
   z-index: 10000;
@@ -656,6 +660,12 @@ footer {
   text-align: left;
   border-radius: 4px;
   animation: tooltipFadeIn 0.2s ease-out;
+}
+
+.ls-tooltip-fixed.ls-tooltip-bottom {
+  transform: translateX(-50%) translateY(0);
+  margin-top: 12px;
+  margin-bottom: 0;
 }
 
 @keyframes tooltipFadeIn {
@@ -678,6 +688,12 @@ footer {
   border-width: 6px;
   border-style: solid;
   border-color: #333333 transparent transparent transparent;
+}
+
+.ls-tooltip-fixed.ls-tooltip-bottom::after {
+  top: auto;
+  bottom: 100%;
+  border-color: transparent transparent #333333 transparent;
 }
 
 .ls-block {
