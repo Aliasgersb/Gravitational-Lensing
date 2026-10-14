@@ -48,12 +48,7 @@ const ContaminationBarChart = () => {
           <CartesianGrid strokeDasharray="3 3" stroke="#2a2a2a" horizontal={false} />
           <XAxis type="number" stroke="#5a5752" tick={{ fill: '#7a7870', fontSize: 14, fontFamily: "'IBM Plex Mono', monospace" }} />
           <YAxis dataKey="name" type="category" stroke="#5a5752" width={130} tick={{ fill: '#e8e6e0', fontSize: 14, fontFamily: "'IBM Plex Mono', monospace" }} />
-          <Tooltip 
-            cursor={{ fill: 'rgba(255,255,255,0.02)' }} 
-            contentStyle={{ backgroundColor: '#111', border: '1px solid #333', fontFamily: "'IBM Plex Mono', monospace", color: '#e8e6e0' }} 
-            itemStyle={{ color: '#e8e6e0', fontSize: '13px', fontFamily: "'IBM Plex Mono', monospace" }}
-            labelStyle={{ color: '#c8b89a', fontWeight: 600, fontSize: '13px', marginBottom: '4px', fontFamily: "'IBM Plex Mono', monospace" }}
-          />
+          <Tooltip cursor={{ fill: 'rgba(255,255,255,0.02)' }} contentStyle={{ backgroundColor: '#111', border: '1px solid #333', fontFamily: "'IBM Plex Mono', monospace", color: '#e8e6e0' }} />
           <Bar dataKey="count" radius={[0, 4, 4, 0]} barSize={32} isAnimationActive={false}>
             {data.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={entry.fill} />
@@ -82,8 +77,8 @@ const LockedSplitBarChart = () => {
   const CustomSplitTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
       return (
-        <div style={{ backgroundColor: '#111', border: '1px solid #444', padding: '12px 16px', borderRadius: '4px', boxShadow: '0 8px 24px rgba(0,0,0,0.9)', zIndex: 1000, fontFamily: "'IBM Plex Mono', monospace" }}>
-          <div style={{ fontSize: '12px', color: '#c8b89a', marginBottom: '8px', letterSpacing: '1px', fontWeight: 600 }}>DATA SPLIT (1,532 TOTAL)</div>
+        <div style={{ backgroundColor: '#111', border: '1px solid #333', padding: '12px', fontFamily: "'IBM Plex Mono', monospace" }}>
+          <div style={{ fontSize: '12px', color: '#7a7870', marginBottom: '8px', letterSpacing: '1px' }}>DATA SPLIT (1,532 TOTAL)</div>
           {payload.map((entry, index) => {
              let sub = '';
              if (entry.dataKey === 'Train') sub = '160 A + 480 C';
@@ -92,9 +87,9 @@ const LockedSplitBarChart = () => {
              if (entry.dataKey === 'Non-Lens') sub = '285 confirmed';
              if (entry.dataKey === 'Grade B') sub = 'never trained on';
              return (
-               <div key={index} style={{ marginBottom: '6px', fontSize: '13px' }}>
-                 <span style={{ color: '#ffffff', fontWeight: '500' }}>{entry.name}:</span> <span style={{ color: '#e8e6e0', fontWeight: '600' }}>{entry.value}</span>
-                 <div style={{ color: '#9a9690', fontSize: '11px', marginTop: '1px' }}>{sub}</div>
+               <div key={index} style={{ color: entry.color, marginBottom: '6px', fontSize: '14px' }}>
+                 <span style={{ fontWeight: '500' }}>{entry.name}:</span> {entry.value} 
+                 <div style={{ color: '#5a5752', fontSize: '12px', marginTop: '2px' }}>{sub}</div>
                </div>
              );
           })}
@@ -107,26 +102,22 @@ const LockedSplitBarChart = () => {
   const renderLabel = (props) => {
     const { x, y, width, height, value, dataKey } = props;
     if (width < 35) return null;
-    const isLightBar = ['Val', 'Test'].includes(dataKey);
-    const fill = isLightBar ? '#111111' : '#e8e6e0';
+    const fill = ['Test', 'Non-Lens', 'Grade B'].includes(dataKey) ? '#4a4846' : '#111111';
     return (
-      <text x={x + width / 2} y={y + height / 2} fill={fill} textAnchor="middle" dominantBaseline="central" fontFamily="'IBM Plex Mono', monospace" fontSize="14" fontWeight="600">
+      <text x={x + width / 2} y={y + height / 2} fill={fill} textAnchor="middle" dominantBaseline="central" fontFamily="'IBM Plex Mono', monospace" fontSize="15" fontWeight="600">
         {value}
       </text>
     );
   };
 
   return (
-    <div style={{ width: '100%', height: 200 }}>
+    <div style={{ width: '100%', height: 160 }}>
       <ResponsiveContainer width="100%" height="100%">
-        <BarChart layout="vertical" data={data} margin={{ top: 10, right: 10, left: 0, bottom: 20 }}>
+        <BarChart layout="vertical" data={data} margin={{ top: 10, right: 10, left: -20, bottom: 20 }}>
           <XAxis type="number" hide />
           <YAxis dataKey="name" type="category" hide />
           <Tooltip cursor={{ fill: 'transparent' }} content={<CustomSplitTooltip />} />
-          <Legend 
-            wrapperStyle={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '12px', paddingTop: '16px' }} 
-            formatter={(value) => <span style={{ color: '#c8b89a', marginRight: '16px' }}>{value}</span>}
-          />
+          <Legend wrapperStyle={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '13px', paddingTop: '10px' }} />
           <Bar dataKey="Train" stackId="a" fill="#5a5752" barSize={32} isAnimationActive={false}>
             <LabelList dataKey="Train" content={renderLabel} />
           </Bar>
@@ -174,12 +165,8 @@ const AUROCBarV6V9 = () => {
         <BarChart layout="vertical" data={data} margin={{ top: 20, right: 60, left: 0, bottom: 20 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="#2a2a2a" horizontal={false} />
           <XAxis type="number" domain={[0.68, 0.9]} stroke="#5a5752" tick={{ fill: '#7a7870', fontSize: 14, fontFamily: "'IBM Plex Mono', monospace" }} />
-          <Tooltip 
-            cursor={{ fill: 'rgba(255,255,255,0.02)' }} 
-            contentStyle={{ backgroundColor: '#111', border: '1px solid #333', fontFamily: "'IBM Plex Mono', monospace", color: '#e8e6e0' }} 
-            itemStyle={{ color: '#e8e6e0', fontSize: '13px', fontFamily: "'IBM Plex Mono', monospace" }}
-            labelStyle={{ color: '#c8b89a', fontWeight: 600, fontSize: '13px', marginBottom: '4px', fontFamily: "'IBM Plex Mono', monospace" }}
-          />
+          <YAxis dataKey="label" type="category" stroke="#5a5752" width={50} tick={{ fill: '#e8e6e0', fontSize: 15, fontFamily: "'IBM Plex Mono', monospace" }} />
+          <Tooltip cursor={{ fill: 'rgba(255,255,255,0.02)' }} contentStyle={{ backgroundColor: '#111', border: '1px solid #333', fontFamily: "'IBM Plex Mono', monospace", color: '#e8e6e0' }} />
           <Bar dataKey="val" radius={[0, 4, 4, 0]} barSize={32} isAnimationActive={false}>
             {data.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={entry.fill} stroke={entry.stroke} strokeWidth={entry.label === 'V7' ? 1.5 : 1} />
@@ -211,12 +198,7 @@ const FinalBarRechart = () => {
           <CartesianGrid strokeDasharray="3 3" stroke="#2a2a2a" vertical={false} />
           <XAxis dataKey="label" stroke="#5a5752" tick={{ fill: '#e8e6e0', fontSize: 15, fontFamily: "'IBM Plex Mono', monospace" }} />
           <YAxis domain={[0.68, 0.90]} stroke="#5a5752" tick={{ fill: '#7a7870', fontSize: 14, fontFamily: "'IBM Plex Mono', monospace" }} />
-          <Tooltip 
-            cursor={{ fill: 'rgba(255,255,255,0.02)' }} 
-            contentStyle={{ backgroundColor: '#111', border: '1px solid #333', fontFamily: "'IBM Plex Mono', monospace", color: '#e8e6e0' }} 
-            itemStyle={{ color: '#e8e6e0', fontSize: '13px', fontFamily: "'IBM Plex Mono', monospace" }}
-            labelStyle={{ color: '#c8b89a', fontWeight: 600, fontSize: '13px', marginBottom: '4px', fontFamily: "'IBM Plex Mono', monospace" }}
-          />
+          <Tooltip cursor={{ fill: 'rgba(255,255,255,0.02)' }} contentStyle={{ backgroundColor: '#111', border: '1px solid #333', fontFamily: "'IBM Plex Mono', monospace", color: '#e8e6e0' }} />
           <Bar dataKey="val" radius={[4, 4, 0, 0]} barSize={32} isAnimationActive={false}>
             {data.map((entry, index) => (
               <Cell key={index} fill={entry.fill} stroke={entry.stroke} strokeWidth={entry.hi ? 1.5 : 1} />
@@ -243,12 +225,7 @@ const ValTestGapBarChart = () => {
           <CartesianGrid strokeDasharray="3 3" stroke="#2a2a2a" horizontal={false} />
           <XAxis type="number" domain={[0.84, 0.96]} stroke="#5a5752" tick={{ fill: '#7a7870', fontSize: 14, fontFamily: "'IBM Plex Mono', monospace" }} />
           <YAxis dataKey="label" type="category" stroke="#5a5752" width={80} tick={{ fill: '#e8e6e0', fontSize: 15, fontFamily: "'IBM Plex Mono', monospace" }} />
-          <Tooltip 
-            cursor={{ fill: 'rgba(255,255,255,0.02)' }} 
-            contentStyle={{ backgroundColor: '#111', border: '1px solid #333', fontFamily: "'IBM Plex Mono', monospace", color: '#e8e6e0' }} 
-            itemStyle={{ color: '#e8e6e0', fontSize: '13px', fontFamily: "'IBM Plex Mono', monospace" }}
-            labelStyle={{ color: '#c8b89a', fontWeight: 600, fontSize: '13px', marginBottom: '4px', fontFamily: "'IBM Plex Mono', monospace" }}
-          />
+          <Tooltip cursor={{ fill: 'rgba(255,255,255,0.02)' }} contentStyle={{ backgroundColor: '#111', border: '1px solid #333', fontFamily: "'IBM Plex Mono', monospace", color: '#e8e6e0' }} />
           <Bar dataKey="val" radius={[0, 4, 4, 0]} barSize={32} isAnimationActive={false}>
             {data.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={entry.fill} />
@@ -276,11 +253,7 @@ const AUROCLineRechart = () => {
           <CartesianGrid strokeDasharray="3 3" stroke="#2a2a2a" />
           <XAxis dataKey="label" stroke="#5a5752" tick={{ fill: '#7a7870', fontSize: 14, fontFamily: "'IBM Plex Mono', monospace" }} />
           <YAxis domain={[0.7, 0.9]} stroke="#5a5752" tick={{ fill: '#7a7870', fontSize: 14, fontFamily: "'IBM Plex Mono', monospace" }} />
-          <Tooltip 
-            contentStyle={{ backgroundColor: '#111', border: '1px solid #333', fontFamily: "'IBM Plex Mono', monospace", color: '#e8e6e0' }} 
-            itemStyle={{ color: '#e8e6e0', fontSize: '13px', fontFamily: "'IBM Plex Mono', monospace" }}
-            labelStyle={{ color: '#c8b89a', fontWeight: 600, fontSize: '13px', marginBottom: '4px', fontFamily: "'IBM Plex Mono', monospace" }}
-          />
+          <Tooltip contentStyle={{ backgroundColor: '#111', border: '1px solid #333' }} />
           <Line type="monotone" dataKey="val" stroke="#e8e6e0" strokeWidth={2} dot={{ fill: '#e8e6e0' }} isAnimationActive={false} />
         </LineChart>
       </ResponsiveContainer>
@@ -363,12 +336,9 @@ const EntropyBarRechart = () => {
         <BarChart layout="vertical" data={data} margin={{ top: 36, right: 200, left: 8, bottom: 8 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="#2a2a2a" horizontal={false} />
           <XAxis type="number" domain={[0, 1.585]} stroke="#5a5752" tick={{ fill: '#7a7870', fontSize: 13, fontFamily: "'IBM Plex Mono', monospace" }} />
-          <Tooltip 
-            cursor={{ fill: 'rgba(255,255,255,0.02)' }} 
-            contentStyle={{ backgroundColor: '#111', border: '1px solid #333', fontFamily: "'IBM Plex Mono', monospace", color: '#e8e6e0' }} 
-            itemStyle={{ color: '#e8e6e0', fontSize: '13px', fontFamily: "'IBM Plex Mono', monospace" }}
-            labelStyle={{ color: '#c8b89a', fontWeight: 600, fontSize: '13px', marginBottom: '4px', fontFamily: "'IBM Plex Mono', monospace" }}
-          />
+          <YAxis dataKey="label" type="category" stroke="#5a5752" width={100} tick={{ fill: '#e8e6e0', fontSize: 14, fontFamily: "'IBM Plex Mono', monospace" }} />
+          <Tooltip cursor={{ fill: 'rgba(255,255,255,0.02)' }} contentStyle={{ backgroundColor: '#111', border: '1px solid #333', fontFamily: "'IBM Plex Mono', monospace", color: '#e8e6e0' }} />
+          <ReferenceLine x={1.585} stroke="#3a3836" strokeDasharray="4 3" label={{ position: 'top', value: 'Max entropy', fill: '#3d3b38', fontSize: 12, fontFamily: "'IBM Plex Mono', monospace" }} />
           <ReferenceLine x={0.5} stroke="#6b5f4e" strokeDasharray="4 3" label={{ position: 'top', value: 'High-conf', fill: '#6b5f4e', fontSize: 12, fontFamily: "'IBM Plex Mono', monospace" }} />
           <Bar dataKey="val" radius={[0, 4, 4, 0]} barSize={32} isAnimationActive={false}>
             {data.map((entry, index) => (
